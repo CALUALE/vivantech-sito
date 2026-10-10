@@ -34,17 +34,17 @@ button{font-family:inherit}
 .photo{position:relative;height:min(76vh,860px);aspect-ratio:415/745;max-width:88vw;border-radius:10px;overflow:hidden;background:#111;box-shadow:0 0 0 1px rgba(53,208,255,.25),0 0 80px -20px rgba(53,208,255,.35),0 40px 80px -40px rgba(0,0,0,.95);transition:box-shadow .8s}
 .scene.open .photo{box-shadow:0 0 0 1px rgba(53,208,255,.6),0 0 140px -10px rgba(53,208,255,.7),0 40px 80px -40px rgba(0,0,0,.95)}
 .photo img.base{position:absolute;inset:0;width:100%;height:100%;display:block}
-.opening{position:absolute;left:11.08%;top:7.79%;width:78.55%;height:86.85%;clip-path:polygon(0 0,100% 4.6%,100% 98%,0 100%)}
+.opening{position:absolute;left:6.75%;top:4.3%;width:85.3%;height:92.9%}
 .inside{position:absolute;inset:0;z-index:1;background:radial-gradient(60% 50% at 50% 45%,rgba(190,240,255,.9),rgba(53,208,255,.45) 35%,rgba(5,6,8,.2) 75%),#06080c;opacity:0;transition:opacity .6s .2s}
 .scene.open .inside{opacity:1}
 .light{position:absolute;inset:-30%;z-index:2;background:radial-gradient(closest-side,rgba(255,255,255,.75),rgba(53,208,255,.35) 40%,transparent 70%);opacity:0;transform:scale(.3);transition:opacity .9s,transform 1.2s cubic-bezier(.2,.8,.2,1);pointer-events:none;mix-blend-mode:screen}
 .scene.open .light{opacity:1;transform:scale(1.1)}
 .sash{position:absolute;z-index:4;overflow:hidden;transition:transform 1.3s cubic-bezier(.25,.9,.25,1);box-shadow:0 0 0 1px rgba(0,0,0,.15)}
 .sash img{position:absolute;display:block;max-width:none}
-.sash.l{left:11.08%;top:7.79%;width:40%;height:86.71%;transform-origin:left center}
-.sash.l img{width:250%;left:-27.71%;top:-8.98%}
-.sash.r{left:51.08%;top:9.93%;width:38.55%;height:84.03%;transform-origin:right center}
-.sash.r img{width:259.4%;left:-132.5%;top:-11.82%}
+.sash.l{left:6.75%;top:4.3%;width:40.96%;height:92.9%;transform-origin:left center}
+.sash.l img{width:244.1%;left:-16.47%;top:-4.62%}
+.sash.r{left:47.71%;top:4.3%;width:44.34%;height:92.9%;transform-origin:right center}
+.sash.r img{width:225.5%;left:-107.6%;top:-4.62%}
 .scene.open .sash.l{transform:rotateY(-124deg)}
 .scene.open .sash.r{transform:rotateY(124deg)}
 .scene.open .sash{box-shadow:16px 0 40px rgba(0,0,0,.6)}
@@ -53,7 +53,9 @@ button{font-family:inherit}
 .scene.open ~ .hint{opacity:0;animation:none}
 .lead{position:relative;z-index:2;margin:0;max-width:62ch;text-align:center;color:var(--muted);font-size:14px;line-height:1.5}
 /* corners picker */
-.pick{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px 16px;background:radial-gradient(70% 60% at 50% 40%,rgba(53,208,255,.18),rgba(5,6,8,.92) 70%);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .7s}
+.xclose{position:absolute;top:14px;right:14px;z-index:9;appearance:none;background:rgba(5,6,8,.75);color:#fff;border:1px solid rgba(53,208,255,.6);border-radius:999px;padding:10px 16px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;box-shadow:0 0 20px rgba(53,208,255,.35)}
+.xclose:hover{border-color:#fff}.xclose:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pick{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:64px 16px 24px;overflow:auto;background:radial-gradient(70% 60% at 50% 40%,rgba(53,208,255,.18),rgba(5,6,8,.92) 70%);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .7s}
 .pick.on{opacity:1;pointer-events:auto}
 .pick h2{font-family:var(--display);font-weight:400;font-size:clamp(20px,3.4vw,34px);letter-spacing:.18em;text-transform:uppercase;margin:0;text-align:center;color:#fff;text-shadow:0 0 30px rgba(53,208,255,.6);text-wrap:balance}
 .pick p{margin:0;color:var(--muted);font-size:14px;letter-spacing:.14em;text-transform:uppercase;text-align:center}
@@ -108,6 +110,7 @@ button{font-family:inherit}
 .vin.talk .bly-head{animation:nod 2.6s ease-in-out infinite}
 @keyframes nod{0%,100%{transform:rotate(0)}30%{transform:rotate(-2.5deg)}70%{transform:rotate(2deg)}}
 footer{padding:26px 16px;text-align:center;color:var(--muted);font-size:12px;letter-spacing:.1em;line-height:1.7;border-top:1px solid var(--line)}
+@media(max-width:640px){.top{padding:8px 12px}.brand img{width:36px}.brand h1{font-size:17px;letter-spacing:.2em}.brand small{font-size:9px}.top nav a{padding:6px 10px;font-size:12px}.hero{min-height:calc(100vh - 56px);min-height:calc(100dvh - 56px);padding:16px 12px 28px}.photo{height:min(66vh,560px);max-width:86vw}.pick{justify-content:flex-start;gap:14px;padding-top:58px}.pick h2{font-size:19px;letter-spacing:.12em}.pick p{font-size:11px}.cards{gap:10px}.card{width:46%;max-width:46%;padding:10px 8px 10px}.card img{height:96px}.card b{font-size:11px}.card span{font-size:11px}.card em{font-size:10px}.ovh{padding:10px 12px;gap:8px}.ovh h3{font-size:14px}.ovh .sp{font-size:11px;flex-basis:100%}.cta,.ghost{padding:8px 12px;font-size:11px}.ovb{padding:10px}.pstage{padding:10px 14px 20px;gap:14px;flex-direction:column}.vin{width:min(46vw,190px)}.bubble{font-size:16px;padding:16px 18px;border-radius:22px 22px 22px 22px}.bubble::before{display:none}}
 @media(prefers-reduced-motion:reduce){.sash,.light,.inside,.photo,.pick{transition:none}.hint,.vin *{animation:none!important}.pick.on .card{animation:none;opacity:1;transform:none}}
 </style>
 </head>
@@ -129,6 +132,7 @@ footer{padding:26px 16px;text-align:center;color:var(--muted);font-size:12px;let
   </div>
   <p class="hint" id="hint">Tocca la finestra per aprirla</p>
  </div>
+ <button type="button" class="xclose" id="xclose" aria-label="Chiudi la finestra" hidden>✕ Chiudi</button>
  <div class="pick" id="pick" aria-hidden="true">
   <h2>Scegli la tua finestra</h2>
   <p>Tocca un angolo per vedere la scheda tecnica</p>
@@ -144,9 +148,9 @@ footer{padding:26px 16px;text-align:center;color:var(--muted);font-size:12px;let
 </div>
 
 <div class="pres" id="pres" hidden role="dialog" aria-modal="true" aria-labelledby="presTitle">
- <div class="ovh"><h3 id="presTitle">Presentazione</h3><span class="sp">Anteprima animata · il video con Luca arriva presto</span><button type="button" class="ghost" id="closePres">Chiudi</button></div>
+ <div class="ovh"><h3 id="presTitle">Presentazione</h3><span class="sp">Anteprima animata · il video arriva presto</span><button type="button" class="ghost" id="closePres">Chiudi</button></div>
  <div class="pstage">
-  <div class="vin" id="vin"><svg class="bly" viewBox="0 0 130 214" xmlns="http://www.w3.org/2000/svg" aria-label="Luca, cartoon"><g stroke-linejoin="round" stroke-linecap="round" stroke="#1b1b1b"><g class="bly-all">
+  <div class="vin" id="vin"><svg class="bly" viewBox="0 0 130 214" xmlns="http://www.w3.org/2000/svg" aria-label="Vinny, cartoon"><g stroke-linejoin="round" stroke-linecap="round" stroke="#1b1b1b"><g class="bly-all">
 <g class="bly-legs"><path d="M52 168v28" stroke="#2f3337" stroke-width="13"/><path d="M78 168v28" stroke="#2f3337" stroke-width="13"/><ellipse cx="49" cy="201" rx="11" ry="6" fill="#2a2a2a" stroke-width="3"/><ellipse cx="81" cy="201" rx="11" ry="6" fill="#2a2a2a" stroke-width="3"/></g>
 <path d="M34 176c-3-28 8-52 31-58 23 6 34 30 31 58z" fill="#151515" stroke-width="3"/>
 <path d="M40 176c-3-26 5-46 19-54l6 54zM90 176c3-26-5-46-19-54l-6 54z" fill="#253a60" stroke-width="3"/>
@@ -174,7 +178,7 @@ footer{padding:26px 16px;text-align:center;color:var(--muted);font-size:12px;let
 </g>
 <g class="bly-hand"><path d="M90 134q16-6 20-26" fill="none" stroke="#151515" stroke-width="10"/><g transform="rotate(-32 110 106)"><rect x="105" y="66" width="10" height="48" rx="2" fill="#ffd166" stroke-width="2.2"/><path d="M105 72h4M105 78h6M105 84h4M105 90h6M105 96h4M105 102h6" stroke="#1b1b1b" stroke-width="1.4"/></g><circle cx="110" cy="106" r="8.5" fill="#e8b48f" stroke-width="3"/><path d="M104 102q6-4 12 0M105 108q5-3 10 0" fill="none" stroke-width="1.6"/></g></g></g></svg>
 </div>
-  <div class="bubble"><span id="line">…</span><small>Luca Zilioli · Vivantech</small></div>
+  <div class="bubble"><span id="line">…</span><small>Vinny · Vivantech</small></div>
  </div>
  <div class="bar"><i id="barFill"></i></div>
 </div>
@@ -191,11 +195,11 @@ const $=s=>document.querySelector(s);
 const scene=$('#scene'),pick=$('#pick'),cards=$('#cards'),hint=$('#hint');
 let openT=null,state={open:false};
 SYS.forEach(s=>{const b=document.createElement('button');b.type='button';b.className='card';b.innerHTML=`<img src="img/angolo-${s.id}.png" alt="Angolo del profilo ${s.name}"><b>${s.name}</b><span>${s.sub}</span><em>Scheda tecnica ›</em>`;b.addEventListener('click',()=>openSheet(s));cards.appendChild(b)});
-function openWin(){if(state.open)return;state.open=true;scene.classList.add('open');scene.setAttribute('aria-expanded','true');clearTimeout(openT);openT=setTimeout(()=>{pick.classList.add('on');pick.setAttribute('aria-hidden','false')},1100)}
-function closeWin(){state.open=false;clearTimeout(openT);pick.classList.remove('on');pick.setAttribute('aria-hidden','true');scene.classList.remove('open');scene.setAttribute('aria-expanded','false')}
+function openWin(){if(state.open)return;state.open=true;$('#xclose').hidden=false;scene.classList.add('open');scene.setAttribute('aria-expanded','true');clearTimeout(openT);openT=setTimeout(()=>{pick.classList.add('on');pick.setAttribute('aria-hidden','false')},1100)}
+function closeWin(){state.open=false;$('#xclose').hidden=true;clearTimeout(openT);pick.classList.remove('on');pick.setAttribute('aria-hidden','true');scene.classList.remove('open');scene.setAttribute('aria-expanded','false')}
 scene.addEventListener('click',()=>state.open?closeWin():openWin());
 scene.addEventListener('keydown',e=>{if(e.key=='Enter'||e.key==' '){e.preventDefault();state.open?closeWin():openWin()}});
-$('#closePick').addEventListener('click',closeWin);
+$('#closePick').addEventListener('click',closeWin);$('#xclose').addEventListener('click',closeWin);
 /* technical sheet */
 const sheet=$('#sheet');let cur=null;
 function openSheet(s){cur=s;$('#sheetTitle').textContent='Scheda tecnica · '+s.name;$('#sheetSub').textContent=s.sub+' · '+s.spec;const im=$('#sheetImg');im.src=`img/scheda-${s.id}.jpg`;im.alt='Scheda tecnica '+s.name;sheet.hidden=false;sheet.querySelector('.ovb').scrollTop=0;$('#closeSheet').focus()}
@@ -206,7 +210,7 @@ const pres=$('#pres'),vin=$('#vin'),line=$('#line'),bar=$('#barFill');let presRu
 function pickVoice(){try{const vs=speechSynthesis.getVoices();voice=vs.find(v=>/^it/i.test(v.lang)&&/male|Luca|Cosimo|Diego|Google/i.test(v.name))||vs.find(v=>/^it/i.test(v.lang))||null}catch(e){}}
 try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice}catch(e){}
 function script(s){return[
- `Ciao, sono Luca di Vivantech. Complimenti: hai scelto uno dei migliori serramenti sul mercato.`,
+ `Ciao, sono Vinny di Vivantech. Complimenti: hai scelto uno dei migliori serramenti sul mercato.`,
  `Il ${s.name} è un profilo in PVC da ${s.mm} millimetri, ${s.extra}.`,
  `Tiene fuori il freddo, il rumore e gli spifferi. E dentro casa cambia davvero l’aria.`,
  `Lo misuriamo noi, lo posiamo noi e te lo garantiamo noi: un solo interlocutore, dal rilievo alla posa.`,
