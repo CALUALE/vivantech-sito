@@ -29,9 +29,9 @@ button{font-family:inherit}
 .hero{position:relative;min-height:calc(100vh - 68px);min-height:calc(100dvh - 68px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:28px 16px 40px;overflow:hidden;background:radial-gradient(900px 500px at 50% 100%,rgba(53,208,255,.08),transparent 60%),var(--bg)}
 #fibre{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
 .stage{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:16px}
-.scene{perspective:1600px;cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:10px}
+.scene{cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:10px}
 .scene:focus-visible{outline:2px solid var(--accent);outline-offset:6px}
-.photo{position:relative;height:min(82vh,900px);aspect-ratio:416/532;max-width:90vw;border-radius:0;overflow:hidden;background:#000;outline:2px solid #000;box-shadow:0 0 0 1px rgba(53,208,255,.35),0 0 90px -20px rgba(53,208,255,.4),0 40px 80px -40px rgba(0,0,0,.95);transition:box-shadow .8s}
+.photo{position:relative;perspective:1300px;height:min(82vh,900px);aspect-ratio:416/532;max-width:90vw;border-radius:0;overflow:visible;background:#000;outline:2px solid #000;box-shadow:0 0 0 1px rgba(53,208,255,.35),0 0 90px -20px rgba(53,208,255,.4),0 40px 80px -40px rgba(0,0,0,.95);transition:box-shadow .8s}
 .scene.open .photo{box-shadow:0 0 0 1px rgba(53,208,255,.6),0 0 140px -10px rgba(53,208,255,.7),0 40px 80px -40px rgba(0,0,0,.95)}
 .photo img.base{position:absolute;inset:0;width:100%;height:100%;display:block}
 .opening{position:absolute;left:3.37%;top:3%;width:92.8%;height:93.6%}
@@ -45,9 +45,11 @@ button{font-family:inherit}
 .sash.l img{width:221.3%;left:-7.45%;top:-3.21%}
 .sash.r{left:48.8%;top:3%;width:47.36%;height:93.6%;transform-origin:right center}
 .sash.r img{width:211.2%;left:-103.05%;top:-3.21%}
-.scene.open .sash.l{transform:rotateY(-124deg)}
-.scene.open .sash.r{transform:rotateY(124deg)}
-.scene.open .sash{box-shadow:16px 0 40px rgba(0,0,0,.6)}
+.scene.open .sash.l{transform:rotateY(-68deg)}
+.scene.open .sash.r{transform:rotateY(68deg)}
+.scene.open .sash{box-shadow:0 0 0 1px rgba(0,0,0,.6),0 30px 60px rgba(0,0,0,.7)}
+.sash::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.18),transparent 40%,transparent 60%,rgba(0,0,0,.18));opacity:0;transition:opacity 1.3s}
+.scene.open .sash::after{opacity:1}
 .hint{position:relative;z-index:2;margin:0;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);text-align:center;animation:pulse 2.4s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
 .scene.open ~ .hint{opacity:0;animation:none}
@@ -55,12 +57,12 @@ button{font-family:inherit}
 /* corners picker */
 .xclose{position:absolute;top:14px;right:14px;z-index:9;appearance:none;background:rgba(5,6,8,.75);color:#fff;border:1px solid rgba(53,208,255,.6);border-radius:999px;padding:10px 16px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;box-shadow:0 0 20px rgba(53,208,255,.35)}
 .xclose:hover{border-color:#fff}.xclose:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.pick{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:64px 16px 24px;overflow:auto;background:radial-gradient(70% 60% at 50% 40%,rgba(53,208,255,.18),rgba(5,6,8,.92) 70%);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .7s}
+.pick{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:64px 16px 24px;overflow:auto;background:radial-gradient(60% 55% at 50% 45%,rgba(5,6,8,0),rgba(5,6,8,.55) 60%,rgba(5,6,8,.85) 100%);opacity:0;pointer-events:none;transition:opacity .7s}
 .pick.on{opacity:1;pointer-events:auto}
 .pick h2{font-family:var(--display);font-weight:400;font-size:clamp(20px,3.4vw,34px);letter-spacing:.18em;text-transform:uppercase;margin:0;text-align:center;color:#fff;text-shadow:0 0 30px rgba(53,208,255,.6);text-wrap:balance}
 .pick p{margin:0;color:var(--muted);font-size:14px;letter-spacing:.14em;text-transform:uppercase;text-align:center}
 .cards{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;max-width:1200px;width:100%}
-.card{appearance:none;background:rgba(11,14,19,.55);border:1px solid rgba(53,208,255,.25);border-radius:16px;padding:16px 14px 14px;width:200px;max-width:44vw;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;color:var(--fg);transition:transform .25s,border-color .25s,box-shadow .25s;transform:translateY(16px);opacity:0}
+.card{appearance:none;background:rgba(8,10,14,.82);backdrop-filter:blur(6px);border:1px solid rgba(53,208,255,.25);border-radius:16px;padding:16px 14px 14px;width:200px;max-width:44vw;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;color:var(--fg);transition:transform .25s,border-color .25s,box-shadow .25s;transform:translateY(16px);opacity:0}
 .pick.on .card{animation:rise .6s forwards}
 .pick.on .card:nth-child(2){animation-delay:.08s}.pick.on .card:nth-child(3){animation-delay:.16s}.pick.on .card:nth-child(4){animation-delay:.24s}.pick.on .card:nth-child(5){animation-delay:.32s}
 @keyframes rise{to{transform:none;opacity:1}}
@@ -195,7 +197,7 @@ const $=s=>document.querySelector(s);
 const scene=$('#scene'),pick=$('#pick'),cards=$('#cards'),hint=$('#hint');
 let openT=null,state={open:false};
 SYS.forEach(s=>{const b=document.createElement('button');b.type='button';b.className='card';b.innerHTML=`<img src="img/angolo-${s.id}.png" alt="Angolo del profilo ${s.name}"><b>${s.name}</b><span>${s.sub}</span><em>Scheda tecnica ›</em>`;b.addEventListener('click',()=>openSheet(s));cards.appendChild(b)});
-function openWin(){if(state.open)return;state.open=true;$('#xclose').hidden=false;scene.classList.add('open');scene.setAttribute('aria-expanded','true');clearTimeout(openT);openT=setTimeout(()=>{pick.classList.add('on');pick.setAttribute('aria-hidden','false')},1100)}
+function openWin(){if(state.open)return;state.open=true;$('#xclose').hidden=false;scene.classList.add('open');scene.setAttribute('aria-expanded','true');clearTimeout(openT);openT=setTimeout(()=>{pick.classList.add('on');pick.setAttribute('aria-hidden','false')},2300)}
 function closeWin(){state.open=false;$('#xclose').hidden=true;clearTimeout(openT);pick.classList.remove('on');pick.setAttribute('aria-hidden','true');scene.classList.remove('open');scene.setAttribute('aria-expanded','false')}
 scene.addEventListener('click',()=>state.open?closeWin():openWin());
 scene.addEventListener('keydown',e=>{if(e.key=='Enter'||e.key==' '){e.preventDefault();state.open?closeWin():openWin()}});
