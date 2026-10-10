@@ -39,12 +39,14 @@ button{font-family:inherit}
 .scene.open .inside{opacity:1}
 .light{position:absolute;inset:-30%;z-index:2;background:radial-gradient(closest-side,rgba(255,255,255,.75),rgba(53,208,255,.35) 40%,transparent 70%);opacity:0;transform:scale(.3);transition:opacity .9s,transform 1.2s cubic-bezier(.2,.8,.2,1);pointer-events:none;mix-blend-mode:screen}
 .scene.open .light{opacity:1;transform:scale(1.1)}
-.sash{position:absolute;z-index:4;overflow:hidden;transition:transform 1.8s cubic-bezier(.3,.8,.25,1);backface-visibility:visible;box-shadow:0 0 0 1px rgba(0,0,0,.15)}
+.sash{position:absolute;z-index:4;transform-style:preserve-3d;transition:transform 1.8s cubic-bezier(.3,.8,.25,1);backface-visibility:visible;box-shadow:0 0 0 1px rgba(0,0,0,.15)}
 .sash img{position:absolute;display:block;max-width:none}
+.sash .front,.sash .back{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;background:#f3f1ec}
+.sash .back{transform:rotateY(180deg)}
 .sash.l{left:3.37%;top:3%;width:45.19%;height:93.6%;transform-origin:left center}
-.sash.l img{width:221.3%;left:-7.45%;top:-3.21%}
+.sash.l .front img,.sash.l .back img{width:221.3%;left:-7.45%;top:-3.21%}
 .sash.r{left:48.8%;top:3%;width:47.36%;height:93.6%;transform-origin:right center}
-.sash.r img{width:211.2%;left:-103.05%;top:-3.21%}
+.sash.r .front img,.sash.r .back img{width:211.2%;left:-103.05%;top:-3.21%}
 .scene.open .sash.l{transform:rotateY(-180deg)}
 .scene.open .sash.r{transform:rotateY(180deg)}
 .scene.open .sash{box-shadow:0 0 0 1px rgba(0,0,0,.6),0 30px 60px rgba(0,0,0,.7)}
@@ -128,8 +130,8 @@ footer{padding:26px 16px;text-align:center;color:var(--muted);font-size:12px;let
    <div class="photo">
     <img class="base" src="img/finestra.jpg" alt="Finestra a due ante Vivantech">
     <div class="opening"><div class="inside"></div><div class="light"></div></div>
-    <div class="sash l"><img src="img/finestra.jpg" alt=""></div>
-    <div class="sash r"><img src="img/finestra.jpg" alt=""></div>
+    <div class="sash l"><div class="front"><img src="img/finestra.jpg" alt=""></div><div class="back"><img src="img/finestra-retro.jpg" alt=""></div></div>
+    <div class="sash r"><div class="front"><img src="img/finestra.jpg" alt=""></div><div class="back"><img src="img/finestra-retro.jpg" alt=""></div></div>
    </div>
   </div>
   <p class="hint" id="hint">Tocca la finestra per aprirla</p>
