@@ -31,7 +31,7 @@ button{font-family:inherit}
 .stage{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:16px}
 .scene{cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:10px}
 .scene:focus-visible{outline:2px solid var(--accent);outline-offset:6px}
-.photo{position:relative;perspective:1300px;height:min(82vh,900px);aspect-ratio:416/532;max-width:48vw;border-radius:0;overflow:visible;background:#000;outline:2px solid #000;box-shadow:0 0 0 1px rgba(53,208,255,.35),0 0 90px -20px rgba(53,208,255,.4),0 40px 80px -40px rgba(0,0,0,.95);transition:box-shadow .8s}
+.photo{position:relative;perspective:1300px;width:min(48vw,calc(82vh * 0.782),704px);height:auto;aspect-ratio:416/532;border-radius:0;overflow:visible;background:#000;outline:2px solid #000;box-shadow:0 0 0 1px rgba(53,208,255,.35),0 0 90px -20px rgba(53,208,255,.4),0 40px 80px -40px rgba(0,0,0,.95);transition:box-shadow .8s}
 .scene.open .photo{box-shadow:0 0 0 1px rgba(53,208,255,.6),0 0 140px -10px rgba(53,208,255,.7),0 40px 80px -40px rgba(0,0,0,.95)}
 .photo img.base{position:absolute;inset:0;width:100%;height:100%;display:block}
 .opening{position:absolute;left:3.37%;top:3%;width:92.8%;height:93.6%}
