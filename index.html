@@ -211,19 +211,22 @@ $('#closeSheet').addEventListener('click',()=>{sheet.hidden=true});
 document.addEventListener('keydown',e=>{if(e.key=='Escape'){if(!pres.hidden)closePres();else if(!sheet.hidden)sheet.hidden=true;else if(state.open)closeWin()}});
 /* presentation */
 const pres=$('#pres'),vin=$('#vin'),line=$('#line'),bar=$('#barFill');let presRun=0,voice=null;
-function pickVoice(){try{const vs=speechSynthesis.getVoices();voice=vs.find(v=>/^it/i.test(v.lang)&&/male|Luca|Cosimo|Diego|Google/i.test(v.name))||vs.find(v=>/^it/i.test(v.lang))||null}catch(e){}}
+function pickVoice(){try{const vs=speechSynthesis.getVoices().filter(v=>/^it/i.test(v.lang));const pref=[/Diego.*Natural|Natural.*Diego/i,/Cosimo.*Natural|Natural.*Cosimo/i,/Giuseppe.*Natural|Natural.*Giuseppe/i,/Natural/i,/Luca.*(Premium|Enhanced)/i,/Luca/i,/Cosimo/i,/Diego/i,/Premium|Enhanced/i,/Google/i,/Alice|Elsa|Federica|Paola/i];for(const r of pref){const v=vs.find(v=>r.test(v.name));if(v){voice=v;return}}voice=vs[0]||null}catch(e){}}
 try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice}catch(e){}
 function script(s){return[
- `Ciao, sono Vinny di Vivantech. Complimenti: hai scelto uno dei migliori serramenti sul mercato.`,
- `Il ${s.name} è un profilo in PVC da ${s.mm} millimetri, ${s.extra}.`,
- `Tiene fuori il freddo, il rumore e gli spifferi. E dentro casa cambia davvero l’aria.`,
- `Lo misuriamo noi, lo posiamo noi e te lo garantiamo noi: un solo interlocutore, dal rilievo alla posa.`,
- `Vieni a toccarlo con mano nello showroom di Luisago, o chiamaci: il preventivo te lo facciamo in giornata.`,
- `A presto!`]}
-function speak(t){return new Promise(res=>{let done=false;const fin=()=>{if(!done){done=true;res()}};try{if(!('speechSynthesis' in window))return setTimeout(fin,Math.max(1800,t.length*58));const u=new SpeechSynthesisUtterance(t);u.lang='it-IT';if(voice)u.voice=voice;u.rate=1;u.onend=fin;u.onerror=fin;speechSynthesis.speak(u);setTimeout(fin,Math.max(2500,t.length*95))}catch(e){setTimeout(fin,Math.max(1800,t.length*58))}})}
+ `Ciao, sono Vinny di Vivantech. Complimenti, davvero: hai scelto uno dei migliori serramenti che ci siano sul mercato.`,
+ `Il ${s.name} è un profilo in PVC da ${s.mm} millimetri, ${s.extra}. Solido, elegante, e pensato per durare.`,
+ `Tiene fuori il freddo, il rumore e gli spifferi. E dentro casa, te lo assicuro, cambia davvero l’aria.`,
+ `Lo misuriamo noi, lo posiamo noi, e te lo garantiamo noi. Un solo interlocutore, dal rilievo alla posa.`,
+ `Vieni a toccarlo con mano nel nostro showroom di Luisago, oppure chiamaci: il preventivo te lo prepariamo in giornata.`,
+ `A presto, da Vivantech. Abbiamo fatto una scelta precisa: qualità senza compromessi.`]}
+function sayOne(t){return new Promise(res=>{let done=false;const fin=()=>{if(!done){done=true;res()}};try{const u=new SpeechSynthesisUtterance(t);u.lang='it-IT';if(voice)u.voice=voice;u.rate=.94;u.pitch=.95;u.volume=1;u.onend=fin;u.onerror=fin;speechSynthesis.speak(u);setTimeout(fin,Math.max(2500,t.length*110))}catch(e){setTimeout(fin,Math.max(1500,t.length*60))}})}
+async function speak(t){if(!('speechSynthesis' in window)){await new Promise(r=>setTimeout(r,Math.max(1800,t.length*58)));return}
+ const parts=t.match(/[^.!?:]+[.!?:]+["”]?|[^.!?:]+$/g)||[t];
+ for(const p of parts){const q=p.trim();if(!q)continue;await sayOne(q);await new Promise(r=>setTimeout(r,/[:]$/.test(q)?180:320))}}
 async function openPres(){if(!cur)return;pres.hidden=false;const run=++presRun;const L=script(cur);vin.classList.add('talk','wave');bar.style.width='0%';
  for(let i=0;i<L.length;i++){if(run!==presRun)return;line.textContent=L[i];bar.style.width=Math.round((i+1)/L.length*100)+'%';await speak(L[i]);await new Promise(r=>setTimeout(r,350))}
- if(run!==presRun)return;vin.classList.remove('talk');line.textContent='Complimenti per la scelta. Ti aspettiamo da Vivantech.'}
+ if(run!==presRun)return;vin.classList.remove('talk');line.textContent='Qualità senza compromessi. Ti aspettiamo da Vivantech.'}
 function closePres(){presRun++;pres.hidden=true;vin.classList.remove('talk','wave');try{speechSynthesis.cancel()}catch(e){}}
 $('#btnPres').addEventListener('click',openPres);$('#closePres').addEventListener('click',closePres);
 /* glass-fibre light around the window (canvas) */
