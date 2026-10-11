@@ -1,0 +1,27 @@
+<svg class="bly" viewBox="0 0 130 214" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke-linejoin="round" stroke-linecap="round" stroke="#1b1b1b"><g class="bly-all">
+<g class="bly-legs"><path d="M52 168v28" stroke="#2f3337" stroke-width="13"/><path d="M78 168v28" stroke="#2f3337" stroke-width="13"/><ellipse cx="49" cy="201" rx="11" ry="6" fill="#2a2a2a" stroke-width="3"/><ellipse cx="81" cy="201" rx="11" ry="6" fill="#2a2a2a" stroke-width="3"/></g>
+<path d="M34 176c-3-28 8-52 31-58 23 6 34 30 31 58z" fill="#151515" stroke-width="3"/>
+<path d="M40 176c-3-26 5-46 19-54l6 54zM90 176c3-26-5-46-19-54l-6 54z" fill="#253a60" stroke-width="3"/>
+<path d="M46 118q19 10 38 0l-6 14q-13 6-26 0z" fill="#d9dbe0" stroke-width="2.5"/>
+<path d="M65 126v48" stroke="#1b1b1b" stroke-width="1.5" opacity=".5"/><circle cx="84" cy="142" r="3" fill="#2bb673" stroke-width="1.5"/>
+<path d="M40 130q-8 16-4 34" fill="none" stroke="#151515" stroke-width="10"/><circle cx="36" cy="168" r="7" fill="#e8b48f" stroke-width="3"/>
+<circle cx="115" cy="104" r="8.5" fill="#e8b48f" stroke-width="3"/><path d="M109 100q6-4 12 0M110 106q5-3 10 0" fill="none" stroke-width="1.6"/>
+<g class="bly-head"><ellipse cx="24" cy="72" rx="7" ry="10" fill="#e8b48f" stroke-width="3"/><ellipse cx="106" cy="72" rx="7" ry="10" fill="#e8b48f" stroke-width="3"/>
+<path d="M65 116c-24 0-38-20-38-48 0-26 16-42 38-42s38 16 38 42c0 28-14 48-38 48z" fill="#efbc95" stroke-width="3.2"/>
+<!-- barba: solo parte bassa del viso, senza linea superiore -->
+<path d="M30 84c4 10 7 17 11 22c6 7 14 11 24 11s18-4 24-11c4-5 7-12 11-22c-3 6-6 10-10 13c-3 2-5 6-8 8c-5 3-11 4-17 4s-12-1-17-4c-3-2-5-6-8-8c-4-3-7-7-10-13z" fill="#a9adb4" stroke="none"/>
+<path d="M30 84c3 9 6 16 10 21c2 4 4 6 7 8c2 3 5 4 8 5c3 2 6 2 10 2s7 0 10-2c3-1 6-2 8-5c3-2 5-4 7-8c4-5 7-12 10-21" fill="none" stroke-width="3"/>
+<path d="M36 92l2 6M42 100l2 5M50 107l1 5M58 110v5M65 111v6M72 110v5M80 107l-1 5M88 100l-2 5M94 92l-2 6" fill="none" stroke="#8d9198" stroke-width="1.8"/><path d="M39 94l2 5M46 103l1 4M54 108l1 4M61 110v5M69 110v5M76 108l-1 4M84 103l-1 4M91 94l-2 5" fill="none" stroke="#e3e5e8" stroke-width="1.4"/>
+<!-- capelli a spazzola -->
+<path d="M28 54c-3-10 0-18 4-24l2 3l2-5l3 3l2-5l3 3l3-5l3 3l3-5l3 3l3-5l3 4l3-4l3 5l3-3l3 5l3-3l3 5l3-3l2 5l3-3l2 5l2-3c4 6 7 14 4 24c-3-6-7-10-12-12c-6-3-13-4-20-4h-6c-7 0-14 1-20 4c-5 2-9 6-12 12z" fill="#a9adb4" stroke-width="2.5"/>
+<path d="M40 34l-1-6M48 31l-1-6M56 29l0-6M65 28l0-6M74 29l0-6M82 31l1-6M90 34l1-6M35 40l-2-5M95 40l2-5" fill="none" stroke="#eef0f3" stroke-width="2.2"/>
+<path d="M44 42l-1-6M52 40l0-6M60 39l0-6M70 39l0-6M78 40l0-6M86 42l1-6M36 48l-1-5M94 48l1-5" fill="none" stroke="#8d9198" stroke-width="1.6"/>
+<ellipse cx="37" cy="86" rx="6" ry="4" fill="#ff8a8a" opacity=".35" stroke="none"/><ellipse cx="93" cy="86" rx="6" ry="4" fill="#ff8a8a" opacity=".35" stroke="none"/>
+<path d="M33 52q11-7 23-2M74 50q12-5 23 2" stroke="#4a4a4a" stroke-width="4.5" fill="none"/>
+<rect x="30" y="56" width="30" height="22" rx="5" fill="#fff" stroke="#111" stroke-width="5.5"/><rect x="70" y="56" width="30" height="22" rx="5" fill="#fff" stroke="#111" stroke-width="5.5"/><path d="M60 64h10" stroke="#111" stroke-width="4.5"/>
+<g class="bly-eyes" stroke="none"><circle cx="45" cy="67" r="5.6" fill="#3a2a1a"/><circle cx="85" cy="67" r="5.6" fill="#3a2a1a"/><circle cx="47" cy="65" r="1.9" fill="#fff"/><circle cx="87" cy="65" r="1.9" fill="#fff"/></g>
+<path d="M62 72q-4 9 3 11q5 1 6-2" stroke="#c9845f" stroke-width="3" fill="#ebb08a"/>
+<path d="M50 86c4-4 9-5 13-2c1 0 3 0 4 0c4-3 9-2 13 2c-3 2-7 3-10 3c-2 0-4-1-5-1c-1 0-3 1-5 1c-3 0-7-1-10-3z" fill="#9ea2a8" stroke="#8d9198" stroke-width="1.2"/>
+<g class="bly-mouth"><path d="M50 92q15 13 30 0z" fill="#7a2e2e" stroke-width="2.5"/><path d="M53 93q12 4 24 0q-12 3-24 0z" fill="#fff" stroke="none"/></g>
+</g>
+<g class="bly-hand"><path d="M90 134q16-6 20-26" fill="none" stroke="#151515" stroke-width="10"/><g transform="rotate(-32 110 106)"><rect x="105" y="66" width="10" height="48" rx="2" fill="#ffd166" stroke-width="2.2"/><path d="M105 72h4M105 78h6M105 84h4M105 90h6M105 96h4M105 102h6" stroke="#1b1b1b" stroke-width="1.4"/></g><circle cx="110" cy="106" r="8.5" fill="#e8b48f" stroke-width="3"/><path d="M104 102q6-4 12 0M105 108q5-3 10 0" fill="none" stroke-width="1.6"/></g></g></g></svg>
