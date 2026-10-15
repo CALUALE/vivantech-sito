@@ -1,4 +1,4 @@
-<svg class="bly" viewBox="0 0 130 214" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke-linejoin="round" stroke-linecap="round" stroke="#1b1b1b"><g class="bly-all">
+<svg class="bly pingy" viewBox="0 0 130 214" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><style>.pingy .bly-hand{transform-box:fill-box;transform-origin:0 100%;animation:pingyWave 1.4s ease-in-out infinite}@keyframes pingyWave{0%,100%{transform:rotate(3deg)}50%{transform:rotate(-10deg)}}@media (prefers-reduced-motion:reduce){.pingy .bly-hand{animation:none}}</style><g stroke-linejoin="round" stroke-linecap="round" stroke="#1b1b1b"><g class="bly-all">
 <g class="bly-legs"><path d="M52 168v28" stroke="#2f3337" stroke-width="13"/><path d="M78 168v28" stroke="#2f3337" stroke-width="13"/><ellipse cx="49" cy="201" rx="11" ry="6" fill="#2a2a2a" stroke-width="3"/><ellipse cx="81" cy="201" rx="11" ry="6" fill="#2a2a2a" stroke-width="3"/></g>
 <path d="M34 186c-2-32 7-62 31-68 24 6 33 36 31 68z" fill="#eef3f8" stroke-width="3"/>
 <path d="M34 186c-2-30 4-58 22-66l2 66zM96 186c2-30-4-58-22-66l-2 66z" fill="#3a6ea5" stroke-width="3"/>
