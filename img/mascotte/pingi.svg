@@ -1,0 +1,15 @@
+<svg class="bly" viewBox="0 0 130 214" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke-linejoin="round" stroke-linecap="round" stroke="#1b1b1b"><g class="bly-all">
+<g class="bly-legs"><path d="M52 168v28" stroke="#2f3337" stroke-width="13"/><path d="M78 168v28" stroke="#2f3337" stroke-width="13"/><ellipse cx="49" cy="201" rx="11" ry="6" fill="#2a2a2a" stroke-width="3"/><ellipse cx="81" cy="201" rx="11" ry="6" fill="#2a2a2a" stroke-width="3"/></g>
+<path d="M36 174c-2-26 6-50 29-56 23 6 31 30 29 56z" fill="#eef3f8" stroke-width="3"/>
+<path d="M36 174c-2-24 4-46 20-54l2 54zM94 174c2-24-4-46-20-54l-2 54z" fill="#3a6ea5" stroke-width="3"/>
+<circle cx="83" cy="138" r="3.2" fill="#2bb673" stroke-width="1.5"/>
+<path d="M38 132q-12 14-6 30" fill="none" stroke="#3a6ea5" stroke-width="10"/><circle cx="33" cy="164" r="6.5" fill="#f8c49a" stroke-width="3"/>
+<g class="bly-head" transform="translate(0,4)"><ellipse cx="25" cy="66" rx="8" ry="11" fill="#f4b183" stroke-width="3"/><ellipse cx="105" cy="66" rx="8" ry="11" fill="#f4b183" stroke-width="3"/>
+<path d="M65 108c-25 0-40-19-40-46 0-26 17-42 40-42s40 16 40 42c0 27-15 46-40 46z" fill="#f8c49a" stroke-width="3.2"/>
+<ellipse cx="38" cy="80" rx="7" ry="4.5" fill="#ff8a8a" opacity=".55" stroke="none"/><ellipse cx="92" cy="80" rx="7" ry="4.5" fill="#ff8a8a" opacity=".55" stroke="none"/>
+<path d="M62 66q-4 9 3 11q5 1 6-2" stroke="#c9845f" stroke-width="3" fill="#f2b28a"/><path d="M27 62C24 40 34 24 50 20C54 10 66 4 80 6C74 9 72 13 74 17C92 20 106 36 103 62C100 50 95 42 88 37C80 38 70 38 60 36C50 34 42 32 36 38C31 44 29 52 27 62Z" fill="#161616" stroke-width="2.8"/>
+<path d="M52 20q8-10 22-12M58 22q6-8 16-10M66 26q10-4 20 0" fill="none" stroke="#4a4a52" stroke-width="1.8"/>
+<path d="M40 30q-6 6-8 14M94 40q3 6 4 12" fill="none" stroke="#4a4a52" stroke-width="1.6"/><ellipse cx="46" cy="62" rx="10" ry="8.5" fill="#fff" stroke-width="2.6"/><ellipse cx="84" cy="62" rx="10" ry="8.5" fill="#fff" stroke-width="2.6"/>
+<g class="bly-eyes" stroke="none"><circle cx="46" cy="62" r="5.6" fill="#2a1d14"/><circle cx="84" cy="62" r="5.6" fill="#2a1d14"/><circle cx="48" cy="60" r="1.9" fill="#fff"/><circle cx="86" cy="60" r="1.9" fill="#fff"/></g><path d="M34 44q11-7 23-1M73 43q12-6 23 1" stroke="#161616" stroke-width="4" fill="none"/><g class="bly-mouth"><path d="M42 84q23 22 46 0q-23 7-46 0z" fill="#fff" stroke-width="3"/><path d="M49 91q16 9 32 0" stroke="#e05a5a" stroke-width="5" fill="none" opacity=".8"/></g></g>
+<g class="bly-hand"><path d="M92 132q16-6 20-26" fill="none" stroke="#3a6ea5" stroke-width="10"/><circle cx="113" cy="100" r="7.5" fill="#f8c49a" stroke-width="3"/><path d="M108 94v-6M112 93v-7M116 94v-6" fill="none" stroke-width="2.8"/></g>
+</g></g></svg>
