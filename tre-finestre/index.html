@@ -22,14 +22,24 @@ button{font-family:inherit}
 .top a.tel{color:var(--fg);text-decoration:none;border:1px solid rgba(53,208,255,.35);border-radius:999px;padding:7px 14px;font-size:13px;white-space:nowrap}
 #bg{position:fixed;inset:0;background:radial-gradient(1200px 700px at 50% 110%,rgba(53,208,255,.16),transparent 60%),radial-gradient(900px 500px at 50% -20%,rgba(124,240,192,.06),transparent 60%),#050608}
 canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:manipulation}
-.ttl{position:fixed;left:0;right:0;top:clamp(78px,12vh,120px);text-align:center;pointer-events:none;transition:opacity .6s}
-.ttl h2{font-family:var(--display);font-weight:400;font-size:clamp(18px,3vw,34px);letter-spacing:.18em;text-transform:uppercase;margin:0;text-shadow:0 0 30px rgba(53,208,255,.5)}
-.ttl p{margin:10px 0 0;color:var(--muted);font-size:12px;letter-spacing:.22em;text-transform:uppercase}
+.ttl{position:fixed;left:0;right:0;top:clamp(70px,9vh,92px);text-align:center;pointer-events:none;transition:opacity .6s}
+.ttl h2{font-family:var(--display);font-weight:400;font-size:clamp(13px,1.7vw,21px);letter-spacing:.24em;text-transform:uppercase;margin:0;text-shadow:0 0 30px rgba(53,208,255,.5)}
+.ttl p{margin:6px 0 0;color:var(--muted);font-size:10px;letter-spacing:.22em;text-transform:uppercase}
 .lbl{position:fixed;transform:translate(-50%,0);appearance:none;background:none;border:0;color:var(--fg);cursor:pointer;text-align:center;padding:6px 10px;transition:opacity .5s}
 .lbl b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(11px,1.4vw,17px);letter-spacing:.2em;text-transform:uppercase}
 .lbl span{display:block;font-size:clamp(9px,1vw,12px);color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-top:4px}
 .lbl:focus-visible{outline:2px solid var(--accent);border-radius:8px}
-.busy .ttl,.busy .lbl{opacity:0;pointer-events:none}
+.busy .ttl,.busy .lbl,.busy #guides{opacity:0;pointer-events:none}
+#fib{position:fixed;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+#guides{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;transition:opacity .6s;z-index:2}
+#guides path{fill:none;stroke-linecap:round}
+#guides .g0{stroke:url(#gg);stroke-width:1.2;opacity:.55}
+#guides .g1{stroke:#dff8ff;stroke-width:2;stroke-dasharray:18 260;animation:run 3.2s linear infinite;filter:drop-shadow(0 0 6px #35d0ff)}
+#guides circle{fill:#bff3ff;filter:drop-shadow(0 0 6px #35d0ff)}
+@keyframes run{from{stroke-dashoffset:278}to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){#guides .g1{animation:none;display:none}}
+#beam{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:6;mix-blend-mode:screen;opacity:0}
+.info.on .prof img{filter:drop-shadow(0 0 40px rgba(190,240,255,.85)) drop-shadow(0 0 90px rgba(53,208,255,.6)) drop-shadow(0 20px 24px rgba(0,0,0,.8))}
 .info{position:fixed;left:max(4vw,16px);top:50%;transform:translateY(-50%);width:min(38vw,520px);display:flex;flex-direction:column;gap:14px;opacity:0;pointer-events:none;transition:opacity .8s;z-index:10}
 .info.on{opacity:1;pointer-events:auto}
 .info .tag{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent2)}
@@ -64,6 +74,8 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
 </head>
 <body>
 <div id="bg"></div>
+<canvas id="fib" aria-hidden="true"></canvas>
+<svg id="guides" aria-hidden="true"><defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#35d0ff" stop-opacity=".9"/><stop offset="1" stop-color="#35d0ff" stop-opacity=".15"/></linearGradient></defs><g id="gl"></g></svg>
 <canvas id="c" aria-label="Tre finestre: PVC, fibra di vetro, alluminio"></canvas>
 <header class="top">
  <a class="brand" href="../"><img src="../img/logo.png" alt="Logo Vivantech"><div><h1>Vivantech</h1><small>Serramenti · Luisago (CO)</small></div></a>
@@ -71,6 +83,10 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
 </header>
 <div class="ttl"><h2>Scegli il materiale</h2><p>Tocca una finestra</p></div>
 <div id="labels"></div>
+<svg id="beam" aria-hidden="true"><defs>
+ <linearGradient id="bg1" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".35" stop-color="#d6f6ff" stop-opacity=".55"/><stop offset="1" stop-color="#35d0ff" stop-opacity=".18"/></linearGradient>
+ <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10"/></filter>
+</defs><polygon id="bp" fill="url(#bg1)" filter="url(#soft)"/><polygon id="bc" fill="url(#bg1)" opacity=".6"/></svg>
 <div class="info" id="info" aria-live="polite">
  <div class="tag" id="iTag"></div>
  <h3 id="iName"></h3>
@@ -183,7 +199,7 @@ function buildWindow(p){
  const plate=box(.028,.075,.01,steel,.003);plate.position.set(hx,0,sd/2+.006);R.a.add(plate);
  const lever=box(.022,.13,.016,steel,.006);lever.position.set(hx,-.055,sd/2+.022);R.a.add(lever);
  const view=new THREE.Mesh(new THREE.PlaneGeometry(ow+.02,oh+.02),viewMat);view.position.z=-D/2-.03;g.add(view);
- g.userData={p,L:L.piv,R:R.piv,mat};
+ g.userData={p,L:L.piv,R:R.piv,mat,ow,oh,D};
  g.traverse(o=>{if(o.isMesh)o.userData.win=g});
  return g;
 }
@@ -195,7 +211,7 @@ function resize(){
  const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;mobile=w<=760;
  const span=(GAP*2+W)*1.15,vfov=THREE.MathUtils.degToRad(camera.fov);
  const dW=(span/2)/(Math.tan(vfov/2)*camera.aspect),dH=(H*1.9/2)/Math.tan(vfov/2);
- home.camZ=Math.max(dW,dH);camera.position.set(0,.05,home.camZ);camera.lookAt(0,-.05,0);camera.updateProjectionMatrix();
+ home.camZ=Math.max(dW,dH);camera.position.set(0,.24,home.camZ);camera.lookAt(0,.2,0);camera.updateProjectionMatrix();
 }
 addEventListener('resize',resize);resize();
 
@@ -232,14 +248,16 @@ async function choose(i){
  // 2. un giro completo, lento
  if(!(await tween(5200,t=>{w.rotation.y=t*Math.PI*2})))return;w.rotation.y=0;
  // 3. si sposta a destra (su telefono sale)
- const tx=mobile?0:.62,ty=mobile?half*.42:0,tz=mobile?fwd:.9;
+ const tx=mobile?0:.95,ty=mobile?half*.42:0,tz=mobile?fwd:.9;
  if(!(await tween(1100,t=>{w.position.x=lerp(0,tx,t);w.position.y=lerp(0,ty,t);w.position.z=lerp(fwd,tz,t);w.rotation.y=lerp(0,-.42,t)})))return;
  // 4. le ante si aprono fino in fondo
- const A=THREE.MathUtils.degToRad(105);
- if(!(await tween(2200,t=>{w.userData.L.rotation.y=-A*t;w.userData.R.rotation.y=A*t},easeOut)))return;
- info.classList.add('on');document.getElementById('close').focus({preventScroll:true});
+ const A=THREE.MathUtils.degToRad(168);
+ if(!(await tween(2600,t=>{w.userData.L.rotation.y=-A*t;w.userData.R.rotation.y=A*t},easeOut)))return;
+ sel=w;info.classList.add('on');
+ viewMat.color.setScalar(1);await tween(900,t=>{beamT=t;viewMat.color.setScalar(1+t*.7)},easeOut);
+ document.getElementById('close').focus({preventScroll:true});
 }
-function closeAll(){token++;busy=false;info.classList.remove('on');document.body.classList.remove('busy');
+function closeAll(){token++;busy=false;sel=null;beamT=0;viewMat.color.setScalar(1);info.classList.remove('on');document.body.classList.remove('busy');
  wins.forEach((w,i)=>{w.visible=true;w.position.set((i-1)*GAP,0,0);w.rotation.set(0,0,0);w.userData.L.rotation.y=0;w.userData.R.rotation.y=0})}
 document.getElementById('close').addEventListener('click',closeAll);
 const ray=new THREE.Raycaster(),ptr=new THREE.Vector2();
@@ -254,7 +272,59 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){const s=document.getElementB
 const clock=new THREE.Clock();
 renderer.setAnimationLoop(()=>{const t=clock.getElapsedTime();
  if(!busy)wins.forEach((w,i)=>{w.rotation.y=Math.sin(t*.5+i*1.3)*.12;w.position.y=Math.sin(t*.8+i)*.02});
- placeLabels();renderer.render(scene,camera)});
+ placeLabels();placeGuides();renderer.render(scene,camera);drawBeam()});
+/* ---------- fascio di luce verso il profilo ---------- */
+let sel=null,beamT=0;const beam=document.getElementById('beam'),bp=document.getElementById('bp'),bc=document.getElementById('bc'),grad=document.getElementById('bg1');
+const pv=new THREE.Vector3();
+function proj(w,x,y,z){pv.set(x,y,z);w.localToWorld(pv);pv.project(camera);return[(pv.x+1)/2*innerWidth,(-pv.y+1)/2*innerHeight]}
+function drawBeam(){
+ if(!sel||beamT<=0){beam.style.opacity=0;return}
+ const {ow,oh,D}=sel.userData,img=document.getElementById('iImg').getBoundingClientRect();
+ let a,b,c,d;
+ if(!mobile){a=proj(sel,-ow/2,oh/2,-D/2);b=proj(sel,-ow/2,-oh/2,-D/2);
+  const tx=img.left+img.width*.62;c=[tx,img.top+img.height*.4];d=[tx,img.top+img.height*.75];}
+ else{a=proj(sel,-ow/2,-oh/2,-D/2);b=proj(sel,ow/2,-oh/2,-D/2);
+  c=[img.left+img.width*.75,img.top+img.height*.3];d=[img.left+img.width*.25,img.top+img.height*.3];}
+ // il fascio "cresce" dalla finestra verso il profilo
+ const k=beamT,lerp2=(p,q)=>[p[0]+(q[0]-p[0])*k,p[1]+(q[1]-p[1])*k];
+ const mid=[(a[0]+b[0])/2,(a[1]+b[1])/2],c2=lerp2(mid,c),d2=lerp2(mid,d);
+ const pts=[a,b,d2,c2].map(p=>p.map(n=>n.toFixed(1)).join(',')).join(' ');
+ bp.setAttribute('points',pts);
+ const cm=[(c2[0]+d2[0])/2,(c2[1]+d2[1])/2],core=[lerp2(mid,[mid[0]+(a[0]-mid[0])*.35,mid[1]+(a[1]-mid[1])*.35]),[mid[0]+(b[0]-mid[0])*.35,mid[1]+(b[1]-mid[1])*.35],[cm[0]+(d2[0]-cm[0])*.4,cm[1]+(d2[1]-cm[1])*.4],[cm[0]+(c2[0]-cm[0])*.4,cm[1]+(c2[1]-cm[1])*.4]];
+ core[0]=[mid[0]+(a[0]-mid[0])*.35,mid[1]+(a[1]-mid[1])*.35];
+ bc.setAttribute('points',core.map(p=>p.map(n=>n.toFixed(1)).join(',')).join(' '));
+ grad.setAttribute('x1',mid[0]);grad.setAttribute('y1',mid[1]);grad.setAttribute('x2',cm[0]);grad.setAttribute('y2',cm[1]);
+ beam.style.opacity=Math.min(1,k*1.4)*(.85+Math.sin(performance.now()/700)*.08);
+}
+/* ---------- righe dal titolo verso ogni finestra ---------- */
+const gl=document.getElementById('gl'),ttlEl=document.querySelector('.ttl');
+const gp=M.map((_,i)=>{const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+ g.innerHTML='<path class="g0"/><path class="g1" style="animation-delay:'+(i*.6)+'s"/><circle r="3"/>';gl.appendChild(g);return g});
+function placeGuides(){if(busy)return;const r=ttlEl.getBoundingClientRect(),sx=innerWidth/2,sy=r.bottom+8;
+ wins.forEach((w,i)=>{v.set(w.position.x,w.position.y+H/2+.04,0).project(camera);const ex=(v.x+1)/2*innerWidth,ey=(-v.y+1)/2*innerHeight;
+  const my=sy+(ey-sy)*.55,d=`M${sx.toFixed(1)},${sy.toFixed(1)} C${sx.toFixed(1)},${my.toFixed(1)} ${ex.toFixed(1)},${(sy+(ey-sy)*.35).toFixed(1)} ${ex.toFixed(1)},${ey.toFixed(1)}`;
+  const [p0,p1,c]=gp[i].children;p0.setAttribute('d',d);p1.setAttribute('d',d);c.setAttribute('cx',ex);c.setAttribute('cy',ey)})}
+
+/* ---------- fibre di luce sullo sfondo (come nella home) ---------- */
+(function(){const cv=document.getElementById('fib'),ctx=cv.getContext('2d');if(!ctx)return;const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ let W2=0,H2=0,F=[];const t0=performance.now();
+ function build(){const dpr=Math.min(1.5,devicePixelRatio||1);W2=innerWidth;H2=innerHeight;cv.width=W2*dpr;cv.height=H2*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+  // zona occupata dalle finestre (proiettata)
+  v.set(-GAP-W/2,H/2,0).project(camera);const x0=(v.x+1)/2*W2,y0=(-v.y+1)/2*H2;v.set(GAP+W/2,-H/2,0).project(camera);const x1=(v.x+1)/2*W2,y1=(-v.y+1)/2*H2;
+  F=[];const N=W2<700?24:46;
+  for(let i=0;i<N;i++){const side=i%2?1:-1,hug=i%3!==0;let p;
+   if(hug){const x=side<0?x0-10-Math.random()*Math.min(160,x0):x1+10+Math.random()*Math.min(160,W2-x1);const bow=side*(30+Math.random()*120);
+    p=[{x:x+bow*.6,y:-40},{x:x+bow,y:H2*.25+Math.random()*H2*.2},{x:x-bow*.3,y:H2*.55+Math.random()*H2*.2},{x:x+bow*.4,y:H2+40}]}
+   else{const sx=side<0?-40:W2+40,sy=Math.random()*H2,ex=x0+Math.random()*(x1-x0),ey=Math.random()<.5?y0-20-Math.random()*60:y1+20+Math.random()*60;
+    p=[{x:sx,y:sy},{x:sx-side*W2*.25,y:sy+(Math.random()-.5)*H2*.5},{x:ex+side*60,y:ey+(Math.random()-.5)*160},{x:ex,y:ey}]}
+   F.push({p,len:60+Math.random()*120,gap:220+Math.random()*320,sp:40+Math.random()*70,ph:Math.random()*1000,w:.6+Math.random()*1.2,a:.25+Math.random()*.45})}}
+ function path(f){ctx.beginPath();ctx.moveTo(f.p[0].x,f.p[0].y);ctx.bezierCurveTo(f.p[1].x,f.p[1].y,f.p[2].x,f.p[2].y,f.p[3].x,f.p[3].y)}
+ function draw(now){const t=(now-t0)/1000,boost=busy?1.8:1;ctx.clearRect(0,0,W2,H2);
+  for(const f of F){path(f);ctx.setLineDash([]);ctx.lineWidth=f.w;ctx.strokeStyle=`rgba(53,208,255,${.07*boost})`;ctx.stroke();
+   ctx.setLineDash([f.len,f.gap]);ctx.lineDashOffset=-(t*f.sp*boost+f.ph);ctx.lineWidth=f.w*2.6;ctx.strokeStyle=`rgba(53,208,255,${f.a*.35*boost})`;ctx.stroke();
+   ctx.lineWidth=f.w;ctx.strokeStyle=`rgba(210,245,255,${Math.min(1,f.a*boost)})`;ctx.stroke()}
+  ctx.setLineDash([]);if(!RM)requestAnimationFrame(draw)}
+ build();addEventListener('resize',()=>{build();if(RM)draw(performance.now())});requestAnimationFrame(draw)})();
 window.__vt={choose,closeAll};
 </script>
 </body>
