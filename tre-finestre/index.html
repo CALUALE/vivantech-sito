@@ -57,6 +57,12 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
 .tabs button:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .info .prof img{max-width:24vw;object-fit:contain;pointer-events:auto;cursor:zoom-in;touch-action:none}
 .info .prof{flex-direction:column;justify-content:center;gap:8px}
+.prow{display:flex;align-items:center;gap:1.2vw;height:calc(100% - 44px)}
+.prow img{max-height:100%}
+.prof.duo .prow img{max-width:17vw}
+.pcap{display:flex;justify-content:space-around;width:100%;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#cfe9f2;opacity:0;transition:opacity .8s 1s}
+.pcap[hidden]{display:none}
+.info.on .pcap{opacity:.9}
 .zh{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);opacity:0;transition:opacity .8s 1s;pointer-events:none;white-space:nowrap}
 .info.on .zh{opacity:.85}
 .lens{position:fixed;z-index:45;width:210px;height:210px;border-radius:50%;pointer-events:none;display:none;background-color:#05070a;background-repeat:no-repeat;
@@ -90,7 +96,9 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
 #err{position:fixed;inset:auto 16px 16px 16px;color:var(--muted);font-size:13px;text-align:center;display:none}
 @media (max-width:760px){
  .info{left:16px;right:16px;width:auto;top:auto;bottom:16px;transform:none;gap:8px}
- .info .prof{position:static;transform:none;height:96px}
+ .info .prof{position:static;transform:none;height:118px}
+ .prof.duo .prow img{max-width:38vw}
+ .pcap{font-size:9px;width:auto;justify-content:center;gap:14px}
  .info ul{font-size:12.5px}
  .top{padding:8px 12px}.brand img{width:36px}.brand small{font-size:9px}
  #close{top:66px}
@@ -118,7 +126,7 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
  <div class="tabs" id="iTabs" role="tablist"></div>
  <h3 id="iName"></h3>
  <p class="hl" id="iHl" hidden></p>
- <div class="prof"><img id="iImg" src="" alt="" draggable="false"><span class="zh" id="zh">🔍 Passa sopra per ingrandire</span></div>
+ <div class="prof" id="prof"><div class="prow"><img id="iImg" src="" alt="" draggable="false"><img id="iImg2" src="" alt="" draggable="false" hidden></div><div class="pcap" id="pcap" hidden><span id="iCap1"></span><span id="iCap2"></span></div><span class="zh" id="zh">🔍 Passa sopra per ingrandire</span></div>
  <div class="lens" id="lens" aria-hidden="true"></div>
  <ul id="iList"></ul>
  <div class="btns"><button type="button" class="cta" id="bSheet">Scheda tecnica</button><a class="ghost" href="tel:+390318130087">Richiedi preventivo</a></div>
@@ -148,7 +156,7 @@ const M=[
   {model:'P76 NEO',img:'angolo-p76.png',sheet:'scheda-p76.jpg',
    pts:['Profilo da 76 mm rinforzato in ultrafibra, 5/7 camere','Uw 0,85 W/m²K con vetro Ug 0,6','Isolamento acustico fino a 44 dB','Tre guarnizioni per la massima tenuta']}]},
  {k:'alu',label:'Alluminio',sub:'Very Light System · ibrido',depth:.082,frame:.046,sash:.036,meet:.045,models:[
-  {model:'VLS',sub:'Fiber Core',img:'angolo-vls.png',sheet:[['scheda-vls.jpg','Anta squadrata'],['scheda-vls-smussata.jpg','Anta smussata · fermavetro svasato, più luce']],
+  {model:'VLS',sub:'Fiber Core',img:'angolo-vls.png',img2:'angolo-vls-smussata.png',caps:['Anta squadrata','Anta smussata 17°'],sheet:[['scheda-vls.jpg','Anta squadrata'],['scheda-vls-smussata.jpg','Anta smussata · inclinazione 17°']],
    hl:'Riciclabile al 100% · nel rispetto della direttiva Case Green 2030',
    pts:['Alluminio a taglio termico con tecnologia Fiber Core','Nodo laterale 82 mm · centrale 90 mm: +30% di luce','Vetro fino a 48 mm · tre guarnizioni di serie','Anticorrosione di serie, verniciatura fino a 30 anni']}]}
 ];
@@ -303,7 +311,7 @@ let curM=null;
 function showModel(k,instant){curM=cur.models[k];
  [...document.getElementById('iTabs').children].forEach((b,j)=>b.setAttribute('aria-selected',j===k?'true':'false'));
  const im=document.getElementById('iImg'),apply=()=>{im.src='../img/'+curM.img;im.alt=(curM.photo?'Foto ':curM.sez?'Sezione del nodo centrale ':'Profilo ')+curM.model;im.classList.toggle('photo',!!curM.photo);
-  document.getElementById('iName').innerHTML=curM.model+(curM.sub?` <small>${curM.sub}</small>`:'');document.getElementById('iHl').hidden=!curM.hl;document.getElementById('iHl').textContent=curM.hl||'';document.getElementById('iList').innerHTML=curM.pts.map(p=>`<li>${p}</li>`).join('');
+  {const i2=document.getElementById('iImg2'),pc=document.getElementById('pcap');i2.hidden=!curM.img2;pc.hidden=!curM.caps;document.getElementById('prof').classList.toggle('duo',!!curM.img2);if(curM.img2){i2.src='../img/'+curM.img2;i2.alt='Profilo '+curM.model+' '+(curM.caps?curM.caps[1]:'')}if(curM.caps){document.getElementById('iCap1').textContent=curM.caps[0];document.getElementById('iCap2').textContent=curM.caps[1]}}document.getElementById('iName').innerHTML=curM.model+(curM.sub?` <small>${curM.sub}</small>`:'');document.getElementById('iHl').hidden=!curM.hl;document.getElementById('iHl').textContent=curM.hl||'';document.getElementById('iList').innerHTML=curM.pts.map(p=>`<li>${p}</li>`).join('');
   document.getElementById('bSheet').hidden=!curM.sheet;requestAnimationFrame(()=>im.classList.remove('sw'))};
  if(instant)apply();else{im.classList.add('sw');setTimeout(apply,280)}}
 document.getElementById('bSheet').addEventListener('click',()=>{if(!curM||!curM.sheet)return;document.getElementById('sTitle').textContent='Scheda tecnica · '+curM.model;const sh=Array.isArray(curM.sheet)?curM.sheet:[[curM.sheet,'']];const b=document.getElementById('sBody');b.classList.toggle('two',sh.length>1);b.innerHTML=sh.map(([f,c])=>`<figure><img src="../img/${f}" alt="Scheda tecnica ${curM.model}${c?' · '+c:''}">${c?`<figcaption>${c}</figcaption>`:''}</figure>`).join('');document.getElementById('sheet').hidden=false;document.getElementById('sClose').focus()});
@@ -368,7 +376,7 @@ function placeGuides(){if(busy)return;const r=ttlEl.getBoundingClientRect(),sx=i
   ctx.setLineDash([]);if(!RM)requestAnimationFrame(draw)}
  build();addEventListener('resize',()=>{build();if(RM)draw(performance.now())});requestAnimationFrame(draw)})();
 /* ---------- lente d'ingrandimento sul profilo ---------- */
-(function(){const img=document.getElementById('iImg'),lens=document.getElementById('lens'),Z=2.6;let on=false,touch=false;
+(function(){const IM=[document.getElementById('iImg'),document.getElementById('iImg2')];let img=IM[0];const lens=document.getElementById('lens'),Z=2.6;let on=false,touch=false;
  if(matchMedia('(hover:none)').matches)document.getElementById('zh').textContent='🔍 Tieni premuto e trascina';
  function box(){const r=img.getBoundingClientRect(),nw=img.naturalWidth||r.width,nh=img.naturalHeight||r.height,k=Math.min(r.width/nw,r.height/nh),w=nw*k,h=nh*k;
   return{l:r.left+(r.width-w)/2,t:r.top+(r.height-h)/2,w,h}}
@@ -379,12 +387,13 @@ function placeGuides(){if(busy)return;const r=ttlEl.getBoundingClientRect(),sx=i
   lens.style.backgroundImage=`url("${img.src}")`;lens.style.backgroundSize=`${b.w*Z}px ${b.h*Z}px`;
   lens.style.backgroundPosition=`${-(cx*Z-R)}px ${-(cy*Z-R)}px`;
   const oy=touch?-(R+70):0;lens.style.left=(e.clientX-R)+'px';lens.style.top=(e.clientY-R+oy)+'px'}
- img.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){on=true;touch=false;move(e)}});
- img.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'){on=true;touch=true;img.setPointerCapture(e.pointerId);move(e);e.preventDefault()}});
- img.addEventListener('pointermove',move);
  const off=()=>{on=false;lens.style.display='none'};
- img.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')off()});
- img.addEventListener('pointerup',e=>{if(e.pointerType!=='mouse')off()});img.addEventListener('pointercancel',off);
+ IM.forEach(el=>{
+ el.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){img=el;on=true;touch=false;move(e)}});
+ el.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'){img=el;on=true;touch=true;el.setPointerCapture(e.pointerId);move(e);e.preventDefault()}});
+ el.addEventListener('pointermove',e=>{if(img===el)move(e)});
+ el.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')off()});
+ el.addEventListener('pointerup',e=>{if(e.pointerType!=='mouse')off()});el.addEventListener('pointercancel',off)});
  document.getElementById('close').addEventListener('click',off);
 })();
 window.__vt={choose,closeAll};
