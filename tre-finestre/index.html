@@ -47,6 +47,14 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
 .info .prof{position:absolute;left:calc(100% + .5vw);top:46%;transform:translateY(-50%);height:clamp(220px,44vh,440px);display:flex;align-items:center;pointer-events:none}
 .info .prof img{max-height:100%;width:auto;filter:drop-shadow(0 0 30px rgba(53,208,255,.45)) drop-shadow(0 20px 24px rgba(0,0,0,.8));transform:translateX(-24px) scale(.92);opacity:0;transition:transform 1s cubic-bezier(.2,.8,.2,1),opacity 1s}
 .info.on .prof img{transform:none;opacity:1}
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tabs:empty{display:none}
+.tabs button{appearance:none;background:rgba(5,6,8,.55);border:1px solid rgba(53,208,255,.35);color:var(--fg);border-radius:999px;padding:7px 14px;font-family:var(--display);font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .25s,border-color .25s,color .25s}
+.tabs button[aria-selected="true"]{background:linear-gradient(90deg,var(--accent),#7cf0c0);color:#06202a;border-color:transparent}
+.tabs button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.info .prof img{max-width:24vw;object-fit:contain}
+.info .prof img.photo{border-radius:10px;border:1px solid rgba(255,255,255,.15)}
+.info .prof img.sw{opacity:0!important;transform:translateX(-14px) scale(.95)!important}
 .info ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px;font-size:12.5px;line-height:1.45;color:#d7dde5}
 .info li::before{content:"— ";color:var(--accent)}
 .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
@@ -89,6 +97,7 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
 </defs><polygon id="bp" fill="url(#bg1)" filter="url(#soft)"/><polygon id="bc" fill="url(#bg1)" opacity=".6"/></svg>
 <div class="info" id="info" aria-live="polite">
  <div class="tag" id="iTag"></div>
+ <div class="tabs" id="iTabs" role="tablist"></div>
  <h3 id="iName"></h3>
  <div class="prof"><img id="iImg" src="" alt=""></div>
  <ul id="iList"></ul>
@@ -108,16 +117,21 @@ import { RoundedBoxGeometry } from 'three/addons/RoundedBoxGeometry.js';
 
 /* ---------- prodotti (misure in metri) ---------- */
 const M=[
- {k:'pvc',label:'PVC',model:'70 EVO',img:'angolo-e70.png',sheet:'scheda-e70.jpg',
-  depth:.070,frame:.062,sash:.058,meet:.040,
-  pts:['Profilo in PVC da 70 mm, 6 camere','Nodo centrale sottile: più vetro, più luce','Uw 1,18 W/m²K · isolamento acustico fino a 46 dB','PVC riciclato fino all’80%']},
- {k:'fib',label:'Fibra di vetro',model:'80 EVO',img:'angolo-e80.png',sheet:'scheda-e80.jpg',
-  depth:.080,frame:.068,sash:.064,meet:.058,
-  pts:['PVC da 80 mm rinforzato in fibra di vetro, 7 camere','Uw fino a 0,83 W/m²K · fino a 48 dB','Sicurezza antieffrazione classe WK3','Tre guarnizioni per la massima tenuta']},
- {k:'alu',label:'Alluminio',model:'VLS',sub:'Very Light System · ibrido',img:'angolo-vls.png',sheet:'scheda-vls.jpg',
-  depth:.082,frame:.046,sash:.036,meet:.045,
-  pts:['Alluminio a taglio termico fuori, PVC riciclato e fibra di vetro dentro','Nodo laterale 82 mm · centrale 90 mm: +30% di luce','Vetro fino a 48 mm · tre guarnizioni di serie','Anticorrosione di serie, verniciatura fino a 30 anni']}
+ {k:'pvc',label:'PVC',depth:.070,frame:.062,sash:.058,meet:.050,models:[
+  {model:'Brillant 70',img:'foto-brillant70.jpg',photo:1,sheet:null,
+   pts:['Il PVC 70 classico: solido, affidabile, senza pensieri','Telaio a L o a Z, anta squadrata o arrotondata','Ante fino a 100 kg','Lo trovi montato nel nostro showroom di Luisago']},
+  {model:'PVC 80',img:'angolo-p80.png',sheet:'scheda-p80.jpg',
+   pts:['Profilo da 80 mm, 7 camere, 3 guarnizioni','Uw 1,12 W/m²K (vetro Ug 1,0) · fino a 0,88 con Ug 0,6','Isolamento acustico fino a 46 dB · antieffrazione fino a WK3','Coestruso con PVC riciclato · oltre 50 finiture']}]},
+ {k:'fib',label:'Fibra di vetro',depth:.070,frame:.060,sash:.056,meet:.040,models:[
+  {model:'70 EVO',img:'angolo-e70.png',sheet:'scheda-e70.jpg',
+   pts:['Profilo da 70 mm, 6 camere','Nodo centrale sottile: più vetro, più luce','Uw 1,18 W/m²K · isolamento acustico fino a 46 dB','PVC riciclato fino all’80%']},
+  {model:'P76 NEO',img:'angolo-p76.png',sheet:'scheda-p76.jpg',
+   pts:['Profilo da 76 mm rinforzato in ultrafibra, 5/7 camere','Uw 0,85 W/m²K con vetro Ug 0,6','Isolamento acustico fino a 44 dB','Tre guarnizioni per la massima tenuta']}]},
+ {k:'alu',label:'Alluminio',sub:'Very Light System · ibrido',depth:.082,frame:.046,sash:.036,meet:.045,models:[
+  {model:'VLS',img:'angolo-vls.png',sheet:'scheda-vls.jpg',
+   pts:['Alluminio a taglio termico fuori, PVC riciclato e fibra di vetro dentro','Nodo laterale 82 mm · centrale 90 mm: +30% di luce','Vetro fino a 48 mm · tre guarnizioni di serie','Anticorrosione di serie, verniciatura fino a 30 anni']}]}
 ];
+M.forEach(m=>m.model=m.models.map(x=>x.model).join(' · '));
 const W=1.2,H=1.5,GAP=1.75;
 
 /* ---------- renderer / scena ---------- */
@@ -236,9 +250,9 @@ async function choose(i){
  if(busy)return;busy=true;document.body.classList.add('busy');cur=M[i];
  const w=wins[i],others=wins.filter(x=>x!==w);
  document.getElementById('iTag').textContent=cur.label+(cur.sub?' · '+cur.sub:'');
- document.getElementById('iName').textContent=cur.model;
- const im=document.getElementById('iImg');im.src='../img/'+cur.img;im.alt='Profilo '+cur.model;
- document.getElementById('iList').innerHTML=cur.pts.map(p=>`<li>${p}</li>`).join('');
+ const tabs=document.getElementById('iTabs');tabs.innerHTML='';
+ if(cur.models.length>1)cur.models.forEach((x,k)=>{const b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.textContent=x.model;b.addEventListener('click',()=>showModel(k));tabs.appendChild(b)});
+ showModel(0,true);
  const x0=w.position.x,oy=others.map(o=>o.position.y);
  const fwd=mobile?home.camZ*.45:1.4,half=(home.camZ-fwd)*Math.tan(THREE.MathUtils.degToRad(camera.fov/2));
  // 1. le altre scendono e spariscono, la scelta viene avanti al centro
@@ -264,7 +278,14 @@ const ray=new THREE.Raycaster(),ptr=new THREE.Vector2();
 canvas.addEventListener('click',e=>{if(busy)return;ptr.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);ray.setFromCamera(ptr,camera);
  const hit=ray.intersectObjects(wins,true)[0];if(hit){const i=wins.indexOf(hit.object.userData.win);if(i>=0)choose(i)}});
 canvas.addEventListener('pointermove',e=>{if(busy){canvas.style.cursor='';return}ptr.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);ray.setFromCamera(ptr,camera);canvas.style.cursor=ray.intersectObjects(wins,true).length?'pointer':''});
-document.getElementById('bSheet').addEventListener('click',()=>{document.getElementById('sTitle').textContent='Scheda tecnica · '+cur.model;const i=document.getElementById('sImg');i.src='../img/'+cur.sheet;i.alt='Scheda tecnica '+cur.model;document.getElementById('sheet').hidden=false;document.getElementById('sClose').focus()});
+let curM=null;
+function showModel(k,instant){curM=cur.models[k];
+ [...document.getElementById('iTabs').children].forEach((b,j)=>b.setAttribute('aria-selected',j===k?'true':'false'));
+ const im=document.getElementById('iImg'),apply=()=>{im.src='../img/'+curM.img;im.alt=(curM.photo?'Foto ':'Profilo ')+curM.model;im.classList.toggle('photo',!!curM.photo);
+  document.getElementById('iName').textContent=curM.model;document.getElementById('iList').innerHTML=curM.pts.map(p=>`<li>${p}</li>`).join('');
+  document.getElementById('bSheet').hidden=!curM.sheet;requestAnimationFrame(()=>im.classList.remove('sw'))};
+ if(instant)apply();else{im.classList.add('sw');setTimeout(apply,280)}}
+document.getElementById('bSheet').addEventListener('click',()=>{if(!curM||!curM.sheet)return;document.getElementById('sTitle').textContent='Scheda tecnica · '+curM.model;const i=document.getElementById('sImg');i.src='../img/'+curM.sheet;i.alt='Scheda tecnica '+curM.model;document.getElementById('sheet').hidden=false;document.getElementById('sClose').focus()});
 document.getElementById('sClose').addEventListener('click',()=>{document.getElementById('sheet').hidden=true});
 addEventListener('keydown',e=>{if(e.key==='Escape'){const s=document.getElementById('sheet');if(!s.hidden)s.hidden=true;else if(busy)closeAll()}});
 
