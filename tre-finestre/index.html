@@ -30,7 +30,8 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
 .lbl span{display:block;font-size:clamp(9px,1vw,12px);color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-top:4px}
 .lbl:focus-visible{outline:2px solid var(--accent);border-radius:8px}
 .busy .ttl,.busy .lbl,.busy #guides{opacity:0;pointer-events:none}
-#fib{position:fixed;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+#fib{position:fixed;inset:0;width:100%;height:100%;display:block;pointer-events:none;transition:opacity .9s}
+#fib.quiet{opacity:0}
 #guides{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;transition:opacity .6s;z-index:2}
 #guides path{fill:none;stroke-linecap:round}
 #guides .g0{stroke:url(#gg);stroke-width:1.2;opacity:.55}
@@ -42,6 +43,8 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
 .info.on .prof img{filter:drop-shadow(0 0 40px rgba(190,240,255,.85)) drop-shadow(0 0 90px rgba(53,208,255,.6)) drop-shadow(0 20px 24px rgba(0,0,0,.8))}
 .info{position:fixed;left:max(4vw,16px);top:50%;transform:translateY(-50%);width:min(29vw,400px);display:flex;flex-direction:column;gap:12px;opacity:0;pointer-events:none;transition:opacity .8s;z-index:10}
 .info.on{opacity:1;pointer-events:auto}
+.info{background:rgba(4,6,9,.86);border:1px solid rgba(53,208,255,.18);border-radius:14px;padding:18px 20px;box-shadow:0 20px 60px rgba(0,0,0,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.info ul{color:#eef6f9}
 .info .tag{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent2)}
 .info h3{font-family:var(--display);font-weight:400;font-size:clamp(20px,2.5vw,34px);letter-spacing:.14em;margin:0;text-transform:uppercase;text-shadow:0 0 30px rgba(53,208,255,.45)}
 .info .prof{position:absolute;left:calc(100% + .5vw);top:46%;transform:translateY(-50%);height:clamp(220px,44vh,440px);display:flex;align-items:center;pointer-events:none}
@@ -75,7 +78,15 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
 .ovh{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line)}
 .ovh h4{flex:1;margin:0;font-family:var(--display);font-weight:400;font-size:clamp(14px,2vw,20px);letter-spacing:.14em;text-transform:uppercase}
 .ovb{flex:1;overflow:auto;padding:18px;display:flex;justify-content:center;align-items:flex-start}
-.ovb img{max-width:min(960px,100%);border-radius:6px}
+.ovb img{max-width:min(960px,100%);border-radius:6px;display:block}
+.ovb figure{margin:0;max-width:min(960px,100%)}
+.ovb figcaption{margin-top:8px;text-align:center;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#cfe9f2}
+.ovb.two{flex-wrap:wrap;gap:18px}
+.ovb.two figure{flex:1 1 360px;max-width:640px}
+.ovb.two img{width:100%;max-width:none}
+.info h3 small{font-size:.5em;letter-spacing:.2em;opacity:.8;margin-left:.4em;vertical-align:middle}
+.info .hl{margin:8px 0 0;display:inline-block;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;color:#062b14;background:linear-gradient(90deg,#7ee8a5,#35d0ff)}
+.info .hl[hidden]{display:none}
 #err{position:fixed;inset:auto 16px 16px 16px;color:var(--muted);font-size:13px;text-align:center;display:none}
 @media (max-width:760px){
  .info{left:16px;right:16px;width:auto;top:auto;bottom:16px;transform:none;gap:8px}
@@ -106,6 +117,7 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
  <div class="tag" id="iTag"></div>
  <div class="tabs" id="iTabs" role="tablist"></div>
  <h3 id="iName"></h3>
+ <p class="hl" id="iHl" hidden></p>
  <div class="prof"><img id="iImg" src="" alt="" draggable="false"><span class="zh" id="zh">🔍 Passa sopra per ingrandire</span></div>
  <div class="lens" id="lens" aria-hidden="true"></div>
  <ul id="iList"></ul>
@@ -114,7 +126,7 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
 <button type="button" class="ghost" id="close">✕ Chiudi</button>
 <div class="ov" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sTitle">
  <div class="ovh"><h4 id="sTitle">Scheda tecnica</h4><button type="button" class="ghost" id="sClose">Chiudi</button></div>
- <div class="ovb"><img id="sImg" src="" alt=""></div>
+ <div class="ovb" id="sBody"></div>
 </div>
 <div id="err">Il tuo browser non riesce a mostrare il 3D. Chiamaci allo 031 8130087.</div>
 
@@ -136,8 +148,9 @@ const M=[
   {model:'P76 NEO',img:'angolo-p76.png',sheet:'scheda-p76.jpg',
    pts:['Profilo da 76 mm rinforzato in ultrafibra, 5/7 camere','Uw 0,85 W/m²K con vetro Ug 0,6','Isolamento acustico fino a 44 dB','Tre guarnizioni per la massima tenuta']}]},
  {k:'alu',label:'Alluminio',sub:'Very Light System · ibrido',depth:.082,frame:.046,sash:.036,meet:.045,models:[
-  {model:'VLS',img:'angolo-vls.png',sheet:'scheda-vls.jpg',
-   pts:['Alluminio a taglio termico fuori, PVC riciclato e fibra di vetro dentro','Nodo laterale 82 mm · centrale 90 mm: +30% di luce','Vetro fino a 48 mm · tre guarnizioni di serie','Anticorrosione di serie, verniciatura fino a 30 anni']}]}
+  {model:'VLS',sub:'Fiber Core',img:'angolo-vls.png',sheet:[['scheda-vls.jpg','Anta squadrata'],['scheda-vls-smussata.jpg','Anta smussata · fermavetro svasato, più luce']],
+   hl:'Riciclabile al 100% · nel rispetto della direttiva Case Green 2030',
+   pts:['Alluminio a taglio termico con tecnologia Fiber Core','Nodo laterale 82 mm · centrale 90 mm: +30% di luce','Vetro fino a 48 mm · tre guarnizioni di serie','Anticorrosione di serie, verniciatura fino a 30 anni']}]}
 ];
 M.forEach(m=>m.model=m.models.map(x=>x.model).join(' · '));
 const W=1.2,H=1.5,GAP=1.75;
@@ -290,10 +303,10 @@ let curM=null;
 function showModel(k,instant){curM=cur.models[k];
  [...document.getElementById('iTabs').children].forEach((b,j)=>b.setAttribute('aria-selected',j===k?'true':'false'));
  const im=document.getElementById('iImg'),apply=()=>{im.src='../img/'+curM.img;im.alt=(curM.photo?'Foto ':curM.sez?'Sezione del nodo centrale ':'Profilo ')+curM.model;im.classList.toggle('photo',!!curM.photo);
-  document.getElementById('iName').textContent=curM.model;document.getElementById('iList').innerHTML=curM.pts.map(p=>`<li>${p}</li>`).join('');
+  document.getElementById('iName').innerHTML=curM.model+(curM.sub?` <small>${curM.sub}</small>`:'');document.getElementById('iHl').hidden=!curM.hl;document.getElementById('iHl').textContent=curM.hl||'';document.getElementById('iList').innerHTML=curM.pts.map(p=>`<li>${p}</li>`).join('');
   document.getElementById('bSheet').hidden=!curM.sheet;requestAnimationFrame(()=>im.classList.remove('sw'))};
  if(instant)apply();else{im.classList.add('sw');setTimeout(apply,280)}}
-document.getElementById('bSheet').addEventListener('click',()=>{if(!curM||!curM.sheet)return;document.getElementById('sTitle').textContent='Scheda tecnica · '+curM.model;const i=document.getElementById('sImg');i.src='../img/'+curM.sheet;i.alt='Scheda tecnica '+curM.model;document.getElementById('sheet').hidden=false;document.getElementById('sClose').focus()});
+document.getElementById('bSheet').addEventListener('click',()=>{if(!curM||!curM.sheet)return;document.getElementById('sTitle').textContent='Scheda tecnica · '+curM.model;const sh=Array.isArray(curM.sheet)?curM.sheet:[[curM.sheet,'']];const b=document.getElementById('sBody');b.classList.toggle('two',sh.length>1);b.innerHTML=sh.map(([f,c])=>`<figure><img src="../img/${f}" alt="Scheda tecnica ${curM.model}${c?' · '+c:''}">${c?`<figcaption>${c}</figcaption>`:''}</figure>`).join('');document.getElementById('sheet').hidden=false;document.getElementById('sClose').focus()});
 document.getElementById('sClose').addEventListener('click',()=>{document.getElementById('sheet').hidden=true});
 addEventListener('keydown',e=>{if(e.key==='Escape'){const s=document.getElementById('sheet');if(!s.hidden)s.hidden=true;else if(busy)closeAll()}});
 
@@ -348,7 +361,7 @@ function placeGuides(){if(busy)return;const r=ttlEl.getBoundingClientRect(),sx=i
     p=[{x:sx,y:sy},{x:sx-side*W2*.25,y:sy+(Math.random()-.5)*H2*.5},{x:ex+side*60,y:ey+(Math.random()-.5)*160},{x:ex,y:ey}]}
    F.push({p,len:60+Math.random()*120,gap:220+Math.random()*320,sp:40+Math.random()*70,ph:Math.random()*1000,w:.6+Math.random()*1.2,a:.25+Math.random()*.45})}}
  function path(f){ctx.beginPath();ctx.moveTo(f.p[0].x,f.p[0].y);ctx.bezierCurveTo(f.p[1].x,f.p[1].y,f.p[2].x,f.p[2].y,f.p[3].x,f.p[3].y)}
- function draw(now){const t=(now-t0)/1000,boost=busy?1.8:1;ctx.clearRect(0,0,W2,H2);
+ function draw(now){cv.classList.toggle('quiet',document.getElementById('info').classList.contains('on'));const t=(now-t0)/1000,boost=busy?1.8:1;ctx.clearRect(0,0,W2,H2);
   for(const f of F){path(f);ctx.setLineDash([]);ctx.lineWidth=f.w;ctx.strokeStyle=`rgba(53,208,255,${.07*boost})`;ctx.stroke();
    ctx.setLineDash([f.len,f.gap]);ctx.lineDashOffset=-(t*f.sp*boost+f.ph);ctx.lineWidth=f.w*2.6;ctx.strokeStyle=`rgba(53,208,255,${f.a*.35*boost})`;ctx.stroke();
    ctx.lineWidth=f.w;ctx.strokeStyle=`rgba(210,245,255,${Math.min(1,f.a*boost)})`;ctx.stroke()}
