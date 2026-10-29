@@ -118,7 +118,7 @@ import { RoundedBoxGeometry } from 'three/addons/RoundedBoxGeometry.js';
 /* ---------- prodotti (misure in metri) ---------- */
 const M=[
  {k:'pvc',label:'PVC',depth:.070,frame:.062,sash:.058,meet:.050,models:[
-  {model:'Brillant 70',img:'foto-brillant70.jpg',photo:1,sheet:null,
+  {model:'Brillant 70',img:'nodo-brillant70.png',sez:1,sheet:null,
    pts:['Il PVC 70 classico: solido, affidabile, senza pensieri','Uw 1,30 W/m²K con doppio vetro · 1,20 con triplo vetro (finestra 2 ante tipo)','Telaio a L o a Z, anta squadrata o arrotondata · ante fino a 100 kg','Lo trovi montato nel nostro showroom di Luisago']},
   {model:'PVC 80',img:'angolo-p80.png',sheet:'scheda-p80.jpg',
    pts:['Profilo da 80 mm, 7 camere, 3 guarnizioni','Uw 1,12 W/m²K (vetro Ug 1,0) · fino a 0,88 con Ug 0,6','Isolamento acustico fino a 46 dB · antieffrazione fino a WK3','Coestruso con PVC riciclato · oltre 50 finiture']}]},
@@ -281,7 +281,7 @@ canvas.addEventListener('pointermove',e=>{if(busy){canvas.style.cursor='';return
 let curM=null;
 function showModel(k,instant){curM=cur.models[k];
  [...document.getElementById('iTabs').children].forEach((b,j)=>b.setAttribute('aria-selected',j===k?'true':'false'));
- const im=document.getElementById('iImg'),apply=()=>{im.src='../img/'+curM.img;im.alt=(curM.photo?'Foto ':'Profilo ')+curM.model;im.classList.toggle('photo',!!curM.photo);
+ const im=document.getElementById('iImg'),apply=()=>{im.src='../img/'+curM.img;im.alt=(curM.photo?'Foto ':curM.sez?'Sezione del nodo centrale ':'Profilo ')+curM.model;im.classList.toggle('photo',!!curM.photo);
   document.getElementById('iName').textContent=curM.model;document.getElementById('iList').innerHTML=curM.pts.map(p=>`<li>${p}</li>`).join('');
   document.getElementById('bSheet').hidden=!curM.sheet;requestAnimationFrame(()=>im.classList.remove('sw'))};
  if(instant)apply();else{im.classList.add('sw');setTimeout(apply,280)}}
