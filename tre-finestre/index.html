@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Vivantech – Scegli il materiale</title>
+<meta name="description" content="Vivantech serramenti, Luisago (CO): scegli il materiale della tua finestra – PVC, fibra di vetro o alluminio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Manrope:wght@400;600;800&display=swap">
+<style>
+/* Tre finestre (PVC / Fibra di vetro / Alluminio). Tap -> la finestra viene avanti, gira a 360°, va a destra, apre le ante e mostra il profilo. Tema scuro unico, come la home. */
+:root{--bg:#050608;--fg:#eef1f5;--muted:#8d97a6;--line:#1f2630;--accent:#35d0ff;--accent2:#7cf0c0;--display:'Michroma',Arial,sans-serif;--body:'Manrope',Arial,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);overflow-x:hidden}
+button{font-family:inherit}
+img{max-width:100%}
+.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 20px;background:rgba(5,6,8,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(53,208,255,.18)}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;min-width:0}
+.brand img{width:46px;height:auto;flex:none}
+.brand h1{font-family:var(--display);font-weight:400;font-size:clamp(18px,3vw,28px);letter-spacing:.26em;margin:0;text-transform:uppercase;background:linear-gradient(90deg,#fff,var(--accent) 55%,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:3px}
+.top a.tel{color:var(--fg);text-decoration:none;border:1px solid rgba(53,208,255,.35);border-radius:999px;padding:7px 14px;font-size:13px;white-space:nowrap}
+
+.hero{position:relative;min-height:calc(100dvh - 68px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(18px,4vh,40px);padding:28px 16px 40px;overflow:hidden;background:radial-gradient(1100px 600px at 50% 105%,rgba(53,208,255,.10),transparent 60%),radial-gradient(800px 400px at 50% -10%,rgba(124,240,192,.05),transparent 60%),var(--bg)}
+.ttl{text-align:center;transition:opacity .5s}
+.ttl h2{font-family:var(--display);font-weight:400;font-size:clamp(20px,3vw,34px);letter-spacing:.18em;text-transform:uppercase;margin:0;text-shadow:0 0 30px rgba(53,208,255,.5)}
+.ttl p{margin:10px 0 0;color:var(--muted);font-size:13px;letter-spacing:.2em;text-transform:uppercase}
+.row{display:flex;gap:clamp(18px,4vw,64px);align-items:flex-end;justify-content:center;flex-wrap:wrap;transition:opacity .5s}
+.pick{appearance:none;background:none;border:0;padding:0;color:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:16px;-webkit-tap-highlight-color:transparent}
+.pick .win{width:clamp(150px,20vw,270px);transition:transform .35s,box-shadow .35s}
+.pick:hover .win,.pick:focus-visible .win{transform:translateY(-6px)}
+.pick:focus-visible{outline:none}.pick:focus-visible .win{box-shadow:0 0 0 2px var(--accent),0 0 60px -6px rgba(53,208,255,.7)}
+.pick b{font-family:var(--display);font-weight:400;font-size:clamp(13px,1.5vw,17px);letter-spacing:.2em;text-transform:uppercase}
+.pick span{font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:-10px}
+.busy .row,.busy .ttl{opacity:0;pointer-events:none}
+
+/* ---- window drawn in CSS ---- */
+.win{--fr:#f1f1ec;--fr2:#d9dad5;--edge:#c9cac4;position:relative;aspect-ratio:3/4;border-radius:3px;background:linear-gradient(135deg,var(--fr),var(--fr2));padding:6.5%;box-shadow:0 30px 60px -25px rgba(0,0,0,.9),0 0 70px -25px rgba(53,208,255,.35),inset 0 0 0 1px rgba(255,255,255,.25),inset -3px -3px 0 rgba(0,0,0,.18);transform-style:preserve-3d}
+.win .view{position:absolute;inset:6.5%;background:#7fa9c9 url(../img/vista.jpg) center/cover;box-shadow:inset 0 0 0 2px rgba(0,0,0,.35),inset 0 8px 18px rgba(0,0,0,.45)}
+.win .glow{position:absolute;inset:6.5%;background:radial-gradient(60% 50% at 50% 45%,rgba(255,255,255,.9),rgba(53,208,255,.35) 55%,transparent 80%);opacity:0;transition:opacity 1s .3s;mix-blend-mode:screen;pointer-events:none}
+.win .s{position:absolute;top:6.5%;bottom:6.5%;width:43.5%;transform-style:preserve-3d;transition:transform 1.6s cubic-bezier(.3,.8,.25,1);backface-visibility:visible}
+.win .s.l{left:6.5%;transform-origin:left center}
+.win .s.r{right:6.5%;transform-origin:right center}
+.win .s i{position:absolute;inset:0;border:clamp(7px,1.6vw,16px) solid transparent;border-image:linear-gradient(135deg,var(--fr),var(--fr2)) 1;background:linear-gradient(115deg,rgba(255,255,255,.28) 0,rgba(255,255,255,.06) 28%,rgba(255,255,255,0) 45%,rgba(255,255,255,.12) 70%,rgba(255,255,255,0) 85%);box-shadow:0 0 0 1px rgba(0,0,0,.25),inset 0 0 0 1px rgba(0,0,0,.35)}
+.win .s.r i{border-left-width:clamp(9px,2vw,20px)}
+.win .s.l i{border-right-width:clamp(9px,2vw,20px)}
+.win .s.r::after{content:"";position:absolute;left:clamp(1px,.4vw,4px);top:46%;width:clamp(3px,.6vw,6px);height:12%;border-radius:3px;background:linear-gradient(90deg,#e9eaec,#9aa0a6);box-shadow:0 1px 2px rgba(0,0,0,.5)}
+.win.open .s.l{transform:rotateY(-112deg)}
+.win.open .s.r{transform:rotateY(112deg)}
+.win.open .glow{opacity:.55}
+/* materials */
+.win.pvc{--fr:#f6f6f2;--fr2:#d8d9d4}
+.win.fib{--fr:#c99a5b;--fr2:#8e6232}
+.win.fib,.win.fib .s i{background-image:repeating-linear-gradient(92deg,rgba(90,55,20,.0) 0 3px,rgba(90,55,20,.18) 3px 4px,rgba(255,230,190,.08) 4px 7px),linear-gradient(135deg,var(--fr),var(--fr2))}
+.win.fib .s i{background-image:linear-gradient(115deg,rgba(255,255,255,.28) 0,rgba(255,255,255,.06) 28%,rgba(255,255,255,0) 45%,rgba(255,255,255,.12) 70%,rgba(255,255,255,0) 85%)}
+.win.alu{--fr:#5d7a45;--fr2:#344a26}
+
+/* ---- stage (the chosen window) ---- */
+.stage{position:absolute;inset:0;display:none;align-items:center;justify-content:center;perspective:1600px;z-index:5}
+.busy .stage{display:flex}
+.stage .win{width:min(30vw,calc(62vh * .75),420px);will-change:transform}
+.info{position:absolute;left:max(4vw,16px);top:50%;transform:translateY(-50%);width:min(40vw,520px);display:flex;flex-direction:column;gap:14px;opacity:0;pointer-events:none;transition:opacity .7s}
+.info.on{opacity:1;pointer-events:auto}
+.info .tag{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent2)}
+.info h3{font-family:var(--display);font-weight:400;font-size:clamp(24px,3.4vw,46px);letter-spacing:.14em;margin:0;text-transform:uppercase;text-shadow:0 0 30px rgba(53,208,255,.45)}
+.info .prof{height:clamp(160px,34vh,340px);display:flex;align-items:center}
+.info .prof img{max-height:100%;width:auto;filter:drop-shadow(0 0 30px rgba(53,208,255,.45)) drop-shadow(0 20px 24px rgba(0,0,0,.8));transform:translateX(-20px) scale(.92);opacity:0;transition:transform .9s cubic-bezier(.2,.8,.2,1),opacity .9s}
+.info.on .prof img{transform:none;opacity:1}
+.info ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.45;color:#d7dde5}
+.info li::before{content:"— ";color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.cta{appearance:none;border:0;background:linear-gradient(90deg,var(--accent),#7cf0c0);color:#06202a;font-weight:800;border-radius:999px;padding:10px 18px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;text-decoration:none}
+.ghost{appearance:none;background:transparent;border:1px solid rgba(255,255,255,.35);color:var(--fg);border-radius:999px;padding:9px 18px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;text-decoration:none}
+.cta:focus-visible,.ghost:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.xclose{position:absolute;top:16px;right:16px;z-index:9;display:none}
+.busy .xclose{display:inline-block}
+
+/* sheet overlay */
+.ov{position:fixed;inset:0;z-index:50;background:rgba(3,4,6,.95);display:flex;flex-direction:column}
+.ov[hidden]{display:none}
+.ovh{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line)}
+.ovh h4{flex:1;margin:0;font-family:var(--display);font-weight:400;font-size:clamp(14px,2vw,20px);letter-spacing:.14em;text-transform:uppercase}
+.ovb{flex:1;overflow:auto;padding:18px;display:flex;justify-content:center;align-items:flex-start}
+.ovb img{max-width:min(960px,100%);border-radius:6px}
+
+@media (max-width:760px){
+ .row{gap:14px;flex-wrap:nowrap}
+ .pick .win{width:28vw}
+ .pick b{font-size:10px;letter-spacing:.12em}
+ .pick span{font-size:9px}
+ .stage{align-items:flex-start;padding-top:70px}
+ .stage .win{width:min(52vw,calc(40vh * .75))}
+ .info{left:16px;right:16px;width:auto;top:auto;bottom:18px;transform:none;gap:8px}
+ .info .prof{height:110px}
+ .info ul{font-size:13px}
+ .top{padding:8px 12px}.brand img{width:36px}.brand h1{font-size:16px;letter-spacing:.18em}.brand small{font-size:9px}
+}
+@media (prefers-reduced-motion:reduce){.win .s,.info,.info .prof img{transition:none}}
+</style>
+</head>
+<body>
+<header class="top">
+ <a class="brand" href="../"><img src="../img/logo.png" alt="Logo Vivantech"><div><h1>Vivantech</h1><small>Serramenti · Luisago (CO)</small></div></a>
+ <a class="tel" href="tel:+390318130087">031 8130087</a>
+</header>
+<section class="hero" id="hero">
+ <div class="ttl"><h2>Scegli il materiale</h2><p>Tocca una finestra</p></div>
+ <div class="row" id="row"></div>
+ <div class="stage" id="stage" aria-live="polite">
+  <div class="win" id="big"><div class="view"></div><div class="glow"></div><div class="s l"><i></i></div><div class="s r"><i></i></div></div>
+  <div class="info" id="info">
+   <div class="tag" id="iTag"></div>
+   <h3 id="iName"></h3>
+   <div class="prof"><img id="iImg" src="" alt=""></div>
+   <ul id="iList"></ul>
+   <div class="btns"><button type="button" class="cta" id="bSheet">Scheda tecnica</button><a class="ghost" href="tel:+390318130087">Richiedi preventivo</a></div>
+  </div>
+ </div>
+ <button type="button" class="ghost xclose" id="close">✕ Chiudi</button>
+</section>
+
+<div class="ov" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sTitle">
+ <div class="ovh"><h4 id="sTitle">Scheda tecnica</h4><button type="button" class="ghost" id="sClose">Chiudi</button></div>
+ <div class="ovb"><img id="sImg" src="" alt=""></div>
+</div>
+
+<script>
+const M=[
+ {k:'pvc',label:'PVC',model:'70 EVO',img:'angolo-e70.png',sheet:'scheda-e70.jpg',
+  pts:['Profilo in PVC da 70 mm, 6 camere','Nodo centrale sottile: più vetro, più luce','Uw 1,18 W/m²K · isolamento acustico fino a 46 dB','PVC riciclato fino all’80%']},
+ {k:'fib',label:'Fibra di vetro',model:'80 EVO',img:'angolo-e80.png',sheet:'scheda-e80.jpg',
+  pts:['PVC da 80 mm rinforzato in fibra di vetro, 7 camere','Uw fino a 0,83 W/m²K · fino a 48 dB','Sicurezza antieffrazione classe WK3','Tre guarnizioni per la massima tenuta']},
+ {k:'alu',label:'Alluminio',model:'VLS',img:'angolo-vls.png',sheet:'scheda-vls.jpg',sub:'Very Light System · ibrido alluminio/PVC',
+  pts:['Alluminio a taglio termico fuori, PVC riciclato e fibra di vetro dentro','Nodo laterale 82 mm · centrale 90 mm: +30% di luce','Vetro fino a 48 mm · tre guarnizioni di serie','Anticorrosione di serie, verniciatura fino a 30 anni']}
+];
+const $=s=>document.querySelector(s);
+const hero=$('#hero'),row=$('#row'),big=$('#big'),info=$('#info');
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const winHTML='<div class="view"></div><div class="glow"></div><div class="s l"><i></i></div><div class="s r"><i></i></div>';
+M.forEach((m,i)=>{const b=document.createElement('button');b.type='button';b.className='pick';b.setAttribute('aria-label',m.label+' – '+m.model);
+ b.innerHTML=`<div class="win ${m.k}">${winHTML}</div><b>${m.label}</b><span>${m.model}</span>`;b.addEventListener('click',()=>choose(i,b));row.appendChild(b)});
+let run=0,cur=null,anim=[];
+function wait(ms){return new Promise(r=>setTimeout(r,ms))}
+async function choose(i,btn){
+ const m=M[i];cur=m;const my=++run;
+ big.className='win '+m.k;
+ $('#iTag').textContent=m.label+(m.sub?' · '+m.sub:'');$('#iName').textContent=m.model;
+ const im=$('#iImg');im.src='../img/'+m.img;im.alt='Profilo '+m.model;
+ $('#iList').innerHTML=m.pts.map(p=>`<li>${p}</li>`).join('');
+ info.classList.remove('on');
+ const from=btn.querySelector('.win').getBoundingClientRect();
+ hero.classList.add('busy');
+ const to=big.getBoundingClientRect();
+ const dx=(from.left+from.width/2)-(to.left+to.width/2),dy=(from.top+from.height/2)-(to.top+to.height/2),s=from.width/to.width;
+ const mobile=innerWidth<=760;
+ const shift=mobile?0:Math.min(innerWidth*.22,(innerWidth-to.width)/2-24);
+ const T=RM?[1,1,1]:[750,1400,750];
+ anim.forEach(a=>a.cancel());
+ const a1=big.animate([{transform:`translate(${dx}px,${dy}px) scale(${s})`},{transform:'translate(0,0) scale(1.08) translateZ(80px)'}],{duration:T[0],easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'});
+ anim=[a1];await a1.finished.catch(()=>{});if(my!==run)return;
+ const a2=big.animate([{transform:'scale(1.08) translateZ(80px) rotateY(0deg)'},{transform:'scale(1.08) translateZ(80px) rotateY(360deg)'}],{duration:T[1],easing:'cubic-bezier(.45,.05,.35,1)',fill:'forwards'});
+ anim=[a2];await a2.finished.catch(()=>{});if(my!==run)return;
+ const a3=big.animate([{transform:'scale(1.08) translateZ(80px)'},{transform:`translateX(${shift}px) scale(1)`}],{duration:T[2],easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'});
+ anim=[a3];await a3.finished.catch(()=>{});if(my!==run)return;
+ big.classList.add('open');await wait(RM?0:700);if(my!==run)return;
+ info.classList.add('on');$('#close').focus({preventScroll:true});
+}
+function closeAll(){run++;anim.forEach(a=>a.cancel());anim=[];info.classList.remove('on');big.classList.remove('open');hero.classList.remove('busy')}
+$('#close').addEventListener('click',closeAll);
+$('#bSheet').addEventListener('click',()=>{$('#sTitle').textContent='Scheda tecnica · '+cur.model;const i=$('#sImg');i.src='../img/'+cur.sheet;i.alt='Scheda tecnica '+cur.model;$('#sheet').hidden=false;$('#sClose').focus()});
+$('#sClose').addEventListener('click',()=>{$('#sheet').hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#sheet').hidden)$('#sheet').hidden=true;else if(hero.classList.contains('busy'))closeAll()}});
+</script>
+</body>
+</html>
