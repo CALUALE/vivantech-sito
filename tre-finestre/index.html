@@ -52,7 +52,14 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
 .tabs button{appearance:none;background:rgba(5,6,8,.55);border:1px solid rgba(53,208,255,.35);color:var(--fg);border-radius:999px;padding:7px 14px;font-family:var(--display);font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .25s,border-color .25s,color .25s}
 .tabs button[aria-selected="true"]{background:linear-gradient(90deg,var(--accent),#7cf0c0);color:#06202a;border-color:transparent}
 .tabs button:focus-visible{outline:2px solid #fff;outline-offset:2px}
-.info .prof img{max-width:24vw;object-fit:contain}
+.info .prof img{max-width:24vw;object-fit:contain;pointer-events:auto;cursor:zoom-in;touch-action:none}
+.info .prof{flex-direction:column;justify-content:center;gap:8px}
+.zh{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);opacity:0;transition:opacity .8s 1s;pointer-events:none;white-space:nowrap}
+.info.on .zh{opacity:.85}
+.lens{position:fixed;z-index:45;width:210px;height:210px;border-radius:50%;pointer-events:none;display:none;background-color:#05070a;background-repeat:no-repeat;
+ border:2px solid rgba(200,245,255,.9);box-shadow:0 0 0 6px rgba(53,208,255,.12),0 0 40px rgba(53,208,255,.55),inset 0 0 24px rgba(0,0,0,.55)}
+.lens::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.22),transparent 40%)}
+@media (max-width:760px){.lens{width:150px;height:150px}.zh{display:none}}
 .info .prof img.photo{border-radius:10px;border:1px solid rgba(255,255,255,.15)}
 .info .prof img.sw{opacity:0!important;transform:translateX(-14px) scale(.95)!important}
 .info ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px;font-size:12.5px;line-height:1.45;color:#d7dde5}
@@ -99,7 +106,8 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
  <div class="tag" id="iTag"></div>
  <div class="tabs" id="iTabs" role="tablist"></div>
  <h3 id="iName"></h3>
- <div class="prof"><img id="iImg" src="" alt=""></div>
+ <div class="prof"><img id="iImg" src="" alt="" draggable="false"><span class="zh" id="zh">🔍 Passa sopra per ingrandire</span></div>
+ <div class="lens" id="lens" aria-hidden="true"></div>
  <ul id="iList"></ul>
  <div class="btns"><button type="button" class="cta" id="bSheet">Scheda tecnica</button><a class="ghost" href="tel:+390318130087">Richiedi preventivo</a></div>
 </div>
@@ -346,6 +354,26 @@ function placeGuides(){if(busy)return;const r=ttlEl.getBoundingClientRect(),sx=i
    ctx.lineWidth=f.w;ctx.strokeStyle=`rgba(210,245,255,${Math.min(1,f.a*boost)})`;ctx.stroke()}
   ctx.setLineDash([]);if(!RM)requestAnimationFrame(draw)}
  build();addEventListener('resize',()=>{build();if(RM)draw(performance.now())});requestAnimationFrame(draw)})();
+/* ---------- lente d'ingrandimento sul profilo ---------- */
+(function(){const img=document.getElementById('iImg'),lens=document.getElementById('lens'),Z=2.6;let on=false,touch=false;
+ if(matchMedia('(hover:none)').matches)document.getElementById('zh').textContent='🔍 Tieni premuto e trascina';
+ function box(){const r=img.getBoundingClientRect(),nw=img.naturalWidth||r.width,nh=img.naturalHeight||r.height,k=Math.min(r.width/nw,r.height/nh),w=nw*k,h=nh*k;
+  return{l:r.left+(r.width-w)/2,t:r.top+(r.height-h)/2,w,h}}
+ function move(e){if(!on)return;const b=box(),x=e.clientX-b.l,y=e.clientY-b.t;
+  if(x<0||y<0||x>b.w||y>b.h){if(!touch){lens.style.display='none';return}}
+  lens.style.display='block';const L=lens.offsetWidth,R=L/2;
+  const cx=Math.max(0,Math.min(b.w,x)),cy=Math.max(0,Math.min(b.h,y));
+  lens.style.backgroundImage=`url("${img.src}")`;lens.style.backgroundSize=`${b.w*Z}px ${b.h*Z}px`;
+  lens.style.backgroundPosition=`${-(cx*Z-R)}px ${-(cy*Z-R)}px`;
+  const oy=touch?-(R+70):0;lens.style.left=(e.clientX-R)+'px';lens.style.top=(e.clientY-R+oy)+'px'}
+ img.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){on=true;touch=false;move(e)}});
+ img.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'){on=true;touch=true;img.setPointerCapture(e.pointerId);move(e);e.preventDefault()}});
+ img.addEventListener('pointermove',move);
+ const off=()=>{on=false;lens.style.display='none'};
+ img.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')off()});
+ img.addEventListener('pointerup',e=>{if(e.pointerType!=='mouse')off()});img.addEventListener('pointercancel',off);
+ document.getElementById('close').addEventListener('click',off);
+})();
 window.__vt={choose,closeAll};
 </script>
 </body>
