@@ -145,17 +145,17 @@ import { RoundedBoxGeometry } from 'three/addons/RoundedBoxGeometry.js';
 
 /* ---------- prodotti (misure in metri) ---------- */
 const M=[
- {k:'pvc',label:'PVC',depth:.070,frame:.062,sash:.058,meet:.050,models:[
+ {k:'pvc',label:'PVC',depth:.070,frame:.056,sash:.062,meet:.050,models:[
   {model:'Brillant 70',img:'nodo-brillant70.png',sez:1,sheet:null,
    pts:['Il PVC 70 classico: solido, affidabile, senza pensieri','Uw 1,30 W/m²K con doppio vetro · 1,20 con triplo vetro (finestra 2 ante tipo)','Telaio a L o a Z, anta squadrata o arrotondata · ante fino a 100 kg','Lo trovi montato nel nostro showroom di Luisago']},
   {model:'PVC 80',img:'angolo-p80.png',sheet:'scheda-p80.jpg',
    pts:['Profilo da 80 mm, 7 camere, 3 guarnizioni','Uw 1,12 W/m²K (vetro Ug 1,0) · fino a 0,88 con Ug 0,6','Isolamento acustico fino a 46 dB · antieffrazione fino a WK3','Coestruso con PVC riciclato · oltre 50 finiture']}]},
- {k:'fib',label:'Fibra di vetro',depth:.070,frame:.060,sash:.056,meet:.040,models:[
+ {k:'fib',label:'Fibra di vetro',depth:.070,frame:.054,sash:.056,meet:.040,models:[
   {model:'70 EVO',img:'angolo-e70.png',sheet:'scheda-e70.jpg',
    pts:['Profilo da 70 mm, 6 camere','Nodo centrale sottile: più vetro, più luce','Uw 1,18 W/m²K · isolamento acustico fino a 46 dB','PVC riciclato fino all’80%']},
   {model:'P76 NEO',img:'angolo-p76.png',sheet:'scheda-p76.jpg',
    pts:['Profilo da 76 mm rinforzato in ultrafibra, 5/7 camere','Uw 0,85 W/m²K con vetro Ug 0,6','Isolamento acustico fino a 44 dB','Tre guarnizioni per la massima tenuta']}]},
- {k:'alu',label:'Alluminio',sub:'Very Light System · ibrido',depth:.082,frame:.046,sash:.036,meet:.045,models:[
+ {k:'alu',label:'Alluminio',sub:'Very Light System · ibrido',depth:.082,frame:.050,sash:.044,meet:.045,models:[
   {model:'VLS',sub:'Fiber Core',img:'angolo-vls.png',img2:'angolo-vls-smussata.png',caps:['Anta squadrata','Anta smussata 17°'],sheet:[['scheda-vls.jpg','Anta squadrata'],['scheda-vls-smussata.jpg','Anta smussata · inclinazione 17°']],
    hl:'Riciclabile al 100% · nel rispetto della direttiva Case Green 2030',
    pts:['Alluminio a taglio termico con tecnologia Fiber Core','Nodo laterale 82 mm · centrale 90 mm: +30% di luce','Vetro fino a 48 mm · tre guarnizioni di serie','Anticorrosione di serie, verniciatura fino a 30 anni']}]}
@@ -185,62 +185,119 @@ floor.rotation.x=-Math.PI/2;floor.position.y=-H/2-.18;floor.receiveShadow=true;s
 
 /* ---------- materiali ---------- */
 function woodTexture(){
- const c=document.createElement('canvas');c.width=512;c.height=1024;const g=c.getContext('2d');
- g.fillStyle='#9c6a36';g.fillRect(0,0,512,1024);
- for(let i=0;i<220;i++){const x=Math.random()*512,w=1+Math.random()*4,a=.08+Math.random()*.25;
-  g.strokeStyle=Math.random()<.5?`rgba(90,52,18,${a})`:`rgba(235,190,130,${a*.7})`;g.lineWidth=w;g.beginPath();g.moveTo(x,0);
-  for(let y=0;y<=1024;y+=32)g.lineTo(x+Math.sin(y*.012+i)*6+Math.sin(y*.05+i*3)*1.5,y);g.stroke()}
- for(let k=0;k<6;k++){const cx=Math.random()*512,cy=Math.random()*1024;g.strokeStyle='rgba(80,45,15,.25)';g.lineWidth=1.5;
-  for(let r=4;r<40;r+=5){g.beginPath();g.ellipse(cx,cy,r*.35,r*1.6,0,0,Math.PI*2);g.stroke()}}
+ // rovere effetto legno (pellicolato), venatura lungo la barra
+ const Wd=512,Hd=2048,c=document.createElement('canvas');c.width=Wd;c.height=Hd;const g=c.getContext('2d');
+ const grd=g.createLinearGradient(0,0,Wd,0);grd.addColorStop(0,'#6f5132');grd.addColorStop(.5,'#7b5b3a');grd.addColorStop(1,'#6a4d2f');
+ g.fillStyle=grd;g.fillRect(0,0,Wd,Hd);
+ let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+ for(let i=0;i<520;i++){const x=rnd()*Wd,w=.4+rnd()*2.2,a=.05+rnd()*.22,dark=rnd()<.6;
+  g.strokeStyle=dark?`rgba(48,30,14,${a*1.3})`:`rgba(170,135,90,${a*.8})`;g.lineWidth=w;g.beginPath();
+  const f1=.002+rnd()*.003,f2=.01+rnd()*.02,ph=rnd()*9;g.moveTo(x,0);
+  for(let y=0;y<=Hd;y+=24)g.lineTo(x+Math.sin(y*f1+ph)*7+Math.sin(y*f2+ph*2)*1.2,y);g.stroke()}
+ for(let i=0;i<5200;i++){const x=rnd()*Wd,y=rnd()*Hd;g.fillStyle=`rgba(55,35,15,${.12+rnd()*.25})`;g.fillRect(x,y,.8,3+rnd()*9)}
+ for(let k=0;k<4;k++){const cx=rnd()*Wd,cy=rnd()*Hd;for(let r=3;r<60;r+=3.5){g.strokeStyle=`rgba(75,48,22,${.10})`;g.lineWidth=1;g.beginPath();g.ellipse(cx,cy,r*.4,r*3.2,0,0,Math.PI*2);g.stroke()}}
  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=8;return t}
+function grainTexture(base,amt){ // leggera grana per verniciatura/pvc
+ const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');g.fillStyle=base;g.fillRect(0,0,256,256);
+ const im=g.getImageData(0,0,256,256),d=im.data;for(let i=0;i<d.length;i+=4){const n=(Math.random()-.5)*amt;d[i]+=n;d[i+1]+=n;d[i+2]+=n}g.putImageData(im,0,0);
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;return t}
 const MAT={
- pvc:()=>new THREE.MeshPhysicalMaterial({color:0xf3f3ee,roughness:.32,clearcoat:.4,clearcoatRoughness:.3}),
- fib:()=>new THREE.MeshPhysicalMaterial({map:woodTexture(),roughness:.55,clearcoat:.25,clearcoatRoughness:.5}),
- alu:()=>new THREE.MeshPhysicalMaterial({color:0x4e6c3a,metalness:.55,roughness:.38,clearcoat:.5,clearcoatRoughness:.25})
+ pvc:()=>new THREE.MeshPhysicalMaterial({map:grainTexture('#f1f1ec',5),roughness:.38,clearcoat:.25,clearcoatRoughness:.35,sheen:.2,sheenColor:0xffffff}),
+ fib:()=>new THREE.MeshPhysicalMaterial({map:woodTexture(),roughness:.62,clearcoat:.12,clearcoatRoughness:.6}),
+ alu:()=>new THREE.MeshPhysicalMaterial({map:grainTexture('#62645a',7),metalness:.35,roughness:.5,clearcoat:.3,clearcoatRoughness:.45})
 };
-const glassMat=new THREE.MeshPhysicalMaterial({color:0xd9f1f4,metalness:0,roughness:.03,transparent:true,opacity:.12,envMapIntensity:2.4,clearcoat:1,clearcoatRoughness:.02,side:THREE.DoubleSide,depthWrite:false});
+const STYLE={ // r = raggio spigoli, step = sporgenza anta, bead = fermavetro 'bev'|'sq'
+ pvc:{r:.0035,rs:.006,step:.007,bead:'bev',glass:.024},
+ fib:{r:.0025,rs:.004,step:.005,bead:'bev',glass:.032},
+ alu:{r:.0007,rs:.0008,step:.002,bead:'sq',glass:.028}
+};
+const glassMat=new THREE.MeshPhysicalMaterial({color:0xeaf6f4,metalness:0,roughness:.02,transparent:true,opacity:.2,envMapIntensity:4,clearcoat:1,clearcoatRoughness:.02,depthWrite:false});
+const glassEdge=new THREE.MeshPhysicalMaterial({color:0x7fb8a8,roughness:.1,transparent:true,opacity:.55});
 const viewTex=new THREE.TextureLoader().load('../img/vista.jpg');viewTex.colorSpace=THREE.SRGBColorSpace;
 const viewMat=new THREE.MeshBasicMaterial({map:viewTex,side:THREE.FrontSide,toneMapped:false});
-const rubber=new THREE.MeshStandardMaterial({color:0x111214,roughness:.85});
-const steel=new THREE.MeshPhysicalMaterial({color:0xd8dadd,metalness:1,roughness:.22});
+const rubber=new THREE.MeshStandardMaterial({color:0x151617,roughness:.9});
+const spacerMat=new THREE.MeshStandardMaterial({color:0x2b2d2f,metalness:.3,roughness:.55});
+const steel=new THREE.MeshPhysicalMaterial({color:0xcfd2d6,metalness:1,roughness:.28,clearcoat:.3});
 
 function box(w,h,d,mat,r=.004){const m=new THREE.Mesh(new RoundedBoxGeometry(w,h,d,3,Math.min(r,w/2-.0005,h/2-.0005,d/2-.0005)),mat);m.castShadow=true;m.receiveShadow=true;return m}
 
-/* ---------- costruzione finestra ---------- */
+/* poligono (u = verso l'interno della cornice, z = profondità) con spigoli arrotondati */
+function rpoly(pts,radii){const out=[];const n=pts.length;
+ for(let i=0;i<n;i++){const r=radii[i]||0,p=pts[i];if(!r){out.push(p);continue}
+  const a=pts[(i-1+n)%n],b=pts[(i+1)%n];const v1=[a[0]-p[0],a[1]-p[1]],v2=[b[0]-p[0],b[1]-p[1]];
+  const l1=Math.hypot(...v1),l2=Math.hypot(...v2);const u1=[v1[0]/l1,v1[1]/l1],u2=[v2[0]/l2,v2[1]/l2];
+  const rr=Math.min(r,l1*.45,l2*.45);const p1=[p[0]+u1[0]*rr,p[1]+u1[1]*rr],p2=[p[0]+u2[0]*rr,p[1]+u2[1]*rr];
+  for(let k=0;k<=5;k++){const t=k/5,q=(1-t)*(1-t),w=2*(1-t)*t,e=t*t;out.push([q*p1[0]+w*p[0]+e*p2[0],q*p1[1]+w*p[1]+e*p2[1]])}}
+ return out}
+/* cornice con tagli a 45°: estrude la sezione lungo i 4 lati di un rettangolo w×h */
+function mitre(pts,w,h,mat,opts={}){
+ let A=0;for(let i=0;i<pts.length;i++){const p=pts[i],q=pts[(i+1)%pts.length];A+=p[0]*q[1]-q[0]*p[1]}
+ const P=A<0?pts.slice().reverse():pts,n=P.length;
+ // normali 2D (verso l'esterno del poligono) con smussatura sugli archi
+ const en=[];for(let i=0;i<n;i++){const p=P[i],q=P[(i+1)%n],dx=q[0]-p[0],dz=q[1]-p[1],l=Math.hypot(dx,dz)||1;en.push([dz/l,-dx/l])}
+ const vn=[];for(let i=0;i<n;i++){const a=en[(i-1+n)%n],b=en[i],dot=a[0]*b[0]+a[1]*b[1];vn.push(dot>.82?(()=>{const x=a[0]+b[0],z=a[1]+b[1],l=Math.hypot(x,z);return[x/l,z/l]})():null)}
+ const per=[0];for(let i=0;i<n;i++){const p=P[i],q=P[(i+1)%n];per.push(per[i]+Math.hypot(q[0]-p[0],q[1]-p[1]))}
+ const sides=[ // origine bordo esterno, direzione lungo, direzione verso interno, lunghezza
+  {o:(u,a)=>[-w/2+u+a*(w-2*u),-h/2+u],dn:[0,1]},{o:(u,a)=>[w/2-u,-h/2+u+a*(h-2*u)],dn:[-1,0]},
+  {o:(u,a)=>[w/2-u-a*(w-2*u),h/2-u],dn:[0,-1]},{o:(u,a)=>[-w/2+u,h/2-u-a*(h-2*u)],dn:[1,0]}];
+ const pos=[],nor=[],uv=[];const sc=opts.uv||1;
+ sides.forEach((S,si)=>{const L=si%2?h:w;
+  for(let i=0;i<n;i++){const p=P[i],q=P[(i+1)%n];
+   const np=vn[i]||en[i],nq=vn[(i+1)%n]||en[i];
+   const V=(pt,a)=>{const xy=S.o(pt[0],a);return[xy[0],xy[1],pt[1]]};
+   const N=nn=>[nn[0]*S.dn[0],nn[0]*S.dn[1],nn[1]];
+   const v=[V(p,0),V(q,0),V(q,1),V(p,1)],nv=[N(np),N(nq),N(nq),N(np)];
+   const t=[[per[i]*sc*4,0],[per[i+1]*sc*4,0],[per[i+1]*sc*4,L*sc],[per[i]*sc*4,L*sc]];
+   // verifica orientamento del triangolo rispetto alla normale
+   const e1=[v[1][0]-v[0][0],v[1][1]-v[0][1],v[1][2]-v[0][2]],e2=[v[2][0]-v[0][0],v[2][1]-v[0][1],v[2][2]-v[0][2]];
+   const cr=[e1[1]*e2[2]-e1[2]*e2[1],e1[2]*e2[0]-e1[0]*e2[2],e1[0]*e2[1]-e1[1]*e2[0]];const en3=N(en[i]);
+   const ord=(cr[0]*en3[0]+cr[1]*en3[1]+cr[2]*en3[2])>=0?[0,1,2,0,2,3]:[0,2,1,0,3,2];
+   ord.forEach(k=>{pos.push(...v[k]);nor.push(...nv[k]);uv.push(...t[k])})}});
+ const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+ geo.setAttribute('normal',new THREE.Float32BufferAttribute(nor,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+ const m=new THREE.Mesh(geo,mat);m.castShadow=opts.shadow!==false;m.receiveShadow=true;return m}
+
+/* ---------- costruzione finestra (sezioni semplificate dai profili reali) ---------- */
 function buildWindow(p){
- const g=new THREE.Group(),mat=MAT[p.k]();
- const f=p.frame,D=p.depth;
- // telaio
- const top=box(W,f,D,mat);top.position.y=H/2-f/2;g.add(top);
- const bot=box(W,f,D,mat);bot.position.y=-H/2+f/2;g.add(bot);
- const ls=box(f,H-2*f,D,mat);ls.position.x=-W/2+f/2;g.add(ls);
- const rs=box(f,H-2*f,D,mat);rs.position.x=W/2-f/2;g.add(rs);
+ const g=new THREE.Group(),mat=MAT[p.k](),st=STYLE[p.k];
+ const f=p.frame,D=p.depth,s=p.sash,ov=.009,zf=D/2,z1=zf+st.step,zb=-D/2+.008,T=st.glass,gz=-.004,gi=gz+T/2,ge=gz-T/2;
+ // telaio con battuta per l'anta
+ const fr=rpoly([[0,-D/2],[f,-D/2],[f,zf-.024],[f-ov-.003,zf-.024],[f-ov-.003,zf],[0,zf]],[st.r*.5,st.r*.5,0,0,st.r,st.r]);
+ g.add(mitre(fr,W,H,mat));
  // ante
- const ow=W-2*f,oh=H-2*f,ov=.012;
- const sw=ow/2+ov,sh=oh+2*ov,sd=D*.92,s=p.sash,m=p.meet;
+ const ow=W-2*(f-ov),oh=H-2*(f-ov),sw=ow/2-.0015,sh=oh;
+ const sashP=rpoly([[0,zf-.022],[ov+.003,zf-.022],[ov+.003,zb],[s+.004,zb],[s+.004,ge-.001],[s-.004,ge-.001],[s-.004,z1],[0,z1]],[0,0,st.r*.5,st.r*.5,0,0,st.rs,st.rs]);
+ const beadP=st.bead==='bev'
+  ?rpoly([[s-.004,gi+.001],[s+.015,gi+.001],[s+.015,gi+.006],[s+.004,z1-.003],[s-.004,z1-.003]],[0,0,st.r*.6,st.r,0])
+  :rpoly([[s-.004,gi+.001],[s+.013,gi+.001],[s+.013,z1-.003],[s-.004,z1-.003]],[0,0,st.r,0]);
+ const gasI=[[s+.0145,gi],[s+.0185,gi],[s+.0185,gi+.0035],[s+.0145,gi+.005]];
+ const gasE=[[s+.003,ge-.004],[s+.007,ge-.004],[s+.007,ge],[s+.003,ge]];
+ const spc=[[s-.010,gz-T/2+.005],[s+.022,gz-T/2+.005],[s+.022,gz+T/2-.005],[s-.010,gz+T/2-.005]];
  function sash(side){
-  const piv=new THREE.Group();piv.position.set(side*(W/2-f+ov),0,D*.18);
-  const a=new THREE.Group();a.position.x=-side*sw/2;piv.add(a);
-  const hinge=side,meetX=-side; // lato cerniera e lato battuta (coordinate locali di a)
-  const t=box(sw,s,sd,mat);t.position.y=sh/2-s/2;a.add(t);
-  const b=box(sw,s,sd,mat);b.position.y=-sh/2+s/2;a.add(b);
-  const h=box(s,sh-2*s,sd,mat);h.position.x=hinge*(sw/2-s/2);a.add(h);
-  const mm=box(m,sh-2*s,sd,mat);mm.position.x=meetX*(sw/2-m/2);a.add(mm);
-  // vetro + guarnizioni
-  const gw=sw-s-m,gh=sh-2*s,gx=(hinge*(sw/2-s)+meetX*(sw/2-m))/2;
-  const gl=new THREE.Mesh(new THREE.BoxGeometry(gw+.004,gh+.004,.024),glassMat);gl.position.x=gx;gl.renderOrder=2;a.add(gl);
-  const sp=new THREE.MeshStandardMaterial({color:0x2a2d30,metalness:.6,roughness:.4});
-  [[gw,.006,0,gh/2-.003],[gw,.006,0,-gh/2+.003],[.006,gh,gw/2-.003,0],[.006,gh,-gw/2+.003,0]].forEach(([w,hh,x,y])=>{
-   const r=new THREE.Mesh(new THREE.BoxGeometry(w,hh,sd*.7),rubber);r.position.set(gx+x,y,0);a.add(r)});
-  // cerniere
-  [sh/2-.16,-sh/2+.16].forEach(y=>{const c=new THREE.Mesh(new THREE.CylinderGeometry(.007,.007,.07,16),steel);c.position.set(hinge*(sw/2+.002),y,sd/2);c.castShadow=true;a.add(c)});
+  const piv=new THREE.Group();piv.position.set(side*(W/2-f+ov),0,zf);
+  const a=new THREE.Group();a.position.set(-side*sw/2,0,-zf);piv.add(a);
+  a.add(mitre(sashP,sw,sh,mat));a.add(mitre(beadP,sw,sh,mat));
+  a.add(mitre(gasI,sw,sh,rubber,{shadow:false}));a.add(mitre(gasE,sw,sh,rubber,{shadow:false}));
+  a.add(mitre(spc,sw,sh,spacerMat,{shadow:false}));
+  // vetrocamera: due lastre
+  const gw=sw-2*(s-.010),gh=sh-2*(s-.010);
+  [gz+T/2-.002,gz-T/2+.002].forEach(z=>{const gl=new THREE.Mesh(new THREE.BoxGeometry(gw,gh,.004),[glassEdge,glassEdge,glassEdge,glassEdge,glassMat,glassMat]);gl.position.z=z;gl.renderOrder=2;a.add(gl)});
+  // cerniere (lato telaio): copricerniera colore profilo + perno
+  const hx=side*(sw/2+.004);
+  [sh/2-.14,-sh/2+.14].forEach(y=>{
+   const c=new THREE.Mesh(new THREE.CylinderGeometry(.0075,.0075,.085,24),mat);c.position.set(hx,y,z1-.004);c.castShadow=true;a.add(c);
+   [1,-1].forEach(e=>{const cap=new THREE.Mesh(new THREE.SphereGeometry(.0075,16,8,0,Math.PI*2,0,Math.PI/2),mat);cap.position.set(hx,y+e*.0425,z1-.004);cap.rotation.x=e>0?0:Math.PI;a.add(cap)})});
   return {piv,a};
  }
  const L=sash(-1),R=sash(1);g.add(L.piv,R.piv);
- // maniglia sull'anta destra (lato interno, verso chi guarda)
- const hx=-(sw/2-m/2);
- const plate=box(.028,.075,.01,steel,.003);plate.position.set(hx,0,sd/2+.006);R.a.add(plate);
- const lever=box(.022,.13,.016,steel,.006);lever.position.set(hx,-.055,sd/2+.022);R.a.add(lever);
+ // riporto centrale sull'anta con maniglia
+ const rip=box(.03,sh-.006,.008,mat,st.rs*.6);rip.position.set(-sw/2-.006,0,z1+.002);R.a.add(rip);
+ // maniglia (rosetta + leva) in alluminio satinato
+ const hx=-sw/2+.006,hz=z1+.006;
+ const ros=box(.03,.078,.012,steel,.006);ros.position.set(hx,.01,hz+.002);R.a.add(ros);
+ const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0),new THREE.Vector3(0,0,.03),new THREE.Vector3(0,-.012,.045),new THREE.Vector3(0,-.05,.05),new THREE.Vector3(0,-.13,.048)]);
+ const lev=new THREE.Mesh(new THREE.TubeGeometry(curve,48,.0075,20,false),steel);lev.scale.x=1.25;lev.position.set(hx,.01,hz+.006);lev.castShadow=true;R.a.add(lev);
+ const end=new THREE.Mesh(new THREE.SphereGeometry(.0075,20,12),steel);end.scale.x=1.25;end.position.set(hx,.01-.13,hz+.006+.048);R.a.add(end);
  const view=new THREE.Mesh(new THREE.PlaneGeometry(ow+.02,oh+.02),viewMat);view.position.z=-D/2-.03;g.add(view);
  g.userData={p,L:L.piv,R:R.piv,mat,ow,oh,D};
  g.traverse(o=>{if(o.isMesh)o.userData.win=g});
