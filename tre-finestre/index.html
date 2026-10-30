@@ -50,7 +50,7 @@ body.busy #colors{opacity:0;pointer-events:none}
 .colors button{appearance:none;width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.25);cursor:pointer;padding:0;box-shadow:inset 0 -3px 6px rgba(0,0,0,.25);transition:transform .2s,border-color .2s}
 .colors button[aria-pressed="true"]{border-color:#fff;transform:scale(1.12);box-shadow:0 0 0 3px rgba(53,208,255,.55)}
 .colors button:focus-visible{outline:2px solid #fff;outline-offset:3px}
-.colors .cn{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#e9f4f8;min-width:84px}
+.colors .cn{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#e9f4f8;min-width:150px}
 @media (max-width:760px){.colors{bottom:14px;gap:8px;padding:6px 10px}.colors button{width:26px;height:26px}.colors .cn{display:none}}
 .info{background:rgba(4,6,9,.86);border:1px solid rgba(53,208,255,.18);border-radius:14px;padding:18px 20px;box-shadow:0 20px 60px rgba(0,0,0,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .info ul{color:#eef6f9}
@@ -214,8 +214,8 @@ function grainTexture(base,amt){ // leggera grana per verniciatura/pvc
  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;return t}
 const COLORI=[
  {k:'bianco',n:'Bianco',sw:'#f1f1ec',tex:()=>grainTexture('#f1f1ec',5),rough:.38},
- {k:'grigio',n:'Grigio scuro',sw:'#2c3034',tex:()=>grainTexture('#2c3034',6),rough:.5},
- {k:'verde',n:'Verde',sw:'#2e4a3b',tex:()=>grainTexture('#2e4a3b',6),rough:.48},
+ {k:'grigio',n:'Antracite RAL 7016',sw:'#383e42',tex:()=>grainTexture('#383e42',6),rough:.5},
+ {k:'verde',n:'Verde RAL 6005',sw:'#114232',tex:()=>grainTexture('#114232',5),rough:.48},
  {k:'noce',n:'Noce',sw:'#45301e',tex:()=>woodTexture('#3d2818','#47301d','#382415',[22,13,6],[120,88,58]),rough:.6}];
 const TEX={};const texOf=c=>TEX[c.k]||(TEX[c.k]=c.tex());
 const MAT={
