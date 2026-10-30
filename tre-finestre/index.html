@@ -43,6 +43,15 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
 .info.on .prof img{filter:drop-shadow(0 0 40px rgba(190,240,255,.85)) drop-shadow(0 0 90px rgba(53,208,255,.6)) drop-shadow(0 20px 24px rgba(0,0,0,.8))}
 .info{position:fixed;left:max(4vw,16px);top:50%;transform:translateY(-50%);width:min(29vw,400px);display:flex;flex-direction:column;gap:12px;opacity:0;pointer-events:none;transition:opacity .8s;z-index:10}
 .info.on{opacity:1;pointer-events:auto}
+.colors{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:8;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;background:rgba(4,6,9,.78);border:1px solid rgba(53,208,255,.2);transition:opacity .5s}
+.colors.in{position:static;transform:none;background:none;border:0;padding:0;flex-wrap:wrap}
+body.busy #colors{opacity:0;pointer-events:none}
+.colors>span{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.colors button{appearance:none;width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.25);cursor:pointer;padding:0;box-shadow:inset 0 -3px 6px rgba(0,0,0,.25);transition:transform .2s,border-color .2s}
+.colors button[aria-pressed="true"]{border-color:#fff;transform:scale(1.12);box-shadow:0 0 0 3px rgba(53,208,255,.55)}
+.colors button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.colors .cn{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#e9f4f8;min-width:84px}
+@media (max-width:760px){.colors{bottom:14px;gap:8px;padding:6px 10px}.colors button{width:26px;height:26px}.colors .cn{display:none}}
 .info{background:rgba(4,6,9,.86);border:1px solid rgba(53,208,255,.18);border-radius:14px;padding:18px 20px;box-shadow:0 20px 60px rgba(0,0,0,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .info ul{color:#eef6f9}
 .info .tag{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent2)}
@@ -117,6 +126,7 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
 </header>
 <div class="ttl"><h2>Scegli il materiale</h2><p>Tocca una finestra</p></div>
 <div id="labels"></div>
+<div class="colors" id="colors" role="group" aria-label="Scegli il colore"></div>
 <svg id="beam" aria-hidden="true"><defs>
  <linearGradient id="bg1" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".35" stop-color="#d6f6ff" stop-opacity=".55"/><stop offset="1" stop-color="#35d0ff" stop-opacity=".18"/></linearGradient>
  <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10"/></filter>
@@ -129,6 +139,7 @@ canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-actio
  <div class="prof" id="prof"><div class="prow"><img id="iImg" src="" alt="" draggable="false"><img id="iImg2" src="" alt="" draggable="false" hidden></div><div class="pcap" id="pcap" hidden><span id="iCap1"></span><span id="iCap2"></span></div><span class="zh" id="zh">🔍 Passa sopra per ingrandire</span></div>
  <div class="lens" id="lens" aria-hidden="true"></div>
  <ul id="iList"></ul>
+ <div class="colors in" id="iColors" role="group" aria-label="Scegli il colore"></div>
  <div class="btns"><button type="button" class="cta" id="bSheet">Scheda tecnica</button><a class="ghost" href="tel:+390318130087">Richiedi preventivo</a></div>
 </div>
 <button type="button" class="ghost" id="close">✕ Chiudi</button>
@@ -184,14 +195,14 @@ const floor=new THREE.Mesh(new THREE.PlaneGeometry(30,30),new THREE.ShadowMateri
 floor.rotation.x=-Math.PI/2;floor.position.y=-H/2-.18;floor.receiveShadow=true;scene.add(floor);
 
 /* ---------- materiali ---------- */
-function woodTexture(){
+function woodTexture(c0='#6f5132',c1='#7b5b3a',c2='#6a4d2f',dk=[48,30,14],lt=[170,135,90]){
  // rovere effetto legno (pellicolato), venatura lungo la barra
  const Wd=512,Hd=2048,c=document.createElement('canvas');c.width=Wd;c.height=Hd;const g=c.getContext('2d');
- const grd=g.createLinearGradient(0,0,Wd,0);grd.addColorStop(0,'#6f5132');grd.addColorStop(.5,'#7b5b3a');grd.addColorStop(1,'#6a4d2f');
+ const grd=g.createLinearGradient(0,0,Wd,0);grd.addColorStop(0,c0);grd.addColorStop(.5,c1);grd.addColorStop(1,c2);
  g.fillStyle=grd;g.fillRect(0,0,Wd,Hd);
  let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
  for(let i=0;i<520;i++){const x=rnd()*Wd,w=.4+rnd()*2.2,a=.05+rnd()*.22,dark=rnd()<.6;
-  g.strokeStyle=dark?`rgba(48,30,14,${a*1.3})`:`rgba(170,135,90,${a*.8})`;g.lineWidth=w;g.beginPath();
+  g.strokeStyle=dark?`rgba(${dk},${a*1.3})`:`rgba(${lt},${a*.8})`;g.lineWidth=w;g.beginPath();
   const f1=.002+rnd()*.003,f2=.01+rnd()*.02,ph=rnd()*9;g.moveTo(x,0);
   for(let y=0;y<=Hd;y+=24)g.lineTo(x+Math.sin(y*f1+ph)*7+Math.sin(y*f2+ph*2)*1.2,y);g.stroke()}
  for(let i=0;i<5200;i++){const x=rnd()*Wd,y=rnd()*Hd;g.fillStyle=`rgba(55,35,15,${.12+rnd()*.25})`;g.fillRect(x,y,.8,3+rnd()*9)}
@@ -201,10 +212,16 @@ function grainTexture(base,amt){ // leggera grana per verniciatura/pvc
  const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');g.fillStyle=base;g.fillRect(0,0,256,256);
  const im=g.getImageData(0,0,256,256),d=im.data;for(let i=0;i<d.length;i+=4){const n=(Math.random()-.5)*amt;d[i]+=n;d[i+1]+=n;d[i+2]+=n}g.putImageData(im,0,0);
  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;return t}
+const COLORI=[
+ {k:'bianco',n:'Bianco',sw:'#f1f1ec',tex:()=>grainTexture('#f1f1ec',5),rough:.38},
+ {k:'grigio',n:'Grigio scuro',sw:'#2c3034',tex:()=>grainTexture('#2c3034',6),rough:.5},
+ {k:'verde',n:'Verde',sw:'#2e4a3b',tex:()=>grainTexture('#2e4a3b',6),rough:.48},
+ {k:'noce',n:'Noce',sw:'#45301e',tex:()=>woodTexture('#3d2818','#47301d','#382415',[22,13,6],[120,88,58]),rough:.6}];
+const TEX={};const texOf=c=>TEX[c.k]||(TEX[c.k]=c.tex());
 const MAT={
- pvc:()=>new THREE.MeshPhysicalMaterial({map:grainTexture('#f1f1ec',5),roughness:.38,clearcoat:.25,clearcoatRoughness:.35,sheen:.2,sheenColor:0xffffff}),
- fib:()=>new THREE.MeshPhysicalMaterial({map:woodTexture(),roughness:.62,clearcoat:.12,clearcoatRoughness:.6}),
- alu:()=>new THREE.MeshPhysicalMaterial({map:grainTexture('#62645a',7),metalness:.35,roughness:.5,clearcoat:.3,clearcoatRoughness:.45})
+ pvc:()=>new THREE.MeshPhysicalMaterial({map:texOf(COLORI[0]),roughness:.38,clearcoat:.25,clearcoatRoughness:.35,sheen:.2,sheenColor:0xffffff}),
+ fib:()=>new THREE.MeshPhysicalMaterial({map:texOf(COLORI[0]),roughness:.38,clearcoat:.25,clearcoatRoughness:.35}),
+ alu:()=>new THREE.MeshPhysicalMaterial({map:texOf(COLORI[0]),metalness:.15,roughness:.42,clearcoat:.3,clearcoatRoughness:.45})
 };
 const STYLE={ // r = raggio spigoli, step = sporgenza anta, bead = fermavetro 'bev'|'sq'
  pvc:{r:.0035,rs:.006,step:.007,bead:'bev',glass:.024},
@@ -238,14 +255,16 @@ function mitre(pts,w,h,mat,opts={}){
  const vn=[];for(let i=0;i<n;i++){const a=en[(i-1+n)%n],b=en[i],dot=a[0]*b[0]+a[1]*b[1];vn.push(dot>.82?(()=>{const x=a[0]+b[0],z=a[1]+b[1],l=Math.hypot(x,z);return[x/l,z/l]})():null)}
  const per=[0];for(let i=0;i<n;i++){const p=P[i],q=P[(i+1)%n];per.push(per[i]+Math.hypot(q[0]-p[0],q[1]-p[1]))}
  const sides=[ // origine bordo esterno, direzione lungo, direzione verso interno, lunghezza
-  {o:(u,a)=>[-w/2+u+a*(w-2*u),-h/2+u],dn:[0,1]},{o:(u,a)=>[w/2-u,-h/2+u+a*(h-2*u)],dn:[-1,0]},
-  {o:(u,a)=>[w/2-u-a*(w-2*u),h/2-u],dn:[0,-1]},{o:(u,a)=>[-w/2+u,h/2-u-a*(h-2*u)],dn:[1,0]}];
- const pos=[],nor=[],uv=[];const sc=opts.uv||1;
+  {o:(u,a)=>{const x0=-w/2+u*K[3],x1=w/2-u*K[1];return[x0+a*(x1-x0),-h/2+u*K[0]]},dn:[0,1],k:0},
+  {o:(u,a)=>{const y0=-h/2+u*K[0],y1=h/2-u*K[2];return[w/2-u*K[1],y0+a*(y1-y0)]},dn:[-1,0],k:1},
+  {o:(u,a)=>{const x0=w/2-u*K[1],x1=-w/2+u*K[3];return[x0+a*(x1-x0),h/2-u*K[2]]},dn:[0,-1],k:2},
+  {o:(u,a)=>{const y0=h/2-u*K[2],y1=-h/2+u*K[0];return[-w/2+u*K[3],y0+a*(y1-y0)]},dn:[1,0],k:3}];
+ const pos=[],nor=[],uv=[];const sc=opts.uv||1;const K=opts.k||[1,1,1,1];
  sides.forEach((S,si)=>{const L=si%2?h:w;
   for(let i=0;i<n;i++){const p=P[i],q=P[(i+1)%n];
    const np=vn[i]||en[i],nq=vn[(i+1)%n]||en[i];
    const V=(pt,a)=>{const xy=S.o(pt[0],a);return[xy[0],xy[1],pt[1]]};
-   const N=nn=>[nn[0]*S.dn[0],nn[0]*S.dn[1],nn[1]];
+   const N=nn=>{const a=nn[0]/K[S.k],b=nn[1],l=Math.hypot(a,b);return[a/l*S.dn[0],a/l*S.dn[1],b/l]};
    const v=[V(p,0),V(q,0),V(q,1),V(p,1)],nv=[N(np),N(nq),N(nq),N(np)];
    const t=[[per[i]*sc*4,0],[per[i+1]*sc*4,0],[per[i+1]*sc*4,L*sc],[per[i]*sc*4,L*sc]];
    // verifica orientamento del triangolo rispetto alla normale
@@ -273,15 +292,18 @@ function buildWindow(p){
  const gasI=[[s+.0145,gi],[s+.0185,gi],[s+.0185,gi+.0035],[s+.0145,gi+.005]];
  const gasE=[[s+.003,ge-.004],[s+.007,ge-.004],[s+.007,ge],[s+.003,ge]];
  const spc=[[s-.010,gz-T/2+.005],[s+.022,gz-T/2+.005],[s+.022,gz+T/2-.005],[s-.010,gz+T/2-.005]];
+ const KM=[.58,.8];
  function sash(side){
   const piv=new THREE.Group();piv.position.set(side*(W/2-f+ov),0,zf);
   const a=new THREE.Group();a.position.set(-side*sw/2,0,-zf);piv.add(a);
-  a.add(mitre(sashP,sw,sh,mat));a.add(mitre(beadP,sw,sh,mat));
-  a.add(mitre(gasI,sw,sh,rubber,{shadow:false}));a.add(mitre(gasE,sw,sh,rubber,{shadow:false}));
-  a.add(mitre(spc,sw,sh,spacerMat,{shadow:false}));
+  // nodo centrale: anta senza maniglia più stretta, anta con maniglia più larga (montante asimmetrico)
+  const km=side<0?KM[0]:KM[1],K=side<0?[1,km,1,1]:[1,1,1,km],o={k:K},o2={k:K,shadow:false};
+  a.add(mitre(sashP,sw,sh,mat,o));a.add(mitre(beadP,sw,sh,mat,o));
+  a.add(mitre(gasI,sw,sh,rubber,o2));a.add(mitre(gasE,sw,sh,rubber,o2));
+  a.add(mitre(spc,sw,sh,spacerMat,o2));
   // vetrocamera: due lastre
-  const gw=sw-2*(s-.010),gh=sh-2*(s-.010);
-  [gz+T/2-.002,gz-T/2+.002].forEach(z=>{const gl=new THREE.Mesh(new THREE.BoxGeometry(gw,gh,.004),[glassEdge,glassEdge,glassEdge,glassEdge,glassMat,glassMat]);gl.position.z=z;gl.renderOrder=2;a.add(gl)});
+  const ge0=s-.010,xl=-sw/2+ge0*K[3],xr=sw/2-ge0*K[1],gw=xr-xl,gh=sh-2*ge0;
+  [gz+T/2-.002,gz-T/2+.002].forEach(z=>{const gl=new THREE.Mesh(new THREE.BoxGeometry(gw,gh,.004),[glassEdge,glassEdge,glassEdge,glassEdge,glassMat,glassMat]);gl.position.set((xl+xr)/2,0,z);gl.renderOrder=2;a.add(gl)});
   // cerniere (lato telaio): copricerniera colore profilo + perno
   const hx=side*(sw/2+.004);
   [sh/2-.14,-sh/2+.14].forEach(y=>{
@@ -291,9 +313,9 @@ function buildWindow(p){
  }
  const L=sash(-1),R=sash(1);g.add(L.piv,R.piv);
  // riporto centrale sull'anta con maniglia
- const rip=box(.03,sh-.006,.008,mat,st.rs*.6);rip.position.set(-sw/2-.006,0,z1+.002);R.a.add(rip);
+ const ripE=.016,ripW=ripE+.012;const rip=box(ripW,sh-.004,.006,mat,st.rs*.6);rip.position.set(-sw/2-ripE+ripW/2,0,z1+.001);R.a.add(rip);
  // maniglia (rosetta + leva) in alluminio satinato
- const hx=-sw/2+.006,hz=z1+.006;
+ const hx=(-sw/2-ripE+(-sw/2+(s-.004)*KM[1]))/2,hz=z1+.006;
  const ros=box(.03,.078,.012,steel,.006);ros.position.set(hx,.01,hz+.002);R.a.add(ros);
  const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0),new THREE.Vector3(0,0,.03),new THREE.Vector3(0,-.012,.045),new THREE.Vector3(0,-.05,.05),new THREE.Vector3(0,-.13,.048)]);
  const lev=new THREE.Mesh(new THREE.TubeGeometry(curve,48,.0075,20,false),steel);lev.scale.x=1.25;lev.position.set(hx,.01,hz+.006);lev.castShadow=true;R.a.add(lev);
@@ -304,6 +326,16 @@ function buildWindow(p){
  return g;
 }
 const wins=M.map((p,i)=>{const w=buildWindow(p);w.position.x=(i-1)*GAP;scene.add(w);return w});
+/* ---------- colori ---------- */
+let colore=COLORI[0];
+function setColor(c){colore=c;wins.forEach(w=>{const m=w.userData.mat;m.map=texOf(c);m.roughness=c.rough;m.needsUpdate=true});
+ document.querySelectorAll('.colors button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.c===c.k?'true':'false'));
+ document.querySelectorAll('.colors .cn').forEach(e=>e.textContent=c.n)}
+['colors','iColors'].forEach(id=>{const box=document.getElementById(id);box.innerHTML='<span>Colore</span>';
+ COLORI.forEach(c=>{const b=document.createElement('button');b.type='button';b.dataset.c=c.k;b.title=c.n;b.setAttribute('aria-label',c.n);
+  b.style.background=c.k==='noce'?'linear-gradient(100deg,#4f3220,#6b4529 40%,#4a2f1d 60%,#5d3c25)':c.sw;b.addEventListener('click',()=>setColor(c));box.appendChild(b)});
+ const n=document.createElement('span');n.className='cn';box.appendChild(n)});
+setColor(COLORI[0]);
 
 /* ---------- camera responsive ---------- */
 let mobile=false,home={camZ:6};
