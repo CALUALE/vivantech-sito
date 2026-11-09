@@ -396,7 +396,7 @@ function setColor(c,id){if(id==='iColors'&&sel)paint(sel,c);else wins.forEach(w=
  COLORI.forEach(c=>{const b=document.createElement('button');b.type='button';b.dataset.c=c.k;b.title=c.n;b.setAttribute('aria-label',c.n);
   b.style.background=c.k==='noce'?'linear-gradient(100deg,#4f3220,#6b4529 40%,#4a2f1d 60%,#5d3c25)':c.sw;b.addEventListener('click',()=>setColor(c,id));box.appendChild(b)});
  const n=document.createElement('span');n.className='cn';box.appendChild(n)});
-{const by=k=>COLORI.find(c=>c.k===k);paint(wins[0],by('rosso'));paint(wins[1],by('bianco'));paint(wins[2],by('verde'));setTimeout(syncColors,0)}
+{const by=k=>COLORI.find(c=>c.k===k);paint(wins[0],by('verde'));paint(wins[1],by('bianco'));paint(wins[2],by('rosso'));setTimeout(syncColors,0)}
 
 /* ---------- camera responsive ---------- */
 let mobile=false,home={camZ:6};
