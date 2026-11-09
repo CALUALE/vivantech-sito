@@ -87,6 +87,8 @@ body.busy #colors{opacity:0;pointer-events:none}
 .ghost{appearance:none;background:rgba(5,6,8,.6);border:1px solid rgba(255,255,255,.35);color:var(--fg);border-radius:999px;padding:9px 18px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;text-decoration:none}
 .cta:focus-visible,.ghost:focus-visible{outline:2px solid #fff;outline-offset:2px}
 #close{position:fixed;top:78px;right:16px;z-index:20;display:none}
+#snd{position:fixed;top:78px;right:150px;z-index:20;display:none}
+.busy #snd{display:inline-block}
 .busy #close{display:inline-block}
 .ov{position:fixed;inset:0;z-index:50;background:rgba(3,4,6,.95);display:flex;flex-direction:column}
 .ov[hidden]{display:none}
@@ -111,6 +113,7 @@ body.busy #colors{opacity:0;pointer-events:none}
  .info ul{font-size:12.5px}
  .top{padding:8px 12px}.brand img{width:36px}.brand small{font-size:9px}
  #close{top:66px}
+ #snd{top:66px;right:136px}
 }
 </style>
 <script type="importmap">{"imports":{"three":"../js/three/three.module.min.js","three/addons/":"../js/three/addons/"}}</script>
@@ -143,6 +146,7 @@ body.busy #colors{opacity:0;pointer-events:none}
  <div class="btns"><button type="button" class="cta" id="bSheet">Scheda tecnica</button><a class="ghost" href="tel:+390318130087">Richiedi preventivo</a></div>
 </div>
 <button type="button" class="ghost" id="close">✕ Chiudi</button>
+<button type="button" class="ghost" id="snd" aria-pressed="true" aria-label="Suoni della natura">🔊 Audio</button>
 <div class="ov" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sTitle">
  <div class="ovh"><h4 id="sTitle">Scheda tecnica</h4><button type="button" class="ghost" id="sClose">Chiudi</button></div>
  <div class="ovb" id="sBody"></div>
@@ -232,7 +236,71 @@ const STYLE={ // r = raggio spigoli, step = sporgenza anta, bead = fermavetro 'b
 };
 const glassMat=new THREE.MeshPhysicalMaterial({color:0xeaf6f4,metalness:0,roughness:.02,transparent:true,opacity:.2,envMapIntensity:4,clearcoat:1,clearcoatRoughness:.02,depthWrite:false});
 const glassEdge=new THREE.MeshPhysicalMaterial({color:0x7fb8a8,roughness:.1,transparent:true,opacity:.55});
-const viewTex=new THREE.TextureLoader().load('../img/vista.jpg');viewTex.colorSpace=THREE.SRGBColorSpace;
+/* ---------- vista esterna: immagine nitida + gabbiano in volo ---------- */
+const vCan=document.createElement('canvas'),vCtx=vCan.getContext('2d');vCan.width=960;vCan.height=1200;
+const viewTex=new THREE.CanvasTexture(vCan);viewTex.colorSpace=THREE.SRGBColorSpace;viewTex.anisotropy=8;
+const vImg=new Image();let vReady=false;
+vImg.onload=()=>{vReady=true;drawView()};vImg.src='../img/vista.jpg';
+const birds=[];
+function drawView(){
+ const W=vCan.width,H=vCan.height;
+ if(vReady){const r=Math.max(W/vImg.naturalWidth,H/vImg.naturalHeight),iw=vImg.naturalWidth*r,ih=vImg.naturalHeight*r;
+  vCtx.drawImage(vImg,(W-iw)/2,(H-ih)*.42,iw,ih)}else{vCtx.fillStyle='#9cc4e4';vCtx.fillRect(0,0,W,H)}
+ birds.forEach(b=>{ // gabbiano: ali a "M" che battono, corpo chiaro
+  const s=b.s,fl=Math.sin(b.ph),up=fl*.55;vCtx.save();vCtx.translate(b.x*W,b.y*H);vCtx.scale(b.dir,1);
+  vCtx.lineCap='round';vCtx.lineJoin='round';
+  const wing=k=>{vCtx.beginPath();vCtx.moveTo(0,0);vCtx.quadraticCurveTo(k*s*.45,-s*(.25+up*.6),k*s*.75,-s*(.05+up*.35));vCtx.quadraticCurveTo(k*s*1.0,s*(.05-up*.1),k*s*1.15,s*(.22-up*.9));vCtx.stroke()};
+  vCtx.strokeStyle='rgba(55,62,70,.92)';vCtx.lineWidth=s*.13;wing(-1);wing(1);
+  vCtx.strokeStyle='rgba(245,247,250,.95)';vCtx.lineWidth=s*.07;wing(-1);wing(1);
+  vCtx.fillStyle='#f4f6f8';vCtx.beginPath();vCtx.ellipse(s*.02,s*.02,s*.2,s*.075,0,0,Math.PI*2);vCtx.fill();
+  vCtx.fillStyle='#e8b03a';vCtx.beginPath();vCtx.moveTo(s*.22,s*.01);vCtx.lineTo(s*.3,s*.03);vCtx.lineTo(s*.22,s*.05);vCtx.fill();
+  vCtx.restore()});
+ viewTex.needsUpdate=true}
+let birdTimer=0,lastT=0;
+function spawnBird(){const dir=Math.random()<.5?1:-1;birds.push({x:dir>0?-.12:1.12,y:.18+Math.random()*.2,dir,s:38+Math.random()*16,ph:0,v:.16+Math.random()*.05,t:0});natura.gull()}
+function tickView(t){const dt=Math.min(.05,t-lastT);lastT=t;
+ if(sel&&busy){birdTimer-=dt;if(birdTimer<=0){spawnBird();birdTimer=9+Math.random()*6}}
+ if(!birds.length)return;
+ birds.forEach(b=>{b.t+=dt;b.x+=b.dir*b.v*dt;b.ph+=dt*(b.t%2.4<1.5?9:2.5);b.y+=Math.sin(b.t*1.3)*.0006;b.s*=1+dt*.04});
+ for(let i=birds.length-1;i>=0;i--)if(birds[i].x<-.2||birds[i].x>1.2)birds.splice(i,1);
+ drawView()}
+
+/* ---------- suoni della natura (generati nel browser: onde, brezza, gabbiani) ---------- */
+const natura=(()=>{let ac=null,master=null,on=false,muted=false;
+ function init(){if(ac)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ac=new AC();
+  master=ac.createGain();master.gain.value=0;master.connect(ac.destination);
+  // rumore marrone per le onde
+  const len=ac.sampleRate*6,buf=ac.createBuffer(2,len,ac.sampleRate);
+  for(let c=0;c<2;c++){const d=buf.getChannelData(c);let last=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;last=(last+.02*w)/1.02;d[i]=last*3.2}}
+  const wave=(f,q,g,period,phase)=>{const s=ac.createBufferSource();s.buffer=buf;s.loop=true;s.playbackRate.value=.9+Math.random()*.2;
+   const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=f;lp.Q.value=q;
+   const amp=ac.createGain();amp.gain.value=g*.5;
+   const lfo=ac.createOscillator();lfo.frequency.value=1/period;const lg=ac.createGain();lg.gain.value=g*.45;lfo.connect(lg);lg.connect(amp.gain);
+   const pan=ac.createStereoPanner?ac.createStereoPanner():null;
+   s.connect(lp);lp.connect(amp);if(pan){pan.pan.value=phase;amp.connect(pan);pan.connect(master)}else amp.connect(master);
+   s.start(0,Math.random()*5);lfo.start(ac.currentTime+Math.abs(phase)*3)};
+  wave(420,.6,.9,7.5,-.4);wave(900,.4,.35,9.5,.4);wave(2600,.3,.06,6,0); // risacca, schiuma, brezza
+  // uccellini lontani
+  setInterval(()=>{if(on&&!muted&&Math.random()<.5)chirp()},2600)}
+ function chirp(){const t=ac.currentTime+.05,o=ac.createOscillator(),g=ac.createGain();o.type='sine';const f=3200+Math.random()*1800;
+  o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*1.35,t+.06);o.frequency.exponentialRampToValueAtTime(f*.9,t+.12);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.025,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.14);o.connect(g);g.connect(master);o.start(t);o.stop(t+.16)}
+ function gull(){if(!ac||!on||muted)return;const n=2+Math.floor(Math.random()*3);
+  for(let k=0;k<n;k++){const t=ac.currentTime+.4+k*.38,o=ac.createOscillator(),o2=ac.createOscillator(),g=ac.createGain(),bp=ac.createBiquadFilter();
+   o.type='sawtooth';o2.type='square';bp.type='bandpass';bp.frequency.value=1500;bp.Q.value=2.5;
+   const f0=k===0?1250:1150;[o,o2].forEach((x,j)=>{x.frequency.setValueAtTime(f0*(j?1.005:1),t);x.frequency.linearRampToValueAtTime(f0*1.25,t+.07);x.frequency.exponentialRampToValueAtTime(f0*.62,t+.3);x.connect(bp)});
+   g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.05,t+.03);g.gain.linearRampToValueAtTime(.035,t+.18);g.gain.exponentialRampToValueAtTime(.0001,t+.32);
+   bp.connect(g);g.connect(master);o.start(t);o2.start(t);o.stop(t+.34);o2.stop(t+.34)}}
+ function fade(v,d){if(!ac)return;const t=ac.currentTime;master.gain.cancelScheduledValues(t);master.gain.setValueAtTime(master.gain.value,t);master.gain.linearRampToValueAtTime(v,t+d)}
+ return{
+  unlock(){init();if(ac&&ac.state==='suspended')ac.resume()},
+  start(){on=true;if(!muted)fade(.55,2.5)},
+  stop(){on=false;fade(0,.8)},
+  gull,
+  toggle(){muted=!muted;if(muted)fade(0,.3);else if(on)fade(.55,.6);return muted},
+  get muted(){return muted}}})();
+const sndBtn=document.getElementById('snd');
+sndBtn.addEventListener('click',()=>{natura.unlock();const m=natura.toggle();sndBtn.setAttribute('aria-pressed',m?'false':'true');sndBtn.textContent=m?'🔇 Audio':'🔊 Audio'});
 const viewMat=new THREE.MeshBasicMaterial({map:viewTex,side:THREE.FrontSide,toneMapped:false});
 const rubber=new THREE.MeshStandardMaterial({color:0x151617,roughness:.9});
 const spacerMat=new THREE.MeshStandardMaterial({color:0x2b2d2f,metalness:.3,roughness:.55});
@@ -426,7 +494,7 @@ const lerp=(a,b,t)=>a+(b-a)*t;
 /* ---------- interazione ---------- */
 const info=document.getElementById('info');let cur=null,busy=false;
 async function choose(i){
- if(busy)return;busy=true;document.body.classList.add('busy');cur=M[i];
+ if(busy)return;natura.unlock();busy=true;document.body.classList.add('busy');cur=M[i];
  const w=wins[i],others=wins.filter(x=>x!==w);
  document.getElementById('iTag').textContent=cur.label+(cur.sub?' · '+cur.sub:'');
  const tabs=document.getElementById('iTabs');tabs.innerHTML='';
@@ -446,11 +514,11 @@ async function choose(i){
  // 4. le ante si aprono fino in fondo
  const A=THREE.MathUtils.degToRad(168);
  if(!(await tween(2600,t=>{w.userData.L.rotation.y=-A*t;w.userData.R.rotation.y=A*t},easeOut)))return;
- sel=w;info.classList.add('on');syncColors();
- viewMat.color.setScalar(1);await tween(900,t=>{beamT=t;viewMat.color.setScalar(1+t*.7)},easeOut);
+ sel=w;info.classList.add('on');syncColors();natura.start();birdTimer=.8;
+ viewMat.color.setScalar(1);await tween(900,t=>{beamT=t;viewMat.color.setScalar(1+t*.18)},easeOut);
  document.getElementById('close').focus({preventScroll:true});
 }
-function closeAll(){token++;busy=false;sel=null;beamT=0;viewMat.color.setScalar(1);info.classList.remove('on');document.body.classList.remove('busy');
+function closeAll(){token++;busy=false;sel=null;natura.stop();birds.length=0;drawView();beamT=0;viewMat.color.setScalar(1);info.classList.remove('on');document.body.classList.remove('busy');
  wins.forEach((w,i)=>{w.visible=true;w.position.set((i-1)*GAP,0,0);w.rotation.set(0,0,0);w.userData.L.rotation.y=0;w.userData.R.rotation.y=0})}
 document.getElementById('close').addEventListener('click',closeAll);
 const ray=new THREE.Raycaster(),ptr=new THREE.Vector2();
@@ -472,7 +540,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){const s=document.getElementB
 const clock=new THREE.Clock();
 renderer.setAnimationLoop(()=>{const t=clock.getElapsedTime();
  if(!busy)wins.forEach((w,i)=>{w.rotation.y=Math.sin(t*.5+i*1.3)*.12;w.position.y=Math.sin(t*.8+i)*.02});
- placeLabels();placeGuides();renderer.render(scene,camera);drawBeam()});
+ tickView(t);placeLabels();placeGuides();renderer.render(scene,camera);drawBeam()});
 /* ---------- fascio di luce verso il profilo ---------- */
 let sel=null,beamT=0;const beam=document.getElementById('beam'),bp=document.getElementById('bp'),bc=document.getElementById('bc'),grad=document.getElementById('bg1');
 const pv=new THREE.Vector3();
