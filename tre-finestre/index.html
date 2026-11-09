@@ -153,6 +153,7 @@ body.busy #colors{opacity:0;pointer-events:none}
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/RoomEnvironment.js';
 import { RoundedBoxGeometry } from 'three/addons/RoundedBoxGeometry.js';
+import { PROFILI } from '../js/profili.js';
 
 /* ---------- prodotti (misure in metri) ---------- */
 const M=[
@@ -277,7 +278,48 @@ function mitre(pts,w,h,mat,opts={}){
  const m=new THREE.Mesh(geo,mat);m.castShadow=opts.shadow!==false;m.receiveShadow=true;return m}
 
 /* ---------- costruzione finestra (sezioni semplificate dai profili reali) ---------- */
+/* finestra con le sezioni reali (nodi Tecnoplast) */
+function buildReal(p,P){
+ const g=new THREE.Group(),mat=MAT[p.k]();
+ const F=P.frame,S=P.sash,G=P.glass;
+ const us0=Math.min(...S.map(q=>q[0])),uS1=Math.max(...S.map(q=>q[0]));
+ const zs1=Math.max(...S.map(q=>q[1])),zf0=Math.min(...F.map(q=>q[1])),zf1=Math.max(...F.map(q=>q[1]));
+ g.add(mitre(F,W,H,mat));
+ const gap=.005,ow=W-2*us0,oh=H-2*us0,sw=(ow-gap)/2,sh=oh;
+ const SP=S.map(q=>[q[0]-us0,q[1]]);const gu=G.x0-us0,T=G.z1-G.z0;
+ function sash(side){
+  const piv=new THREE.Group();piv.position.set(side*(W/2-us0),0,zs1);
+  const a=new THREE.Group();a.position.set(-side*sw/2,0,-zs1);piv.add(a);
+  a.add(mitre(SP,sw,sh,mat));
+  // vetrocamera: lastre esterna e interna + canalina
+  const gw=sw-2*gu,gh=sh-2*gu;
+  [G.z0+.002,G.z1-.002].forEach(z=>{const gl=new THREE.Mesh(new THREE.BoxGeometry(gw,gh,.004),[glassEdge,glassEdge,glassEdge,glassEdge,glassMat,glassMat]);gl.position.z=z;gl.renderOrder=2;a.add(gl)});
+  if(T>.026){const gl=new THREE.Mesh(new THREE.BoxGeometry(gw,gh,.004),[glassEdge,glassEdge,glassEdge,glassEdge,glassMat,glassMat]);gl.position.z=(G.z0+G.z1)/2;gl.renderOrder=2;a.add(gl)}
+  a.add(mitre([[gu,G.z0+.004],[gu+.016,G.z0+.004],[gu+.016,G.z1-.004],[gu,G.z1-.004]],sw,sh,spacerMat,{shadow:false}));
+  // guarnizioni di battuta vetro (nere) lungo il fermavetro
+  const ub=Math.max(...S.filter(q=>q[1]>G.z1).map(q=>q[0]))-us0;
+  a.add(mitre([[ub-.004,G.z1],[ub+.0005,G.z1],[ub+.0005,G.z1+.003],[ub-.004,G.z1+.003]],sw,sh,rubber,{shadow:false}));
+  // cerniere sul lato telaio
+  const hx=side*(sw/2+.003);
+  [sh/2-.14,-sh/2+.14].forEach(y=>{
+   const c=new THREE.Mesh(new THREE.CylinderGeometry(.0075,.0075,.085,24),mat);c.position.set(hx,y,zs1-.006);c.castShadow=true;a.add(c);
+   [1,-1].forEach(e=>{const cap=new THREE.Mesh(new THREE.SphereGeometry(.0075,16,8,0,Math.PI*2,0,Math.PI/2),mat);cap.position.set(hx,y+e*.0425,zs1-.006);cap.rotation.x=e>0?0:Math.PI;a.add(cap)})});
+  return {piv,a,ub};
+ }
+ const L=sash(-1),R=sash(1);g.add(L.piv,R.piv);
+ // maniglia centrata sul montante dell'anta principale
+ const hx=-sw/2+(L.ub)/2,hz=zs1+.004;
+ const ros=box(.03,.078,.012,steel,.006);ros.position.set(hx,.01,hz+.002);R.a.add(ros);
+ const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0),new THREE.Vector3(0,0,.03),new THREE.Vector3(0,-.012,.045),new THREE.Vector3(0,-.05,.05),new THREE.Vector3(0,-.13,.048)]);
+ const lev=new THREE.Mesh(new THREE.TubeGeometry(curve,48,.0075,20,false),steel);lev.scale.x=1.25;lev.position.set(hx,.01,hz+.006);lev.castShadow=true;R.a.add(lev);
+ const end=new THREE.Mesh(new THREE.SphereGeometry(.0075,20,12),steel);end.scale.x=1.25;end.position.set(hx,.01-.13,hz+.006+.048);R.a.add(end);
+ const view=new THREE.Mesh(new THREE.PlaneGeometry(ow+.02,oh+.02),viewMat);view.position.z=zf0-.03;g.add(view);
+ g.userData={p,L:L.piv,R:R.piv,mat,ow,oh,D:zf1-zf0};
+ g.traverse(o=>{if(o.isMesh)o.userData.win=g});
+ return g;
+}
 function buildWindow(p){
+ if(PROFILI[p.k])return buildReal(p,PROFILI[p.k]);
  const g=new THREE.Group(),mat=MAT[p.k](),st=STYLE[p.k];
  const f=p.frame,D=p.depth,s=p.sash,ov=.009,zf=D/2,z1=zf+st.step,zb=-D/2+.008,T=st.glass,gz=-.004,gi=gz+T/2,ge=gz-T/2;
  // telaio con battuta per l'anta
