@@ -240,7 +240,7 @@ const glassEdge=new THREE.MeshPhysicalMaterial({color:0x7fb8a8,roughness:.1,tran
 const vCan=document.createElement('canvas'),vCtx=vCan.getContext('2d');vCan.width=960;vCan.height=1200;
 const viewTex=new THREE.CanvasTexture(vCan);viewTex.colorSpace=THREE.SRGBColorSpace;viewTex.anisotropy=8;
 const vImg=new Image();let vReady=false;
-vImg.onload=()=>{vReady=true;drawView()};vImg.src='../img/vista.jpg';
+vImg.onload=()=>{vReady=true;drawView()};vImg.src='../img/vista-lago.jpg';
 const birds=[];
 function drawView(){
  const W=vCan.width,H=vCan.height;
@@ -257,7 +257,8 @@ function drawView(){
   vCtx.restore()});
  viewTex.needsUpdate=true}
 let birdTimer=0,lastT=0;
-function spawnBird(){const dir=Math.random()<.5?1:-1;birds.push({x:dir>0?-.12:1.12,y:.18+Math.random()*.2,dir,s:38+Math.random()*16,ph:0,v:.16+Math.random()*.05,t:0});natura.gull()}
+function spawnBird(){const dir=Math.random()<.5?1:-1;birds.push({x:dir>0?-.12:1.12,y:.07+Math.random()*.12,dir,s:50+Math.random()*16,ph:0,v:.16+Math.random()*.05,t:0});natura.gull()}
+window.__bird=()=>{spawnBird();birds[birds.length-1].x=.5};
 function tickView(t){const dt=Math.min(.05,t-lastT);lastT=t;
  if(sel&&busy){birdTimer-=dt;if(birdTimer<=0){spawnBird();birdTimer=9+Math.random()*6}}
  if(!birds.length)return;
