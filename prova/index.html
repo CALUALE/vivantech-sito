@@ -59,7 +59,14 @@ h1{font:400 clamp(18px,5vw,24px)/1.3 var(--display);letter-spacing:.04em;margin:
 <body>
 <header><img src="../img/logo.png" alt="" onerror="this.remove()"><b>VIVANTECH</b><a href="tel:+390318130087">031 8130087</a></header>
 <main>
- <p class="tag">Prova a casa · gratis</p>
+ <section id="locked" class="card cta" hidden>
+  <p class="tag">Regalo riservato ai clienti Vivantech</p>
+  <h2>Questa prova si sblocca con il tuo QR personale</h2>
+  <p>Il QR te lo consegniamo in showroom a Luisago o alla visita gratuita del tecnico, insieme alla consulenza. Porta due foto della tua finestra: una frontale a finestra chiusa e una laterale con l'anta aperta.</p>
+  <div class="row"><a class="btn" href="../tre-finestre/#prenota">Prenota la consulenza gratuita</a><a class="ghost" href="tel:+390318130087">Chiama 031 8130087</a></div>
+ </section>
+ <div id="unlocked">
+ <p class="tag">Prova a casa · il tuo regalo</p>
  <h1>Guarda la tua nuova finestra, a casa tua</h1>
  <p class="lead">Hai scelto <b id="selName"></b>. Carica la foto della tua finestra e appoggiaci sopra il serramento: vedi subito l'effetto.</p>
 
@@ -100,14 +107,17 @@ h1{font:400 clamp(18px,5vw,24px)/1.3 var(--display);letter-spacing:.04em;margin:
   <div class="row"><a class="btn" id="book">Prenota la consulenza gratuita</a><a class="ghost" href="tel:+390318130087">Chiama 031 8130087</a></div>
   <p class="small" id="code"></p>
  </section>
+</div>
  <p class="small">La foto resta sul tuo telefono: non viene caricata su internet. L'immagine è una simulazione indicativa; colori e proporzioni reali si verificano sul campione.</p>
 </main>
 <script type="module">
+import { codiceValido } from '../js/consulenza.js';
 const MAT={pvc:{label:'PVC',models:['Brillant 70','PVC 80']},fib:{label:'Fibra di vetro',models:['70 EVO','P76 NEO']},alu:{label:'Alluminio',models:['VLS']}};
 const COL=[{k:'bianco',n:'Bianco',sw:'#f1f1ec'},{k:'rosso',n:'Rosso vino RAL 3005',sw:'#5e2129'},{k:'grigio',n:'Antracite RAL 7016',sw:'#383e42'},{k:'verde',n:'Verde RAL 6005',sw:'#114232'},{k:'noce',n:'Noce',sw:'linear-gradient(100deg,#4f3220,#6b4529 40%,#4a2f1d 60%,#5d3c25)'}];
 const q=new URLSearchParams(location.search);
 const st={m:MAT[q.get('m')]?q.get('m'):'fib',mod:q.get('mod')||'',c:COL.some(c=>c.k===q.get('c'))?q.get('c'):'bianco',id:(q.get('id')||'').replace(/[^A-Z0-9-]/gi,'').slice(0,12)};
 if(!MAT[st.m].models.includes(st.mod))st.mod=MAT[st.m].models[0];
+if(!codiceValido(st.id.toUpperCase())){document.getElementById('locked').hidden=false;document.getElementById('unlocked').hidden=true}
 const $=s=>document.querySelector(s);
 const ov=$('#ov'),stage=$('#stage'),photo=$('#photo');
 function src(){return `../img/prova/${st.m}-${st.c}.webp`}

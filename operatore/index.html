@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QR prova a casa · Showroom Vivantech</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Manrope:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#050608;--fg:#eef1f5;--muted:#8d97a6;--accent:#35d0ff;--accent2:#7cf0c0;--display:'Michroma',Arial,sans-serif;--body:'Manrope',Arial,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body)}
+[hidden]{display:none!important}
+main{max-width:900px;margin:0 auto;padding:24px 16px}
+h1{font:400 20px var(--display);letter-spacing:.08em;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 20px;font-size:14px}
+.grid{display:grid;grid-template-columns:1fr 340px;gap:20px}
+.card{background:#0b0f14;border:1px solid #1f2a38;border-radius:16px;padding:16px}
+label{display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:#aab4c2;margin-bottom:12px}
+select,input{background:#0f151d;border:1px solid #2a3646;border-radius:10px;color:var(--fg);font:15px var(--body);padding:10px 12px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{appearance:none;border:0;background:linear-gradient(90deg,var(--accent),#7cf0c0);color:#06202a;font:800 13px var(--body);border-radius:999px;padding:11px 16px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.ghost{appearance:none;background:transparent;border:1px solid rgba(255,255,255,.35);color:var(--fg);border-radius:999px;padding:10px 14px;font:600 13px var(--body);cursor:pointer;text-decoration:none}
+#qr{background:#fff;border-radius:12px;padding:10px;aspect-ratio:1}
+#qr svg{display:block;width:100%;height:100%}
+.code{font:400 22px var(--display);letter-spacing:.12em;text-align:center;margin:12px 0 4px}
+.what{text-align:center;color:#c3ccd8;font-size:13.5px;margin:0 0 10px}
+.err{color:#ff8a8a;font-size:13px}
+.note{color:var(--muted);font-size:12.5px;line-height:1.5;margin-top:16px}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+@media print{body{background:#fff;color:#000}.card:first-child,.row,.note,h1+.sub{display:none}.grid{grid-template-columns:1fr}.card{border:0;background:#fff}.code,.what{color:#000}}
+</style>
+</head>
+<body>
+<main>
+ <section id="gate" class="card" style="max-width:380px;margin:60px auto">
+  <h1>Area showroom</h1><p class="sub">QR personale per la prova a casa.</p>
+  <label>Codice showroom<input id="pin" type="password" inputmode="numeric" autocomplete="off"></label>
+  <button class="btn" id="enter">Entra</button> <span class="err" id="pinErr" hidden>Codice non corretto</span>
+ </section>
+ <section id="app" hidden>
+  <h1>QR prova a casa</h1>
+  <p class="sub">Scegli la finestra vista con il cliente e consegnagli il QR: lo inquadra, carica la foto frontale della sua finestra e ci appoggia sopra il serramento.</p>
+  <div class="grid">
+   <div class="card">
+    <label>Materiale<select id="m"></select></label>
+    <label>Modello<select id="mod"></select></label>
+    <label>Colore<select id="c"></select></label>
+    <label>Codice cliente <small>(quello della prenotazione, se c'è; altrimenti ne creo uno nuovo)</small><input id="id" placeholder="VT-XXXXXX" autocapitalize="characters"></label>
+    <span class="err" id="idErr" hidden>Codice non valido: controlla le lettere o creane uno nuovo.</span>
+    <div class="row"><button class="ghost" id="nuovo">Nuovo codice</button><button class="ghost" onclick="print()">Stampa</button></div>
+   </div>
+   <div class="card">
+    <div id="qr"></div>
+    <p class="code" id="code"></p>
+    <p class="what" id="what"></p>
+    <div class="row" style="justify-content:center"><a class="ghost" id="open" target="_blank" rel="noopener">Apri la prova</a><button class="ghost" id="copy">Copia il link</button></div>
+   </div>
+  </div>
+  <p class="note">Il codice va annotato in Go High Level sulla scheda del cliente: è lo stesso che arriva con la prenotazione dal sito. La foto del cliente resta sul suo telefono.</p>
+ </section>
+</main>
+<script type="module">
+import { nuovoCodice, codiceValido, linkProva, disegnaQR } from '../js/consulenza.js';
+const MAT={pvc:{label:'PVC',models:['Brillant 70','PVC 80']},fib:{label:'Fibra di vetro',models:['70 EVO','P76 NEO']},alu:{label:'Alluminio',models:['VLS']}};
+const COL=[['bianco','Bianco'],['rosso','Rosso vino RAL 3005'],['grigio','Antracite RAL 7016'],['verde','Verde RAL 6005'],['noce','Noce']];
+const $=s=>document.querySelector(s);
+// cancello leggero: il sito è statico e pubblico, questo evita solo l'accesso casuale
+const PIN='3005';
+const ok=()=>{$('#gate').hidden=true;$('#app').hidden=false;try{sessionStorage.setItem('vt-op','1')}catch(_){}};
+try{if(sessionStorage.getItem('vt-op'))ok()}catch(_){}
+$('#enter').onclick=()=>{if($('#pin').value===PIN)ok();else $('#pinErr').hidden=false};
+$('#pin').onkeydown=e=>{if(e.key==='Enter')$('#enter').click()};
+$('#m').innerHTML=Object.entries(MAT).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('');
+$('#c').innerHTML=COL.map(([k,n])=>`<option value="${k}">${n}</option>`).join('');
+const fillMod=()=>{$('#mod').innerHTML=MAT[$('#m').value].models.map(x=>`<option>${x}</option>`).join('')};
+$('#m').value='fib';fillMod();$('#id').value=nuovoCodice();
+function draw(){const id=$('#id').value.trim().toUpperCase();const valid=codiceValido(id);$('#idErr').hidden=valid;if(!valid){$('#qr').innerHTML='';$('#code').textContent='';return}
+ const sel={mat:$('#m').value,model:$('#mod').value,colorKey:$('#c').value};const url=linkProva(sel,id);
+ disegnaQR($('#qr'),url);$('#code').textContent=id;$('#what').textContent=`${MAT[sel.mat].label} ${sel.model} · ${COL.find(c=>c[0]===sel.colorKey)[1]}`;$('#open').href=url;$('#copy').onclick=()=>navigator.clipboard&&navigator.clipboard.writeText(url)}
+$('#m').onchange=()=>{fillMod();draw()};['#mod','#c'].forEach(s=>$(s).onchange=draw);$('#id').oninput=draw;
+$('#nuovo').onclick=()=>{$('#id').value=nuovoCodice();draw()};
+draw();
+</script>
+</body>
+</html>
