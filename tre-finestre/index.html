@@ -445,6 +445,8 @@ function buildWindow(p){
  const L=sash(-1),R=sash(1);g.add(L.piv,R.piv);
  // riporto centrale sull'anta con maniglia
  const ripE=.016,ripW=ripE+.012;const rip=box(ripW,sh-.004,.006,mat,st.rs*.6);rip.position.set(-sw/2-ripE+ripW/2,0,z1+.001);R.a.add(rip);
+ // riporto esterno che copre il nodo centrale (lato esterno)
+ const ripX=box(.064,sh-.004,.007,mat,st.rs*.6);ripX.position.set(-sw/2-.003+.032-.032,0,zb-.0035);L.a.add(ripX);ripX.position.x=sw/2+.0015;
  // maniglia (rosetta + leva) in alluminio satinato
  const hx=(-sw/2-ripE+(-sw/2+(s-.004)*KM[1]))/2,hz=z1+.006;
  const ros=box(.03,.078,.012,steel,.006);ros.position.set(hx,.01,hz+.002);R.a.add(ros);
@@ -623,7 +625,7 @@ function placeGuides(){if(busy)return;const r=ttlEl.getBoundingClientRect(),sx=i
  el.addEventListener('pointerup',e=>{if(e.pointerType!=='mouse')off()});el.addEventListener('pointercancel',off)});
  document.getElementById('close').addEventListener('click',off);
 })();
-window.__vt={choose,closeAll};
+window.__vt={choose,closeAll,wins,spin:a=>{busy=true;wins.forEach(w=>w.rotation.y=a)}};
 </script>
 </body>
 </html>
