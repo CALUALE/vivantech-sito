@@ -72,7 +72,10 @@ h1{font:400 clamp(18px,5vw,24px)/1.3 var(--display);letter-spacing:.04em;margin:
 
  <div class="card">
   <div class="row" id="mats"><span class="lbl">Materiale</span></div>
-  <div class="row" style="margin-top:10px" id="cols"><span class="lbl">Colore</span><span class="cn" id="colName"></span></div>
+  <div class="row" style="margin-top:10px" id="cols"><span class="lbl">Colore interno</span><span class="cn" id="colName"></span></div>
+  <div class="row" style="margin-top:10px" id="hans"><span class="lbl">Maniglia</span></div>
+  <div class="row" style="margin-top:10px" id="fins"><span class="lbl">Finitura</span><span class="cn" id="finName"></span></div>
+  <p class="cn" style="margin:8px 0 0;text-transform:none;letter-spacing:0">Tonalità indicative: i colori veri li vedi sui campioni.</p>
  </div>
 
  <label class="up" id="upBox">
@@ -113,26 +116,43 @@ h1{font:400 clamp(18px,5vw,24px)/1.3 var(--display);letter-spacing:.04em;margin:
 <script type="module">
 import { codiceValido } from '../js/consulenza.js';
 const MAT={pvc:{label:'PVC',models:['Brillant 70','PVC 80']},fib:{label:'Fibra di vetro',models:['70 EVO','P76 NEO']},alu:{label:'Alluminio',models:['VLS']}};
-const COL=[{k:'bianco',n:'Bianco',sw:'#f1f1ec'},{k:'rosso',n:'Rosso vino RAL 3005',sw:'#5e2129'},{k:'grigio',n:'Antracite RAL 7016',sw:'#383e42'},{k:'verde',n:'Verde RAL 6005',sw:'#114232'},{k:'noce',n:'Noce',sw:'linear-gradient(100deg,#4f3220,#6b4529 40%,#4a2f1d 60%,#5d3c25)'}];
+const COL=[{k:'bianco',n:'Bianco',sw:'#f1f1ec'},{k:'rosso',n:'Rosso vino RAL 3005',sw:'#5e2129'},{k:'grigio',n:'Antracite RAL 7016',sw:'#383e42'},{k:'verde',n:'Verde RAL 6005',sw:'#114232'},{k:'marrone',n:'Marrone RAL 8017',sw:'#45322e'},{k:'rovere',n:'Rovere',sw:'linear-gradient(100deg,#8d6d47,#a6865a 40%,#86663f 60%,#99794f)'},{k:'noce',n:'Noce',sw:'linear-gradient(100deg,#4f3220,#6b4529 40%,#4a2f1d 60%,#5d3c25)'}];
+const HAN=[{k:'classica',n:'Classica'},{k:'squadrata',n:'Squadrata'},{k:'chiave',n:'Con chiave'}];
+const FIN=[{k:'argento',n:'Argento satinato',sw:'linear-gradient(135deg,#e6e8eb,#a9adb3)'},{k:'cromo',n:'Cromo satinato',sw:'linear-gradient(135deg,#f6f7f8,#b8bdc3)'},{k:'nero',n:'Nero opaco',sw:'#1d1e20'},{k:'bronzo',n:'Bronzo',sw:'linear-gradient(135deg,#9a7448,#5d4128)'},{k:'bianco',n:'Bianco',sw:'#f1f1ec'}];
+/* posizione della maniglia sull'immagine della finestra (x,y,larghezza,altezza in frazioni) */
+const HPOS={"pvc":{"classica":[0.5215,0.4666,0.0262,0.1182],"squadrata":[0.5232,0.472,0.0228,0.104],"chiave":[0.5215,0.4666,0.0262,0.1182]},"fib":{"classica":[0.5139,0.4666,0.0253,0.1182],"squadrata":[0.5156,0.472,0.0219,0.104],"chiave":[0.5139,0.4666,0.0253,0.1182]},"alu":{"classica":[0.4954,0.4666,0.0262,0.1182],"squadrata":[0.497,0.472,0.0228,0.104],"chiave":[0.4954,0.4666,0.0262,0.1182]}};
 const q=new URLSearchParams(location.search);
-const st={m:MAT[q.get('m')]?q.get('m'):'fib',mod:q.get('mod')||'',c:COL.some(c=>c.k===q.get('c'))?q.get('c'):'bianco',id:(q.get('id')||'').replace(/[^A-Z0-9-]/gi,'').slice(0,12)};
+const st={m:MAT[q.get('m')]?q.get('m'):'fib',mod:q.get('mod')||'',c:COL.some(c=>c.k===q.get('c'))?q.get('c'):'bianco',ce:COL.some(c=>c.k===q.get('ce'))?q.get('ce'):null,h:HAN.some(x=>x.k===q.get('h'))?q.get('h'):'classica',hf:FIN.some(x=>x.k===q.get('hf'))?q.get('hf'):'argento',id:(q.get('id')||'').replace(/[^A-Z0-9-]/gi,'').slice(0,12)};
 if(!MAT[st.m].models.includes(st.mod))st.mod=MAT[st.m].models[0];
 if(!codiceValido(st.id.toUpperCase())){document.getElementById('locked').hidden=false;document.getElementById('unlocked').hidden=true}
 const $=s=>document.querySelector(s);
 const ov=$('#ov'),stage=$('#stage'),photo=$('#photo');
-function src(){return `../img/prova/${st.m}-${st.c}.webp`}
+const load=u=>new Promise((ok,ko)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=ko;i.src=u});
+let job=0;
+async function compose(){const my=++job;try{
+ const [w,h]=await Promise.all([load(`../img/prova/${st.m}-${st.c}.webp`),load(`../img/prova/h-${st.m}-${st.h}-${st.hf}.webp`)]);if(my!==job)return;
+ const cv=document.createElement('canvas');cv.width=w.naturalWidth;cv.height=w.naturalHeight;const g=cv.getContext('2d');g.drawImage(w,0,0);
+ const r=HPOS[st.m][st.h];g.drawImage(h,Math.round(r[0]*cv.width),Math.round(r[1]*cv.height),Math.round(r[2]*cv.width),Math.round(r[3]*cv.height));
+ ov.src=cv.toDataURL('image/png')}catch(_){ov.src=`../img/prova/${st.m}-${st.c}.webp`}}
+const nm=(L,k)=>L.find(x=>x.k===k).n;
+const params=()=>({m:st.m,mod:st.mod,c:st.c,...(st.ce?{ce:st.ce}:{}),h:st.h,hf:st.hf});
 function sync(){
- $('#selName').textContent=`${MAT[st.m].label} ${st.mod} · ${COL.find(c=>c.k===st.c).n}`;
+ $('#selName').textContent=`${MAT[st.m].label} ${st.mod} · interno ${nm(COL,st.c)}${st.ce&&st.ce!==st.c?`, esterno ${nm(COL,st.ce)}`:''} · maniglia ${nm(HAN,st.h).toLowerCase()} ${nm(FIN,st.hf).toLowerCase()}`;
+ $('#finName').textContent=nm(FIN,st.hf);
+ document.querySelectorAll('#hans .pill').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===st.h));
+ document.querySelectorAll('#fins .sw').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===st.hf));
  $('#colName').textContent=COL.find(c=>c.k===st.c).n;
  document.querySelectorAll('#mats .pill').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===st.m));
  document.querySelectorAll('#cols .sw').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===st.c));
- ov.src=src();
- const p=new URLSearchParams({m:st.m,mod:st.mod,c:st.c});$('#book').href=`../tre-finestre/#prenota?${p}`;
+ compose();
+ const p=new URLSearchParams(params());$('#book').href=`../tre-finestre/#prenota?${p}`;
  $('#code').textContent=st.id?`Il tuo codice: ${st.id} — citalo quando ci chiami.`:'';
- history.replaceState(null,'',`?${new URLSearchParams({m:st.m,mod:st.mod,c:st.c,...(st.id?{id:st.id}:{})})}`);
+ history.replaceState(null,'',`?${new URLSearchParams({...params(),...(st.id?{id:st.id}:{})})}`);
 }
 Object.entries(MAT).forEach(([k,v])=>{const b=document.createElement('button');b.type='button';b.className='pill';b.dataset.k=k;b.textContent=v.label;b.onclick=()=>{st.m=k;st.mod=v.models[0];sync()};$('#mats').appendChild(b)});
 COL.forEach(c=>{const b=document.createElement('button');b.type='button';b.className='sw';b.dataset.k=c.k;b.title=c.n;b.setAttribute('aria-label',c.n);b.style.background=c.sw;b.onclick=()=>{st.c=c.k;sync()};$('#cols').insertBefore(b,$('#colName'))});
+HAN.forEach(h=>{const b=document.createElement('button');b.type='button';b.className='pill';b.dataset.k=h.k;b.textContent=h.n;b.onclick=()=>{st.h=h.k;sync()};$('#hans').appendChild(b)});
+FIN.forEach(f=>{const b=document.createElement('button');b.type='button';b.className='sw';b.dataset.k=f.k;b.title=f.n;b.setAttribute('aria-label',f.n);b.style.background=f.sw;b.onclick=()=>{st.hf=f.k;sync()};$('#fins').insertBefore(b,$('#finName'))});
 sync();
 
 /* ---------- foto ---------- */

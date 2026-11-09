@@ -45,7 +45,10 @@ select,input{background:#0f151d;border:1px solid #2a3646;border-radius:10px;colo
    <div class="card">
     <label>Materiale<select id="m"></select></label>
     <label>Modello<select id="mod"></select></label>
-    <label>Colore<select id="c"></select></label>
+    <label>Colore interno<select id="c"></select></label>
+    <label>Colore esterno<select id="ce"></select></label>
+    <label>Maniglia<select id="h"></select></label>
+    <label>Finitura maniglia<select id="hf"></select></label>
     <label>Codice cliente <small>(quello della prenotazione, se c'è; altrimenti ne creo uno nuovo)</small><input id="id" placeholder="VT-XXXXXX" autocapitalize="characters"></label>
     <span class="err" id="idErr" hidden>Codice non valido: controlla le lettere o creane uno nuovo.</span>
     <div class="row"><button class="ghost" id="nuovo">Nuovo codice</button><button class="ghost" onclick="print()">Stampa</button></div>
@@ -63,7 +66,10 @@ select,input{background:#0f151d;border:1px solid #2a3646;border-radius:10px;colo
 <script type="module">
 import { nuovoCodice, codiceValido, linkProva, disegnaQR } from '../js/consulenza.js';
 const MAT={pvc:{label:'PVC',models:['Brillant 70','PVC 80']},fib:{label:'Fibra di vetro',models:['70 EVO','P76 NEO']},alu:{label:'Alluminio',models:['VLS']}};
-const COL=[['bianco','Bianco'],['rosso','Rosso vino RAL 3005'],['grigio','Antracite RAL 7016'],['verde','Verde RAL 6005'],['noce','Noce']];
+const COL=[['bianco','Bianco'],['rosso','Rosso vino RAL 3005'],['grigio','Antracite RAL 7016'],['verde','Verde RAL 6005'],['marrone','Marrone RAL 8017'],['rovere','Rovere'],['noce','Noce']];
+const HAN=[['classica','Classica'],['squadrata','Squadrata minimal'],['chiave','Con chiave']];
+const FIN=[['argento','Argento satinato'],['cromo','Cromo satinato'],['nero','Nero opaco'],['bronzo','Bronzo'],['bianco','Bianco']];
+const opt=L=>L.map(([k,n])=>`<option value="${k}">${n}</option>`).join('');
 const $=s=>document.querySelector(s);
 // cancello leggero: il sito è statico e pubblico, questo evita solo l'accesso casuale
 const PIN='3005';
@@ -72,13 +78,13 @@ try{if(sessionStorage.getItem('vt-op'))ok()}catch(_){}
 $('#enter').onclick=()=>{if($('#pin').value===PIN)ok();else $('#pinErr').hidden=false};
 $('#pin').onkeydown=e=>{if(e.key==='Enter')$('#enter').click()};
 $('#m').innerHTML=Object.entries(MAT).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('');
-$('#c').innerHTML=COL.map(([k,n])=>`<option value="${k}">${n}</option>`).join('');
+$('#c').innerHTML=opt(COL);$('#ce').innerHTML=opt(COL);$('#h').innerHTML=opt(HAN);$('#hf').innerHTML=opt(FIN);
 const fillMod=()=>{$('#mod').innerHTML=MAT[$('#m').value].models.map(x=>`<option>${x}</option>`).join('')};
 $('#m').value='fib';fillMod();$('#id').value=nuovoCodice();
 function draw(){const id=$('#id').value.trim().toUpperCase();const valid=codiceValido(id);$('#idErr').hidden=valid;if(!valid){$('#qr').innerHTML='';$('#code').textContent='';return}
- const sel={mat:$('#m').value,model:$('#mod').value,colorKey:$('#c').value};const url=linkProva(sel,id);
- disegnaQR($('#qr'),url);$('#code').textContent=id;$('#what').textContent=`${MAT[sel.mat].label} ${sel.model} · ${COL.find(c=>c[0]===sel.colorKey)[1]}`;$('#open').href=url;$('#copy').onclick=()=>navigator.clipboard&&navigator.clipboard.writeText(url)}
-$('#m').onchange=()=>{fillMod();draw()};['#mod','#c'].forEach(s=>$(s).onchange=draw);$('#id').oninput=draw;
+ const sel={mat:$('#m').value,model:$('#mod').value,colorKey:$('#c').value,colorOutKey:$('#ce').value,handle:$('#h').value,finish:$('#hf').value};const N=(L,k)=>L.find(x=>x[0]===k)[1];const url=linkProva(sel,id);
+ disegnaQR($('#qr'),url);$('#code').textContent=id;$('#what').textContent=`${MAT[sel.mat].label} ${sel.model} · int. ${N(COL,sel.colorKey)} / est. ${N(COL,sel.colorOutKey)} · maniglia ${N(HAN,sel.handle).toLowerCase()} ${N(FIN,sel.finish).toLowerCase()}`;$('#open').href=url;$('#copy').onclick=()=>navigator.clipboard&&navigator.clipboard.writeText(url)}
+$('#m').onchange=()=>{fillMod();draw()};['#mod','#c','#ce','#h','#hf'].forEach(s=>$(s).onchange=draw);$('#id').oninput=draw;
 $('#nuovo').onclick=()=>{$('#id').value=nuovoCodice();draw()};
 draw();
 </script>

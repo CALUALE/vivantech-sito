@@ -9,7 +9,7 @@ const $ = s => document.querySelector(s);
 export const PRIORITA = {
   sicurezza: { t: 'Sicurezza', s: 'Protezione e antieffrazione', ico: '🛡️', mat: 'pvc' },
   luce: { t: 'Luce & Design', s: 'Profilo minimale, massima luminosità', ico: '☀️', mat: 'alu' },
-  silenzio: { t: 'Insonorizzazione', s: 'Lasciare fuori i rumori', ico: '🔇', mat: 'fib' }
+  silenzio: { t: 'Insonorizzazione', s: 'Lasciare fuori i rumori', ico: '🤫', mat: 'fib' }
 };
 let prio = null;
 try { prio = sessionStorage.getItem('vt-prio'); } catch (_) {}
@@ -38,17 +38,17 @@ export const BENEFICIO = {
 /* le tre soluzioni (good-better-best), senza prezzo: composizione indicativa */
 export const SOLUZIONI = {
   sicurezza: [
-    { n: 'Essenziale', d: 'Vetro stratificato sul lato interno e ferramenta di serie con chiusure perimetrali.' },
-    { n: 'Consigliata', d: 'Vetri stratificati su entrambi i lati, nottolini antieffrazione su tutto il perimetro e maniglia con chiave.' },
-    { n: 'Eccellenza', d: 'Serramento in classe antieffrazione certificata, vetro antisfondamento e posa con fissaggi di sicurezza.' }],
+    { n: 'A · Essenziale', d: 'Vetrocamera con lastra stratificata 33.1 sul lato interno, ferramenta di serie con nottolini a fungo sul lato maniglia. Protegge dagli urti e dalle effrazioni improvvisate.' },
+    { n: 'B · Consigliata', d: 'Stratificati 33.1 su entrambi i lati, nottolini a fungo su tutto il perimetro con riscontri in acciaio, maniglia con chiave e protezione antitrapano. La protezione che chiede chi vive al piano terra.' },
+    { n: 'C · Eccellenza', d: 'Pacchetto in classe antieffrazione RC2 certificata: vetro P4A antisfondamento, ferramenta e fissaggi di sicurezza, sensori di apertura predisposti per l’allarme.' }],
   luce: [
-    { n: 'Essenziale', d: 'Profilo standard con doppio vetro basso emissivo: più luce e meno dispersione di oggi.' },
-    { n: 'Consigliata', d: 'Nodo centrale ridotto e vetro extrachiaro: più superficie vetrata e luce più naturale.' },
-    { n: 'Eccellenza', d: 'Profilo minimale, triplo vetro extrachiaro con canalina scura e colore su misura per la tua facciata.' }],
+    { n: 'A · Essenziale', d: 'Profilo standard con doppio vetro basso emissivo: più luce e meno dispersione di oggi.' },
+    { n: 'B · Consigliata', d: 'Nodo centrale ridotto e vetro extrachiaro: più superficie vetrata e luce più naturale.' },
+    { n: 'C · Eccellenza', d: 'Profilo minimale, triplo vetro extrachiaro con canalina scura e colore su misura per la tua facciata.' }],
   silenzio: [
-    { n: 'Essenziale', d: 'Doppio vetro con lastre di spessore diverso, che spezzano le frequenze del rumore.' },
-    { n: 'Consigliata', d: 'Vetro acustico stratificato, tre guarnizioni e posa con sigillatura continua.' },
-    { n: 'Eccellenza', d: 'Triplo vetro acustico, cassonetto isolato e posa certificata: il massimo silenzio per la camera e lo studio.' }]
+    { n: 'A · Essenziale', d: 'Vetrocamera asimmetrica (lastre di spessore diverso, es. 4 + 6 mm): spezza le frequenze del traffico e abbassa il rumore di fondo rispetto ai vecchi infissi.' },
+    { n: 'B · Consigliata', d: 'Vetro acustico stratificato con PVB silent sul lato strada, tre guarnizioni e posa con nastri autoespandenti e sigillatura continua: il rumore non passa dal vetro né dal giunto.' },
+    { n: 'C · Eccellenza', d: 'Triplo vetro acustico con due stratificati silent, cassonetto isolato e posa certificata: per la camera da letto su strada trafficata o lo studio dove serve concentrazione.' }]
 };
 
 /* ---------- codice cliente con controllo (deterrente: il sito è pubblico) ---------- */
@@ -61,7 +61,7 @@ export function nuovoCodice() {
 }
 export const codiceValido = c => /^VT-[A-Z2-9]{6}$/.test(c || '') && chk(c.slice(3, 8)) === c[8];
 export function linkProva(sel, codice) {
-  const q = new URLSearchParams({ m: sel.mat, mod: sel.model, c: sel.colorKey, id: codice });
+  const q = new URLSearchParams({ m: sel.mat, mod: sel.model, c: sel.colorKey, ce: sel.colorOutKey || sel.colorKey, h: sel.handle || 'classica', hf: sel.finish || 'argento', id: codice });
   return `${location.origin}/prova/?${q}`;
 }
 export function disegnaQR(el, testo) {
@@ -75,7 +75,7 @@ export function initConsulenza(getSel) {
   let tipo = 'showroom', codice = null;
   const steps = box.querySelectorAll('[data-step]');
   const show = n => { steps.forEach(s => s.hidden = s.dataset.step !== n); const h = box.querySelector(`[data-step="${n}"] h3`); h && h.focus({ preventScroll: true }); box.querySelector('.bk').scrollTop = 0; };
-  const riepilogo = () => { const s = getSel(); return `${s.label} · ${s.model} · ${s.colorName}`; };
+  const riepilogo = () => { const s = getSel(); return `${s.label} ${s.model} · interno ${s.colorName}, esterno ${s.colorOutName} · maniglia ${s.handleName.toLowerCase()} ${s.finishName.toLowerCase()}`; };
 
   function soluzioni() {
     const p = getPrio() || 'luce', el = $('#bSol');
@@ -112,7 +112,9 @@ export function initConsulenza(getSel) {
     const s = getSel();
     form.elements['priorita'].value = (PRIORITA[getPrio()] || {}).t || 'non indicata';
     form.elements['materiale'].value = s.label; form.elements['modello'].value = s.model;
-    form.elements['colore'].value = s.colorName; form.elements['codice'].value = codice;
+    form.elements['colore'].value = s.colorName; form.elements['colore_esterno'].value = s.colorOutName;
+    form.elements['maniglia'].value = s.handleName; form.elements['finitura_maniglia'].value = s.finishName;
+    form.elements['codice'].value = codice;
     form.elements['link_prova'].value = linkProva(s, codice);
     const btn = form.querySelector('[type=submit]'); btn.disabled = true; btn.textContent = 'Invio in corso…';
     let ok = false;
