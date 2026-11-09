@@ -13,6 +13,52 @@
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);overflow:hidden}
+
+/* ---------- prenotazione consulenza + QR ---------- */
+.qrlink{appearance:none;background:none;border:0;color:var(--accent2);font:600 13px var(--body);padding:8px 0 0;cursor:pointer;text-align:left}
+.qrlink:hover,.linkish:hover{text-decoration:underline}
+.linkish{appearance:none;background:none;border:0;color:var(--accent2);font:inherit;padding:0;cursor:pointer;text-decoration:underline}
+.book{align-items:center;justify-content:center;padding:16px;background:rgba(3,4,6,.88);backdrop-filter:blur(6px)}
+.book[hidden]{display:none}
+.bk{position:relative;width:min(760px,100%);max-height:calc(100dvh - 32px);overflow:auto;background:#0b0f14;border:1px solid rgba(53,208,255,.25);border-radius:18px;padding:28px 28px 24px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.bx{position:absolute;top:14px;right:14px;padding:7px 14px;font-size:11px}
+.bk h3{font:400 clamp(17px,2.4vw,22px)/1.35 var(--display);letter-spacing:.04em;margin:6px 48px 12px 0;outline:none}
+.bTag{margin:0 90px 0 0;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent2)}
+.bLead{color:#d4dbe4;font-size:15px;line-height:1.55;margin:0 0 16px}
+.bLead b{color:#fff}
+.bChoices{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 16px}
+.bChoice{appearance:none;text-align:left;background:#101722;border:1px solid #243041;border-radius:14px;padding:16px;color:var(--fg);cursor:pointer;display:flex;flex-direction:column;gap:6px;font:14px/1.45 var(--body);transition:border-color .2s,transform .2s}
+.bChoice:hover,.bChoice:focus-visible{border-color:var(--accent);transform:translateY(-2px);outline:none}
+.bChoice b{font-size:16px}.bChoice span:last-child{color:#aab4c2}
+.bIco{font-size:24px}
+.bPlus{display:flex;flex-wrap:wrap;gap:8px 18px;margin:0;padding:0;list-style:none;font-size:12.5px;color:#aab4c2}
+.bPlus li::before{content:"✓ ";color:var(--accent2)}
+.bBack{appearance:none;background:none;border:0;color:var(--muted);font:13px var(--body);padding:0;cursor:pointer}
+.bGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin-bottom:16px}
+.bGrid label,.bPriv{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:#aab4c2}
+.bGrid label[hidden]{display:none}
+.bGrid input,.bGrid select{background:#0f151d;border:1px solid #2a3646;border-radius:10px;color:var(--fg);font:15px var(--body);padding:10px 12px}
+.bGrid input:focus,.bGrid select:focus{outline:2px solid var(--accent);outline-offset:0}
+.bFoto p{margin:0 0 10px;font-size:14px;color:#d4dbe4}.bFoto p[hidden]{display:none}
+.bFotoGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.bShot{display:flex;flex-direction:column;gap:6px;background:#101722;border:1px dashed #2f3d50;border-radius:14px;padding:12px;font-size:12.5px;color:#aab4c2;cursor:pointer}
+.bShot b{color:var(--fg);font-size:13.5px}
+.bShot input{font-size:12px;color:#aab4c2}
+.bShotImg{height:92px;border-radius:10px;background:#0a0e13 center/contain no-repeat}
+.bShotImg.f1{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 90'%3E%3Crect x='30' y='8' width='60' height='74' rx='2' fill='none' stroke='%2335d0ff' stroke-width='3'/%3E%3Cline x1='60' y1='8' x2='60' y2='82' stroke='%2335d0ff' stroke-width='2'/%3E%3Crect x='20' y='4' width='80' height='82' fill='none' stroke='%237cf0c0' stroke-dasharray='4 3'/%3E%3C/svg%3E")}
+.bShotImg.f2{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 90'%3E%3Cpath d='M20 10h30v70H20z' fill='%23243041'/%3E%3Cpath d='M50 10l40 12v50l-40 8z' fill='none' stroke='%2335d0ff' stroke-width='3'/%3E%3Cpath d='M44 10h6v70h-6z' fill='%237cf0c0'/%3E%3C/svg%3E")}
+.bPriv{flex-direction:row;align-items:flex-start;gap:8px;margin-bottom:16px}
+.bSend{width:100%;padding:14px;font-size:14px}
+.bQR{display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:center;background:#101722;border:1px solid #243041;border-radius:14px;padding:16px;margin-bottom:16px}
+.qrBox{background:#fff;border-radius:10px;padding:8px;aspect-ratio:1}
+.qrBox svg{display:block;width:100%;height:100%}
+.bQR p{color:#c3ccd8;font-size:14px;line-height:1.5;margin:6px 0}
+.bSteps{margin:0 0 8px;padding-left:20px;color:#d4dbe4;font-size:14px;line-height:1.55}
+.qrMeta{font-size:12.5px!important;color:#8d97a6!important}
+.qrLink{display:inline-block;margin-top:6px}
+body.booking #snd,body.booking #close{visibility:hidden}
+@media (max-width:640px){.bk{padding:22px 16px 18px}.bChoices,.bGrid,.bFotoGrid{grid-template-columns:1fr}.bQR{grid-template-columns:1fr;justify-items:center;text-align:center}.qrBox{width:180px}}
+body.rendermode{background:transparent}body.rendermode>*:not(#c){display:none!important}
 button{font-family:inherit}
 .top{position:fixed;inset:0 0 auto 0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 20px;background:rgba(5,6,8,.7);backdrop-filter:blur(10px);border-bottom:1px solid rgba(53,208,255,.18)}
 .brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;min-width:0}
@@ -142,13 +188,68 @@ body.busy #colors{opacity:0;pointer-events:none}
  <div class="lens" id="lens" aria-hidden="true"></div>
  <ul id="iList"></ul>
  <div class="colors in" id="iColors" role="group" aria-label="Scegli il colore"></div>
- <div class="btns"><button type="button" class="cta" id="bSheet">Scheda tecnica</button><a class="ghost" href="tel:+390318130087">Richiedi preventivo</a></div>
+ <div class="btns"><button type="button" class="cta" id="bBook">Prenota la consulenza gratuita</button><button type="button" class="ghost" id="bSheet">Scheda tecnica</button></div>
+ <button type="button" class="qrlink" id="bQR">📱 Provala sulla tua finestra di casa</button>
 </div>
 <button type="button" class="ghost" id="close">✕ Chiudi</button>
 <button type="button" class="ghost" id="snd" aria-pressed="true" aria-label="Suoni della natura">🔊 Audio</button>
 <div class="ov" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sTitle">
  <div class="ovh"><h4 id="sTitle">Scheda tecnica</h4><button type="button" class="ghost" id="sClose">Chiudi</button></div>
  <div class="ovb" id="sBody"></div>
+</div>
+<div class="ov book" id="book" hidden role="dialog" aria-modal="true" aria-label="Prenota la consulenza gratuita">
+ <div class="bk">
+  <button type="button" class="ghost bx" id="bClose">Chiudi</button>
+  <section data-step="1">
+   <p class="bTag">Consulenza gratuita · nessun impegno</p>
+   <h3 tabindex="-1">Ogni casa è unica. Il prezzo giusto nasce da una misura vera.</h3>
+   <p class="bLead">Hai scelto <b class="bSel"></b>. Un prezzo online non sa com’è fatto il tuo muro, se la mazzetta è dritta o come va posato il serramento. Per questo non te lo diamo a caso: un nostro tecnico valuta la tua finestra e ti propone la soluzione giusta, gratis.</p>
+   <div class="bChoices">
+    <button type="button" class="bChoice" data-scelta="showroom"><span class="bIco" aria-hidden="true">🏛️</span><b>Vieni in showroom</b><span>Luisago (CO) · tocchi con mano i profili, i colori e i vetri, montati e funzionanti.</span></button>
+    <button type="button" class="bChoice" data-scelta="casa"><span class="bIco" aria-hidden="true">🏠</span><b>Il tecnico viene da te</b><span>Sopralluogo gratuito a casa tua: misure, stato delle mazzette, tipo di posa.</span></button>
+   </div>
+   <ul class="bPlus"><li>Serramenti prodotti in Italia</li><li>Rilievo e posa con squadre nostre</li><li>Ti seguiamo anche per detrazioni e pratiche</li></ul>
+  </section>
+  <form name="consulenza" method="POST" data-netlify="true" netlify-honeypot="bot" enctype="multipart/form-data" id="bForm" data-step="2" hidden>
+   <input type="hidden" name="form-name" value="consulenza">
+   <p hidden><label>Non compilare: <input name="bot"></label></p>
+   <input type="hidden" name="tipo" value="showroom"><input type="hidden" name="materiale"><input type="hidden" name="modello"><input type="hidden" name="colore"><input type="hidden" name="codice"><input type="hidden" name="link_prova">
+   <button type="button" class="bBack" data-indietro="1">← Indietro</button>
+   <h3 id="bFormTitle" tabindex="-1">Vieni a trovarci in showroom</h3>
+   <p class="bLead">Per <b class="bSel"></b>. Lasciaci un recapito: ti chiamiamo noi per fissare giorno e ora.</p>
+   <div class="bGrid">
+    <label>Nome e cognome<input name="nome" required autocomplete="name"></label>
+    <label>Telefono<input name="telefono" type="tel" required autocomplete="tel" inputmode="tel"></label>
+    <label>Email <small>(facoltativa)</small><input name="email" type="email" autocomplete="email"></label>
+    <label>Comune<input name="comune" required autocomplete="address-level2"></label>
+    <label data-solo="casa" hidden>Indirizzo <small>(facoltativo)</small><input name="indirizzo" autocomplete="street-address"></label>
+    <label>Quando preferisci<select name="preferenza"><option>Mattina</option><option>Pomeriggio</option><option>Sabato</option><option>Indifferente</option></select></label>
+    <label>Quante finestre, circa<select name="quante"><option>1–3</option><option>4–8</option><option>Più di 8</option><option>Non so ancora</option></select></label>
+   </div>
+   <div class="bFoto">
+    <p data-solo="showroom"><b>Portaci due foto della tua finestra</b> (o caricale qui):</p>
+    <p data-solo="casa" hidden><b>Se vuoi, mandaci già due foto della finestra</b>: il tecnico arriva preparato.</p>
+    <div class="bFotoGrid">
+     <label class="bShot"><span class="bShotImg f1" aria-hidden="true"></span><b>1 · Frontale, finestra chiusa</b><span>Mettiti al centro della stanza e inquadra tutta la finestra: ci serve per capire posizione e proporzioni.</span><input type="file" name="foto_frontale" accept="image/*"></label>
+     <label class="bShot"><span class="bShotImg f2" aria-hidden="true"></span><b>2 · Laterale, anta tutta aperta</b><span>Apri l’anta fino in fondo e fotografa il fianco: vediamo la mazzetta e gli spazi di battuta.</span><input type="file" name="foto_laterale" accept="image/*"></label>
+    </div>
+   </div>
+   <label class="bPriv"><input type="checkbox" name="privacy" required> Acconsento a essere ricontattato da Vivantech srl per questa richiesta.</label>
+   <button type="submit" class="cta bSend">Prenota la consulenza gratuita</button>
+  </form>
+  <section data-step="3" hidden>
+   <h3 id="bGrazieTitolo" tabindex="-1">Richiesta ricevuta, grazie!</h3>
+   <p class="bLead" id="bGrazieTesto"></p>
+   <p class="bLead" id="bEsito" hidden></p>
+   <div class="bQR"><div class="qrBox"></div><div><b>Intanto provala sulla tua finestra</b><p>Inquadra il codice con il telefono, carica la foto frontale della tua finestra e appoggiaci sopra <span class="bSel"></span>.</p><p class="qrMeta">Il tuo codice: <b class="qrCode"></b></p><a class="ghost qrLink" target="_blank" rel="noopener">Apri qui la prova</a></div></div>
+  </section>
+  <section data-step="qr" hidden>
+   <p class="bTag">Prova a casa · gratis</p>
+   <h3 tabindex="-1">Guarda come sta sulla tua finestra</h3>
+   <div class="bQR"><div class="qrBox"></div><div><ol class="bSteps"><li>Inquadra il codice con la fotocamera del telefono.</li><li>Carica la foto frontale della tua finestra, a finestra chiusa.</li><li>Trascina i 4 angoli sui bordi della finestra: vedi <span class="bSel"></span> al suo posto.</li></ol><p class="qrMeta">Codice: <b class="qrCode"></b> · la foto resta sul tuo telefono</p><a class="ghost qrLink" target="_blank" rel="noopener">Apri qui la prova</a></div></div>
+   <p class="bLead">Ti piace? <button type="button" class="linkish" data-indietro="1">Prenota la consulenza gratuita</button> e la vediamo dal vero.</p>
+  </section>
+ </div>
 </div>
 <div id="err">Il tuo browser non riesce a mostrare il 3D. Chiamaci allo 031 8130087.</div>
 
@@ -157,6 +258,7 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/RoomEnvironment.js';
 import { RoundedBoxGeometry } from 'three/addons/RoundedBoxGeometry.js';
 import { PROFILI } from '../js/profili.js';
+import { initConsulenza } from '../js/consulenza.js';
 
 /* ---------- prodotti (misure in metri) ---------- */
 const M=[
@@ -549,6 +651,14 @@ function showModel(k,instant){curM=cur.models[k];
  if(instant)apply();else{im.classList.add('sw');setTimeout(apply,280)}}
 document.getElementById('bSheet').addEventListener('click',()=>{if(!curM||!curM.sheet)return;document.getElementById('sTitle').textContent='Scheda tecnica · '+curM.model;const sh=Array.isArray(curM.sheet)?curM.sheet:[[curM.sheet,'']];const b=document.getElementById('sBody');b.classList.toggle('two',sh.length>1);b.innerHTML=sh.map(([f,c])=>`<figure><img src="../img/${f}" alt="Scheda tecnica ${curM.model}${c?' · '+c:''}">${c?`<figcaption>${c}</figcaption>`:''}</figure>`).join('');document.getElementById('sheet').hidden=false;document.getElementById('sClose').focus()});
 document.getElementById('sClose').addEventListener('click',()=>{document.getElementById('sheet').hidden=true});
+/* ---------- prenotazione consulenza e QR ---------- */
+const consulenza=initConsulenza(()=>{const w=sel||wins[M.indexOf(cur)]||wins[1],c=(w&&w.userData.col)||COLORI[0];
+ return {mat:(cur||M[1]).k,label:(cur||M[1]).label,model:(curM||M[1].models[0]).model,colorKey:c.k,colorName:c.n}});
+document.getElementById('bBook').addEventListener('click',()=>consulenza.apri('1'));
+document.getElementById('bQR').addEventListener('click',()=>consulenza.apri('qr'));
+if(location.hash.startsWith('#prenota')){const q=new URLSearchParams(location.hash.split('?')[1]||'');const i=M.findIndex(m=>m.k===q.get('m'));
+ if(i>=0){cur=M[i];curM=M[i].models.find(x=>x.model===q.get('mod'))||M[i].models[0];const c=COLORI.find(x=>x.k===q.get('c'));if(c)paint(wins[i],c)}
+ setTimeout(()=>consulenza.apri('1'),400)}
 addEventListener('keydown',e=>{if(e.key==='Escape'){const s=document.getElementById('sheet');if(!s.hidden)s.hidden=true;else if(busy)closeAll()}});
 
 /* ---------- loop ---------- */
@@ -630,6 +740,15 @@ function placeGuides(){if(busy)return;const r=ttlEl.getBoundingClientRect(),sx=i
  document.getElementById('close').addEventListener('click',off);
 })();
 window.__vt={choose,closeAll,wins,spin:a=>{busy=true;wins.forEach(w=>w.rotation.y=a)}};
+/* ---------- modalità render (solo per generare le sagome PNG della prova a casa) ---------- */
+window.__renderFront=(i,ck)=>{busy=true;document.body.classList.add('rendermode');
+ const w=wins[i];wins.forEach((x,k)=>{x.visible=k===i;x.position.set(0,0,0);x.rotation.set(0,0,0)});
+ paint(w,COLORI.find(c=>c.k===ck));floor.visible=false;
+ w.traverse(o=>{if(o.isMesh&&o.material===viewMat)o.visible=false});
+ glassMat.opacity=.06;
+ const ar=innerWidth/innerHeight,hh=H/2+.01,hw=hh*ar;
+ const cam=new THREE.OrthographicCamera(-hw,hw,hh,-hh,.1,20);cam.position.set(0,0,5);cam.lookAt(0,0,0);
+ renderer.setAnimationLoop(null);renderer.setClearColor(0x000000,0);renderer.render(scene,cam);return true};
 </script>
 </body>
 </html>

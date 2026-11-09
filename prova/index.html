@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Prova a casa · Vivantech</title>
+<meta name="description" content="Prova il serramento Vivantech sulla foto della tua finestra: carica la foto, appoggia la finestra nuova e guarda l'effetto.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Manrope:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#050608;--fg:#eef1f5;--muted:#8d97a6;--line:#1f2630;--accent:#35d0ff;--accent2:#7cf0c0;--display:'Michroma',Arial,sans-serif;--body:'Manrope',Arial,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--fg);font-family:var(--body)}
+[hidden]{display:none!important}
+header{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+header img{height:30px}
+header b{font:400 15px var(--display);letter-spacing:.3em}
+header a{margin-left:auto;color:var(--fg);text-decoration:none;border:1px solid #2a3646;border-radius:999px;padding:6px 12px;font-size:13px}
+main{max-width:720px;margin:0 auto;padding:16px}
+.tag{margin:6px 0 4px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent2)}
+h1{font:400 clamp(18px,5vw,24px)/1.3 var(--display);letter-spacing:.04em;margin:0 0 8px}
+.lead{color:#d4dbe4;font-size:15px;line-height:1.55;margin:0 0 14px}
+.lead b{color:#fff}
+.card{background:#0b0f14;border:1px solid #1f2a38;border-radius:16px;padding:16px;margin-bottom:14px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lbl{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.pill{appearance:none;border:1px solid #2a3646;background:#0f151d;color:var(--fg);border-radius:999px;padding:8px 12px;font:600 13px var(--body);cursor:pointer}
+.pill[aria-pressed="true"]{border-color:var(--accent);background:rgba(53,208,255,.12)}
+.sw{appearance:none;width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,.25);cursor:pointer;padding:0}
+.sw[aria-pressed="true"]{border-color:#fff;box-shadow:0 0 0 3px rgba(53,208,255,.55)}
+.cn{font-size:12px;color:#c3ccd8;letter-spacing:.08em;text-transform:uppercase}
+.up{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;border:1.5px dashed #2f3d50;border-radius:16px;padding:22px 16px;cursor:pointer;background:#0b0f14}
+.up input{position:absolute;width:1px;height:1px;opacity:0}
+.up .big{font-size:40px}
+.up b{font-size:16px}
+.up span{color:#aab4c2;font-size:13.5px;line-height:1.5}
+.btn{appearance:none;border:0;background:linear-gradient(90deg,var(--accent),#7cf0c0);color:#06202a;font:800 14px var(--body);border-radius:999px;padding:12px 18px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.ghost{appearance:none;background:transparent;border:1px solid rgba(255,255,255,.35);color:var(--fg);border-radius:999px;padding:10px 16px;font:600 13px var(--body);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn:focus-visible,.ghost:focus-visible,.pill:focus-visible,.sw:focus-visible{outline:2px solid #fff;outline-offset:2px}
+/* editor */
+#stage{position:relative;width:100%;border-radius:14px;overflow:hidden;background:#000;touch-action:none;user-select:none;-webkit-user-select:none}
+#photo{display:block;width:100%;height:auto;pointer-events:none}
+#ov{position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:none;will-change:transform;transition:opacity .2s}
+#stage.hide #ov{opacity:0}
+.h{position:absolute;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:rgba(53,208,255,.25);border:2px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.35);touch-action:none;cursor:grab;z-index:3}
+.h::after{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:#fff}
+.h.mv{width:44px;height:44px;margin:-22px 0 0 -22px;background:rgba(0,0,0,.35);border-style:dashed}
+.h.mv::after{content:"✥";width:auto;height:auto;margin:0;transform:translate(-50%,-55%);background:none;color:#fff;font-size:20px}
+#stage.hide .h{opacity:.25}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.hint{font-size:13px;color:#aab4c2;margin:10px 0 0;line-height:1.5}
+.cta{background:linear-gradient(135deg,#0e1a24,#0b1118);border-color:rgba(53,208,255,.3)}
+.cta h2{font:400 17px/1.35 var(--display);margin:0 0 8px;letter-spacing:.04em}
+.cta p{color:#c3ccd8;margin:0 0 12px;line-height:1.5;font-size:14px}
+.small{font-size:12px;color:var(--muted);line-height:1.5}
+</style>
+</head>
+<body>
+<header><img src="../img/logo.png" alt="" onerror="this.remove()"><b>VIVANTECH</b><a href="tel:+390318130087">031 8130087</a></header>
+<main>
+ <p class="tag">Prova a casa · gratis</p>
+ <h1>Guarda la tua nuova finestra, a casa tua</h1>
+ <p class="lead">Hai scelto <b id="selName"></b>. Carica la foto della tua finestra e appoggiaci sopra il serramento: vedi subito l'effetto.</p>
+
+ <div class="card">
+  <div class="row" id="mats"><span class="lbl">Materiale</span></div>
+  <div class="row" style="margin-top:10px" id="cols"><span class="lbl">Colore</span><span class="cn" id="colName"></span></div>
+ </div>
+
+ <label class="up" id="upBox">
+  <span class="big" aria-hidden="true">📷</span>
+  <b>Carica la foto frontale della tua finestra</b>
+  <span>Finestra chiusa, scattata dal centro della stanza, con tutta la finestra nell'inquadratura.</span>
+  <span class="ghost">Scatta o scegli una foto</span>
+  <input type="file" id="file" accept="image/*">
+ </label>
+
+ <section id="editor" hidden>
+  <div id="stage">
+   <img id="photo" alt="La foto della tua finestra">
+   <img id="ov" alt="">
+   <div class="h" data-i="0" aria-label="Angolo in alto a sinistra"></div>
+   <div class="h" data-i="1" aria-label="Angolo in alto a destra"></div>
+   <div class="h" data-i="2" aria-label="Angolo in basso a destra"></div>
+   <div class="h" data-i="3" aria-label="Angolo in basso a sinistra"></div>
+   <div class="h mv" data-i="m" aria-label="Sposta la finestra"></div>
+  </div>
+  <p class="hint">Trascina i 4 cerchi sugli angoli della tua finestra (dove il telaio incontra il muro). Il cerchio al centro sposta tutto.</p>
+  <div class="tools">
+   <button type="button" class="ghost" id="cmp">👁 Tieni premuto per vedere com'è oggi</button>
+   <button type="button" class="ghost" id="save">⬇ Salva l'immagine</button>
+   <button type="button" class="ghost" id="other">↺ Cambia foto</button>
+  </div>
+ </section>
+
+ <section class="card cta">
+  <h2>Ti piace? La vediamo dal vero, gratis</h2>
+  <p>La foto ti dà l'idea; le misure, la posa giusta e il prezzo li definisce un nostro tecnico. Vieni in showroom a Luisago o prenota il sopralluogo gratuito a casa tua.</p>
+  <div class="row"><a class="btn" id="book">Prenota la consulenza gratuita</a><a class="ghost" href="tel:+390318130087">Chiama 031 8130087</a></div>
+  <p class="small" id="code"></p>
+ </section>
+ <p class="small">La foto resta sul tuo telefono: non viene caricata su internet. L'immagine è una simulazione indicativa; colori e proporzioni reali si verificano sul campione.</p>
+</main>
+<script type="module">
+const MAT={pvc:{label:'PVC',models:['Brillant 70','PVC 80']},fib:{label:'Fibra di vetro',models:['70 EVO','P76 NEO']},alu:{label:'Alluminio',models:['VLS']}};
+const COL=[{k:'bianco',n:'Bianco',sw:'#f1f1ec'},{k:'rosso',n:'Rosso vino RAL 3005',sw:'#5e2129'},{k:'grigio',n:'Antracite RAL 7016',sw:'#383e42'},{k:'verde',n:'Verde RAL 6005',sw:'#114232'},{k:'noce',n:'Noce',sw:'linear-gradient(100deg,#4f3220,#6b4529 40%,#4a2f1d 60%,#5d3c25)'}];
+const q=new URLSearchParams(location.search);
+const st={m:MAT[q.get('m')]?q.get('m'):'fib',mod:q.get('mod')||'',c:COL.some(c=>c.k===q.get('c'))?q.get('c'):'bianco',id:(q.get('id')||'').replace(/[^A-Z0-9-]/gi,'').slice(0,12)};
+if(!MAT[st.m].models.includes(st.mod))st.mod=MAT[st.m].models[0];
+const $=s=>document.querySelector(s);
+const ov=$('#ov'),stage=$('#stage'),photo=$('#photo');
+function src(){return `../img/prova/${st.m}-${st.c}.webp`}
+function sync(){
+ $('#selName').textContent=`${MAT[st.m].label} ${st.mod} · ${COL.find(c=>c.k===st.c).n}`;
+ $('#colName').textContent=COL.find(c=>c.k===st.c).n;
+ document.querySelectorAll('#mats .pill').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===st.m));
+ document.querySelectorAll('#cols .sw').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===st.c));
+ ov.src=src();
+ const p=new URLSearchParams({m:st.m,mod:st.mod,c:st.c});$('#book').href=`../tre-finestre/#prenota?${p}`;
+ $('#code').textContent=st.id?`Il tuo codice: ${st.id} — citalo quando ci chiami.`:'';
+ history.replaceState(null,'',`?${new URLSearchParams({m:st.m,mod:st.mod,c:st.c,...(st.id?{id:st.id}:{})})}`);
+}
+Object.entries(MAT).forEach(([k,v])=>{const b=document.createElement('button');b.type='button';b.className='pill';b.dataset.k=k;b.textContent=v.label;b.onclick=()=>{st.m=k;st.mod=v.models[0];sync()};$('#mats').appendChild(b)});
+COL.forEach(c=>{const b=document.createElement('button');b.type='button';b.className='sw';b.dataset.k=c.k;b.title=c.n;b.setAttribute('aria-label',c.n);b.style.background=c.sw;b.onclick=()=>{st.c=c.k;sync()};$('#cols').insertBefore(b,$('#colName'))});
+sync();
+
+/* ---------- foto ---------- */
+let P=null; // 4 angoli in frazioni della foto (0..1): alto-sx, alto-dx, basso-dx, basso-sx
+$('#file').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;photo.onload=()=>{$('#upBox').hidden=true;$('#editor').hidden=false;
+  if(!P){const ar=photo.naturalWidth/photo.naturalHeight,h=.62,w=Math.min(.7,h*.8/ar);P=[[.5-w/2,.5-h/2],[.5+w/2,.5-h/2],[.5+w/2,.5+h/2],[.5-w/2,.5+h/2]]}
+  layout();$('#editor').scrollIntoView({behavior:'smooth',block:'start'})};photo.src=URL.createObjectURL(f)});
+$('#other').onclick=()=>{$('#file').value='';$('#file').click()};
+
+/* ---------- prospettiva: matrice che porta il rettangolo dell'immagine sui 4 punti ---------- */
+function adj(m){return[m[4]*m[8]-m[5]*m[7],m[2]*m[7]-m[1]*m[8],m[1]*m[5]-m[2]*m[4],m[5]*m[6]-m[3]*m[8],m[0]*m[8]-m[2]*m[6],m[2]*m[3]-m[0]*m[5],m[3]*m[7]-m[4]*m[6],m[1]*m[6]-m[0]*m[7],m[0]*m[4]-m[1]*m[3]]}
+function mul(a,b){const c=Array(9);for(let i=0;i<3;i++)for(let j=0;j<3;j++){let s=0;for(let k=0;k<3;k++)s+=a[3*i+k]*b[3*k+j];c[3*i+j]=s}return c}
+function mulv(m,v){return[m[0]*v[0]+m[1]*v[1]+m[2]*v[2],m[3]*v[0]+m[4]*v[1]+m[5]*v[2],m[6]*v[0]+m[7]*v[1]+m[8]*v[2]]}
+function basis(p){const m=[p[0][0],p[1][0],p[2][0],p[0][1],p[1][1],p[2][1],1,1,1];const v=mulv(adj(m),[p[3][0],p[3][1],1]);return mul(m,[v[0],0,0,0,v[1],0,0,0,v[2]])}
+function homog(src,dst){const t=mul(basis(dst),adj(basis(src)));return t.map(x=>x/t[8])}
+function layout(){if(!P)return;const W=stage.clientWidth,Hh=stage.clientHeight,w=ov.naturalWidth||1185,h=ov.naturalHeight||1481;
+ const d=P.map(p=>[p[0]*W,p[1]*Hh]);const t=homog([[0,0],[w,0],[w,h],[0,h]],d);
+ ov.style.width=w+'px';ov.style.height=h+'px';
+ ov.style.transform=`matrix3d(${t[0]},${t[3]},0,${t[6]},${t[1]},${t[4]},0,${t[7]},0,0,1,0,${t[2]},${t[5]},0,${t[8]})`;
+ document.querySelectorAll('.h').forEach(el=>{const i=el.dataset.i;const p=i==='m'?[(d[0][0]+d[1][0]+d[2][0]+d[3][0])/4,(d[0][1]+d[1][1]+d[2][1]+d[3][1])/4]:d[+i];el.style.left=p[0]+'px';el.style.top=p[1]+'px'})}
+ov.onload=layout;addEventListener('resize',layout);
+
+/* ---------- trascinamento degli angoli ---------- */
+document.querySelectorAll('.h').forEach(el=>{el.addEventListener('pointerdown',e=>{e.preventDefault();el.setPointerCapture(e.pointerId);const r=stage.getBoundingClientRect();let last=[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height];
+ const mv=ev=>{const n=[(ev.clientX-r.left)/r.width,(ev.clientY-r.top)/r.height].map(v=>Math.max(-.05,Math.min(1.05,v)));
+  if(el.dataset.i==='m'){const dx=n[0]-last[0],dy=n[1]-last[1];P=P.map(p=>[p[0]+dx,p[1]+dy])}else P[+el.dataset.i]=n;last=n;layout()};
+ const up=()=>{el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up)};
+ el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up)})});
+const cmp=$('#cmp');['pointerdown'].forEach(t=>cmp.addEventListener(t,()=>stage.classList.add('hide')));['pointerup','pointerleave','pointercancel'].forEach(t=>cmp.addEventListener(t,()=>stage.classList.remove('hide')));
+
+/* ---------- salvataggio: foto + finestra deformata in prospettiva (a triangoli) ---------- */
+function tri(ctx,img,s,d){const[x0,y0]=s[0],[x1,y1]=s[1],[x2,y2]=s[2],[u0,v0]=d[0],[u1,v1]=d[1],[u2,v2]=d[2];
+ ctx.save();ctx.beginPath();const cx=(u0+u1+u2)/3,cy=(v0+v1+v2)/3,g=v=>{const dx=v[0]-cx,dy=v[1]-cy,l=Math.hypot(dx,dy)||1;return[v[0]+dx/l*.6,v[1]+dy/l*.6]};const a=g(d[0]),b=g(d[1]),c=g(d[2]);ctx.moveTo(...a);ctx.lineTo(...b);ctx.lineTo(...c);ctx.closePath();ctx.clip();
+ const den=x0*(y1-y2)+x1*(y2-y0)+x2*(y0-y1);if(!den){ctx.restore();return}
+ const A=(u0*(y1-y2)+u1*(y2-y0)+u2*(y0-y1))/den,B=(u0*(x2-x1)+u1*(x0-x2)+u2*(x1-x0))/den,C=(u0*(x1*y2-x2*y1)+u1*(x2*y0-x0*y2)+u2*(x0*y1-x1*y0))/den;
+ const D=(v0*(y1-y2)+v1*(y2-y0)+v2*(y0-y1))/den,E=(v0*(x2-x1)+v1*(x0-x2)+v2*(x1-x0))/den,F=(v0*(x1*y2-x2*y1)+v1*(x2*y0-x0*y2)+v2*(x0*y1-x1*y0))/den;
+ ctx.setTransform(A,D,B,E,C,F);ctx.drawImage(img,0,0);ctx.restore()}
+$('#save').onclick=async()=>{const k=Math.min(1,2000/Math.max(photo.naturalWidth,photo.naturalHeight)),W=Math.round(photo.naturalWidth*k),Hh=Math.round(photo.naturalHeight*k),cv=document.createElement('canvas');cv.width=W;cv.height=Hh;const ctx=cv.getContext('2d');ctx.drawImage(photo,0,0,W,Hh);
+ // finestra deformata pixel per pixel con la prospettiva inversa (nessuna giunta)
+ const w=ov.naturalWidth,h=ov.naturalHeight,oc=document.createElement('canvas');oc.width=w;oc.height=h;const ox=oc.getContext('2d');ox.drawImage(ov,0,0);const O=ox.getImageData(0,0,w,h).data;
+ const D=P.map(p=>[p[0]*W,p[1]*Hh]),inv=homog(D,[[0,0],[w,0],[w,h],[0,h]]);
+ const x0=Math.max(0,Math.floor(Math.min(...D.map(d=>d[0])))),x1=Math.min(W,Math.ceil(Math.max(...D.map(d=>d[0])))),y0=Math.max(0,Math.floor(Math.min(...D.map(d=>d[1])))),y1=Math.min(Hh,Math.ceil(Math.max(...D.map(d=>d[1]))));
+ if(x1>x0&&y1>y0){const img=ctx.getImageData(x0,y0,x1-x0,y1-y0),T=img.data;
+  for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++){const X=x+.5,Y=y+.5,z=inv[6]*X+inv[7]*Y+inv[8],u=(inv[0]*X+inv[1]*Y+inv[2])/z-.5,v=(inv[3]*X+inv[4]*Y+inv[5])/z-.5;
+   if(u<0||v<0||u>w-1||v>h-1)continue;const iu=u|0,iv=v|0,fu=u-iu,fv=v-iv,i00=(iv*w+iu)*4,i10=i00+4,i01=i00+w*4,i11=i01+4;
+   const o=((y-y0)*(x1-x0)+(x-x0))*4;const s=c=>(O[i00+c]*(1-fu)+O[i10+c]*fu)*(1-fv)+(O[i01+c]*(1-fu)+O[i11+c]*fu)*fv;const al=s(3)/255;
+   if(al<=0)continue;for(let c=0;c<3;c++)T[o+c]=T[o+c]*(1-al)+s(c)*al}
+  ctx.putImageData(img,x0,y0)}
+ ctx.font=`${Math.round(W/40)}px Manrope, Arial`;ctx.fillStyle='rgba(255,255,255,.85)';ctx.fillText(`Vivantech · ${MAT[st.m].label} ${st.mod}`,W*.03,Hh*.96);
+ cv.toBlob(async b=>{const f=new File([b],'vivantech-prova.jpg',{type:'image/jpeg'});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'La mia nuova finestra Vivantech'});return}catch(_){}}
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='vivantech-prova.jpg';a.click()},'image/jpeg',.9)};
+window.__prova={get P(){return P},set P(v){P=v;layout()}};
+</script>
+</body>
+</html>
