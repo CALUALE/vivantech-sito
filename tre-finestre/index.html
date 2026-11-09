@@ -218,11 +218,11 @@ function grainTexture(base,amt){ // leggera grana per verniciatura/pvc
  const im=g.getImageData(0,0,256,256),d=im.data;for(let i=0;i<d.length;i+=4){const n=(Math.random()-.5)*amt;d[i]+=n;d[i+1]+=n;d[i+2]+=n}g.putImageData(im,0,0);
  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;return t}
 const COLORI=[
- {k:'bianco',n:'Bianco',sw:'#f1f1ec',tex:()=>grainTexture('#f1f1ec',5),rough:.38},
- {k:'rosso',n:'Rosso vino RAL 3005',sw:'#5e2129',tex:()=>grainTexture('#5e2129',5),rough:.45},
- {k:'grigio',n:'Antracite RAL 7016',sw:'#383e42',tex:()=>grainTexture('#383e42',6),rough:.5},
- {k:'verde',n:'Verde RAL 6005',sw:'#114232',tex:()=>grainTexture('#114232',5),rough:.48},
- {k:'noce',n:'Noce',sw:'#45301e',tex:()=>woodTexture('#3d2818','#47301d','#382415',[22,13,6],[120,88,58]),rough:.6}];
+ {k:'bianco',n:'Bianco',sw:'#f1f1ec',tex:()=>grainTexture('#f6f6f2',4),rough:.3},
+ {k:'rosso',n:'Rosso vino RAL 3005',sw:'#5e2129',tex:()=>grainTexture('#8c1f2e',5),rough:.28},
+ {k:'grigio',n:'Antracite RAL 7016',sw:'#383e42',tex:()=>grainTexture('#4b535a',6),rough:.32},
+ {k:'verde',n:'Verde RAL 6005',sw:'#114232',tex:()=>grainTexture('#16704c',5),rough:.28},
+ {k:'noce',n:'Noce',sw:'#45301e',tex:()=>woodTexture('#5a3a20','#664427','#52341d',[30,18,8],[150,110,70]),rough:.42}];
 const TEX={};const texOf=c=>TEX[c.k]||(TEX[c.k]=c.tex());
 const MAT={
  pvc:()=>new THREE.MeshPhysicalMaterial({map:texOf(COLORI[0]),roughness:.38,clearcoat:.25,clearcoatRoughness:.35,sheen:.2,sheenColor:0xffffff}),
@@ -451,7 +451,7 @@ function buildWindow(p){
 const wins=M.map((p,i)=>{const w=buildWindow(p);w.position.x=(i-1)*GAP;scene.add(w);return w});
 /* ---------- colori ---------- */
 let colore=COLORI[0];
-function paint(w,c){const m=w.userData.mat;m.map=texOf(c);m.roughness=c.rough;m.needsUpdate=true;w.userData.col=c}
+function paint(w,c){const m=w.userData.mat;m.map=texOf(c);m.roughness=c.rough;m.clearcoat=.55;m.clearcoatRoughness=.18;m.metalness=Math.min(m.metalness||0,.1);m.needsUpdate=true;w.userData.col=c}
 function syncColors(){
  const ks=new Set(wins.map(w=>w.userData.col.k)),all=ks.size===1?wins[0].userData.col:null;
  document.querySelectorAll('#colors button').forEach(b=>b.setAttribute('aria-pressed',all&&b.dataset.c===all.k?'true':'false'));
