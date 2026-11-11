@@ -39,25 +39,39 @@
 @keyframes rise{to{opacity:1;transform:none}}
 
 /* BINARIO B: l'esperienza (azione primaria, la più luminosa) */
-.tB{background:linear-gradient(160deg,rgba(14,32,44,.78),rgba(8,14,20,.82));border:1px solid rgba(53,208,255,.55);
+.tB{z-index:1;background:linear-gradient(160deg,rgba(12,40,56,.9),rgba(6,16,24,.92));border:1.5px solid rgba(53,208,255,.85);
  box-shadow:0 0 0 1px rgba(53,208,255,.15),0 30px 90px -30px rgba(53,208,255,.55);animation-delay:.15s}
 .tB::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;
  background:linear-gradient(120deg,rgba(53,208,255,.9),rgba(124,240,192,.2) 40%,rgba(53,208,255,0) 60%,rgba(124,240,192,.8));
  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.8}
-.tB .btn{margin-top:22px}
+.tB .btn{margin-top:14px;font-size:15px;padding:18px 26px}
+.tB{animation:rise .9s cubic-bezier(.2,.8,.2,1) .15s forwards,halo 4.5s ease-in-out 1.2s infinite}
+@keyframes halo{0%,100%{box-shadow:0 0 0 1px rgba(53,208,255,.25),0 0 40px -6px rgba(53,208,255,.55),0 30px 90px -30px rgba(53,208,255,.6)}
+ 50%{box-shadow:0 0 0 1px rgba(53,208,255,.45),0 0 70px -4px rgba(53,208,255,.8),0 30px 110px -26px rgba(53,208,255,.75)}}
+/* rassicurazione subito sopra il pulsante */
+.tB .proof{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:22px;font-size:13.5px;color:#e8f6fb}
+.proof .ok{flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:rgba(124,240,192,.16);border:1px solid rgba(124,240,192,.6);color:var(--accent2);font-size:12px;font-weight:800}
+.tB .proof span:last-child{flex:1;min-width:0}
+.proof b{font-weight:800;color:#fff}
 .tB{display:flex;flex-direction:column}.tB .gift{margin-top:auto;padding-top:18px}
 @media(max-width:860px){.tB .gift{margin-top:14px;padding-top:0}}
 .steps{list-style:none;display:flex;flex-wrap:wrap;gap:6px 6px;padding:0;margin:20px 0 0;counter-reset:s}
-.steps li{counter-increment:s;display:flex;align-items:center;gap:7px;font-size:12.5px;color:#d7e0ea;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:5px 11px 5px 5px}
-.steps li::before{content:counter(s);display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:rgba(53,208,255,.18);color:var(--accent);font-weight:800;font-size:11px}
+.steps li{counter-increment:s;display:flex;align-items:center;gap:8px;font:700 13.5px/1 var(--body);letter-spacing:.01em;color:#fff;
+ background:rgba(4,18,26,.92);border:1px solid rgba(53,208,255,.45);border-radius:999px;padding:6px 13px 6px 6px;
+ -webkit-font-smoothing:antialiased;text-shadow:0 1px 1px rgba(0,0,0,.6)}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#03202a;font-weight:800;font-size:12px;text-shadow:none}
 .gift{display:flex;gap:10px;align-items:flex-start;margin-top:18px;font-size:13.5px;color:#cfe9f2}
 .gift i{font-style:normal;font-size:20px;line-height:1}
 .micro{display:block;margin-top:10px;font-size:12px;color:var(--muted)}
 
 /* BINARIO A: la scoperta (secondario, calmo) */
-.tA{background:rgba(8,11,16,.62);border:1px solid rgba(255,255,255,.14);animation-delay:.3s;display:flex;flex-direction:column}
+.tA{background:rgba(6,8,12,.5);border:1px solid rgba(255,255,255,.09);animation-delay:.3s;display:flex;flex-direction:column}
 .links{display:grid;gap:10px;margin-top:20px}
-.links .gh{justify-content:space-between;padding:14px 18px;border-radius:14px;font-size:14.5px}
+.tA h2{font-size:clamp(17px,1.9vw,21px);color:#e3e8ef}
+.tA h2+p{color:#aeb8c5;font-size:14.5px}
+.tA .eyebrow{color:#8fa0b3}
+.links .gh{justify-content:space-between;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:600;border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.02);backdrop-filter:none}
+@media(min-width:861px){.tA{margin-block:18px}}
 .links .gh span{display:flex;align-items:center;gap:12px}
 .links .gh em{font-style:normal;font-size:18px}
 .where{margin-top:auto;padding-top:18px;font-size:12.5px;color:var(--muted)}
@@ -100,6 +114,7 @@
     <ol class="steps" aria-label="Le tappe">
      <li>La tua priorità</li><li>Il tuo stile</li><li>Tre soluzioni</li><li>Il tuo regalo</li>
     </ol>
+    <p class="proof"><span class="ok" aria-hidden="true">✓</span><span><b>Oltre 10 anni</b> nelle case della Lombardia · <b>garanzia 10 anni</b></span></p>
     <a class="btn" href="tre-finestre/#priorita">Inizia il tuo progetto <span aria-hidden="true">→</span></a>
     <span class="micro">Gratis e senza impegno. Nessun dato richiesto per iniziare.</span>
     <p class="gift"><i aria-hidden="true">🎁</i><span>Alla fine ti aspetta un regalo: vedere la tua nuova finestra sulla foto di casa tua.</span></p>
