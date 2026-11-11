@@ -28,7 +28,13 @@
 
 .wrap{width:min(1120px,100%);margin:0 auto}
 .head{max-width:720px;margin-bottom:clamp(26px,5vh,48px)}
-.head .ttl{text-shadow:0 4px 30px rgba(0,0,0,.5);font:italic 500 clamp(32px,5.4vw,62px)/1.12 'Playfair Display',Georgia,serif;letter-spacing:0}
+.head .ttl{text-shadow:0 4px 30px rgba(0,0,0,.5);font:italic 500 clamp(28px,4.5vw,52px)/1.14 'Playfair Display',Georgia,serif;letter-spacing:0}
+/* Made in Italy in evidenza, con il tricolore */
+.head .eyebrow{display:inline-flex;align-items:center;gap:12px;font:800 clamp(13px,1.5vw,16px)/1 var(--body);letter-spacing:.28em;color:#9ff5d2;
+ margin-bottom:16px;padding:8px 16px 8px 12px;border-radius:999px;background:rgba(5,10,14,.55);border:1px solid rgba(124,240,192,.4);
+ backdrop-filter:blur(6px);text-shadow:0 0 14px rgba(124,240,192,.45)}
+.head .eyebrow::before{content:"";width:30px;height:4px;border-radius:2px;flex:none;
+ background:linear-gradient(90deg,#1f9d55 0 33.3%,#f4f5f0 33.3% 66.6%,#d6343a 66.6%)}
 
 /* i due binari */
 .tracks{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;align-items:stretch}
