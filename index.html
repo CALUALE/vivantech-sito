@@ -64,7 +64,12 @@
 
 .scroll{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);opacity:.7}
 
+/* barra della fiducia: numeri brevi, sotto la scelta (non distraggono dal bivio) */
+.trust{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 28px;margin:26px 0 0;padding:16px 0 0;border-top:1px solid rgba(255,255,255,.1);
+ font-size:13px;color:#aab4c2;opacity:0;animation:rise .9s .5s forwards}
+.trust b{color:#fff;font-weight:800;margin-right:4px}
 @media(max-width:860px){
+ .trust{justify-content:flex-start;gap:8px 18px}
  .tracks{grid-template-columns:1fr}
  .hero{justify-content:flex-start}
  .head{margin-bottom:22px}
@@ -113,9 +118,15 @@
     <p class="where">Showroom: via Milano 3, Luisago (CO) · 031 8130087</p>
    </section>
   </div>
+  <ul class="trust" aria-label="Perché fidarti">
+   <li><b>10+</b> anni di esperienza</li>
+   <li><b>10 anni</b> di garanzia sui lavori</li>
+   <li><b>Posa certificata</b> UNI 11673</li>
+   <li><b>Consulenza</b> e sopralluogo gratuiti</li>
+  </ul>
  </div>
 </main>
 
-<footer>Vivantech S.r.l. · via Milano 3, 22070 Luisago (CO) · <a href="tel:+390318130087">031 8130087</a><br>Serramenti, pergole, tende da sole e vetrate panoramiche · rilievo e posa inclusi</footer>
+<footer>Vivantech S.r.l. · via Milano 3, 22070 Luisago (CO) · <a href="tel:+390318130087">031 8130087</a> · <a href="mailto:info@vivantechserramenti.com">info@vivantechserramenti.com</a><br>Lun–ven 9:00–13:00 · 14:30–18:30 · P.IVA 10122750960<br>Serramenti, persiane, tapparelle, zanzariere, pergole, tende da sole e vetrate panoramiche · rilievo e posa inclusi</footer>
 </body>
 </html>
