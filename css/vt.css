@@ -1,0 +1,46 @@
+/* Vivantech · stile comune di Home e Scopri
+   Regole di neuromarketing applicate:
+   - una sola azione primaria per schermata (gradiente luminoso), le altre sono "ghost";
+   - testo corto, gerarchia a tre livelli (sopratitolo, titolo, una riga di beneficio);
+   - movimento lento e calmo (niente lampeggi), disattivato con prefers-reduced-motion. */
+:root{--bg:#050608;--bg2:#0b0f14;--fg:#eef1f5;--muted:#9aa4b2;--line:#1f2a38;--accent:#35d0ff;--accent2:#7cf0c0;
+ --display:'Michroma',Arial,sans-serif;--body:'Manrope',Arial,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.5;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+[hidden]{display:none!important}
+
+/* header minimale: logo + telefono, nient'altro */
+.top{position:fixed;inset:0 0 auto 0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:12px;
+ padding:calc(10px + env(safe-area-inset-top,0px)) 20px 10px;background:linear-gradient(rgba(5,6,8,.75),rgba(5,6,8,0))}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-width:0}
+.brand img{width:42px;height:auto;filter:drop-shadow(0 0 10px rgba(53,208,255,.3))}
+.brand b{font:400 clamp(16px,2.4vw,24px) var(--display);letter-spacing:.26em;text-transform:uppercase;
+ background:linear-gradient(90deg,#fff,var(--accent) 55%,#fff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2px}
+.tel{color:var(--fg);text-decoration:none;border:1px solid rgba(53,208,255,.4);border-radius:999px;padding:7px 14px;font-size:13px;white-space:nowrap;background:rgba(5,6,8,.4);backdrop-filter:blur(6px)}
+.tel:hover{border-color:var(--accent)}
+
+/* pulsanti */
+.btn{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;cursor:pointer;
+ background:linear-gradient(90deg,var(--accent),var(--accent2));color:#04202a;font:800 14px var(--body);letter-spacing:.1em;text-transform:uppercase;
+ border-radius:999px;padding:16px 26px;box-shadow:0 10px 40px -8px rgba(53,208,255,.6);transition:transform .25s,box-shadow .25s,filter .25s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 16px 50px -8px rgba(53,208,255,.75)}
+.btn:focus-visible,.gh:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.gh{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--fg);border:1px solid rgba(255,255,255,.28);border-radius:999px;
+ padding:11px 18px;font:600 13.5px var(--body);letter-spacing:.04em;background:rgba(5,8,12,.35);backdrop-filter:blur(6px);transition:border-color .2s,background .2s}
+.gh:hover{border-color:var(--accent);background:rgba(53,208,255,.08)}
+.gh i{font-style:normal;opacity:.7}
+
+.eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--accent2);margin:0 0 10px}
+h1,h2,h3{font-weight:400;margin:0}
+.ttl{font:400 clamp(24px,4.2vw,46px)/1.18 var(--display);letter-spacing:.03em}
+.sub{color:#c6cfdb;font-size:clamp(15px,1.7vw,18px);max-width:58ch;margin:14px 0 0}
+
+footer{padding:22px 16px calc(22px + env(safe-area-inset-bottom,0px));text-align:center;color:var(--muted);font-size:12px;letter-spacing:.08em;line-height:1.8;border-top:1px solid var(--line);background:var(--bg)}
+footer a{color:var(--fg)}
+
+@media(max-width:640px){.top{padding-inline:14px}.brand img{width:34px}.brand small{display:none}.btn{width:100%;padding:16px 18px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}

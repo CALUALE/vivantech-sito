@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Scopri Vivantech · Filosofia, materiali, showroom</title>
+<meta name="description" content="Chi siamo, i materiali delle nostre finestre (PVC, fibra di vetro, alluminio) e lo showroom di Luisago (CO), via Milano 3.">
+<meta name="theme-color" content="#050608">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Manrope:wght@400;600;800&display=swap">
+<link rel="stylesheet" href="../css/vt.css">
+<style>
+.intro{position:relative;padding:calc(110px + env(safe-area-inset-top,0px)) 20px 34px;isolation:isolate;overflow:hidden}
+.intro::before{content:"";position:absolute;inset:0;z-index:-2;background:url(../img/vista-lago.jpg) center 35%/cover;opacity:.55}
+.intro::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(5,6,8,.35),#050608 92%)}
+.wrap{width:min(1080px,100%);margin:0 auto}
+.jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+section.blk{padding:clamp(48px,8vh,84px) 20px;border-top:1px solid var(--line);scroll-margin-top:60px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:10px}
+.card h3{font:400 16px/1.35 var(--display);letter-spacing:.06em}
+.card p{margin:0;color:#c6cfdb;font-size:15px}
+.card .ico{font-size:24px}
+/* materiali */
+.mat .tag{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent2)}
+.mat .claim{font-size:17px;color:#fff;font-weight:600;line-height:1.4}
+.mat ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:7px;font-size:14px;color:#c6cfdb}
+.mat li{padding-left:18px;position:relative}
+.mat li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:2px;background:var(--accent)}
+.mat .for{margin-top:auto;padding-top:12px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+.mat .for b{color:var(--fg);font-weight:600}
+.mat .models{font-size:12px;color:var(--muted);letter-spacing:.06em}
+.mat a.gh{align-self:flex-start;margin-top:6px}
+.more{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;color:var(--muted);font-size:13.5px}
+/* dove siamo */
+.two{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;margin-top:30px}
+.addr{font-size:18px;line-height:1.6}
+.addr b{font-family:var(--display);font-weight:400;letter-spacing:.06em;font-size:15px;display:block;margin-bottom:6px}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.photos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.ph{border:1px dashed rgba(53,208,255,.4);border-radius:14px;padding:14px;font-size:13.5px;color:#c6cfdb}
+.ph svg{width:100%;height:70px;margin-bottom:8px}
+.ph b{display:block;color:#fff;font-size:14px;margin-bottom:2px}
+/* chiusura: si torna sempre al binario B */
+.end{padding:clamp(56px,10vh,96px) 20px;text-align:center;background:radial-gradient(60% 80% at 50% 100%,rgba(53,208,255,.16),transparent 70%)}
+.end .sub{margin:12px auto 26px}
+/* barra fissa su telefono: l'azione principale è sempre a un tocco */
+.dock{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:25;display:none}
+.dock .btn{width:100%;box-shadow:0 10px 40px rgba(0,0,0,.6),0 0 30px -6px rgba(53,208,255,.6)}
+@media(max-width:860px){.grid3,.two{grid-template-columns:1fr}.dock{display:block}footer{padding-bottom:96px}}
+</style>
+</head>
+<body>
+<header class="top">
+ <a class="brand" href="../"><img src="../img/logo.png" alt="Logo Vivantech"><div><b>Vivantech</b><small>Serramenti · Luisago (CO)</small></div></a>
+ <a class="tel" href="tel:+390318130087">031 8130087</a>
+</header>
+
+<div class="intro"><div class="wrap">
+ <p class="eyebrow">Scopri Vivantech</p>
+ <h1 class="ttl">Una finestra si sceglie una volta.<br>Deve essere quella giusta.</h1>
+ <nav class="jump" aria-label="In questa pagina">
+  <a class="gh" href="#filosofia">La nostra filosofia</a><a class="gh" href="#materiali">I materiali</a><a class="gh" href="#dove">Dove siamo</a>
+ </nav>
+</div></div>
+
+<!-- FILOSOFIA -->
+<section class="blk" id="filosofia"><div class="wrap">
+ <p class="eyebrow">La nostra filosofia</p>
+ <h2 class="ttl">Prima ascoltiamo. Poi costruiamo.</h2>
+ <p class="sub">Non partiamo da un catalogo: partiamo da te. Da cosa ti tiene sveglio, da cosa vuoi vedere quando apri le tende, da quanto silenzio ti serve.</p>
+ <div class="grid3">
+  <div class="card"><span class="ico" aria-hidden="true">👂</span><h3>Su misura di come vivi</h3><p>Sicurezza, luce o silenzio: scegliamo il serramento in base a quello che conta davvero per te, non al prodotto da spingere.</p></div>
+  <div class="card"><span class="ico" aria-hidden="true">✦</span><h3>Prodotti italiani</h3><p>Lavoriamo con produttori italiani, scelti per qualità e durata. I loro serramenti li trovi esposti nel nostro showroom.</p></div>
+  <div class="card"><span class="ico" aria-hidden="true">🤝</span><h3>Un solo interlocutore</h3><p>Rilievo, fornitura e posa: ce ne occupiamo noi, con un unico riferimento per te. Niente sorprese, niente rimpalli.</p></div>
+ </div>
+</div></section>
+
+<!-- MATERIALI -->
+<section class="blk" id="materiali"><div class="wrap">
+ <p class="eyebrow">I materiali</p>
+ <h2 class="ttl">Tre materiali, tre caratteri.</h2>
+ <p class="sub">Ognuno ha un punto di forza. Ti aiutiamo a scegliere quello che fa per la tua casa.</p>
+ <div class="grid3">
+  <article class="card mat">
+   <span class="tag">PVC</span>
+   <p class="claim">Calore, silenzio e nessuna manutenzione.</p>
+   <ul><li>Fino a 7 camere e 3 guarnizioni</li><li>Isolamento acustico fino a 46 dB</li><li>Antieffrazione fino alla classe WK3</li></ul>
+   <span class="models">Brillant 70 · PVC 80</span>
+   <p class="for"><b>Per chi</b> vuole protezione e comfort con il miglior rapporto qualità-prezzo.</p>
+   <a class="gh" href="../tre-finestre/#priorita">Guardala in 3D <i aria-hidden="true">→</i></a>
+  </article>
+  <article class="card mat">
+   <span class="tag">Fibra di vetro</span>
+   <p class="claim">La forza della fibra, la leggerezza di un profilo sottile.</p>
+   <ul><li>Profilo rinforzato in ultrafibra</li><li>Isolamento acustico fino a 46 dB</li><li>Nodo centrale sottile: più vetro, più luce</li></ul>
+   <span class="models">70 EVO · P76 NEO</span>
+   <p class="for"><b>Per chi</b> cerca silenzio e stabilità senza rinunciare a linee pulite.</p>
+   <a class="gh" href="../tre-finestre/#priorita">Guardala in 3D <i aria-hidden="true">→</i></a>
+  </article>
+  <article class="card mat">
+   <span class="tag">Alluminio · Fiber Core</span>
+   <p class="claim">Più vetro, più luce, linee essenziali.</p>
+   <ul><li>Nodi da 82 e 90 mm: fino al 30% di luce in più</li><li>Vetri fino a 48 mm, tre guarnizioni</li><li>Riciclabile al 100% · Case Green 2030</li></ul>
+   <span class="models">VLS</span>
+   <p class="for"><b>Per chi</b> vuole far entrare la luce e un design che si nota.</p>
+   <a class="gh" href="../tre-finestre/#priorita">Guardala in 3D <i aria-hidden="true">→</i></a>
+  </article>
+ </div>
+ <p class="more">Vuoi i dettagli tecnici? <a class="gh" href="../profili/">Profili e schede tecniche <i aria-hidden="true">→</i></a></p>
+</div></section>
+
+<!-- DOVE SIAMO -->
+<section class="blk" id="dove"><div class="wrap">
+ <p class="eyebrow">Dove siamo</p>
+ <h2 class="ttl">Vieni a toccarle con mano.</h2>
+ <p class="sub">Nello showroom apri le finestre, senti il peso dell'anta, confronti i colori veri. Oppure veniamo noi da te: il sopralluogo è gratuito.</p>
+ <div class="two">
+  <div class="card">
+   <p class="addr"><b>Showroom Vivantech</b>via Milano 3<br>22070 Luisago (CO)</p>
+   <p style="margin:0;color:var(--muted);font-size:14px">Meglio prenotare: trovi un consulente tutto per te · domenica chiuso</p>
+   <div class="row">
+    <a class="gh" href="https://www.google.com/maps/search/?api=1&amp;query=Vivantech+via+Milano+3+Luisago+CO" target="_blank" rel="noopener">Apri in Maps <i aria-hidden="true">↗</i></a>
+    <a class="gh" href="tel:+390318130087">Chiama 031 8130087</a>
+   </div>
+   <div class="row"><a class="btn" href="../tre-finestre/#prenota">Prenota showroom o visita a casa</a></div>
+  </div>
+  <div class="card">
+   <h3>Porta due foto della tua finestra</h3>
+   <p>Ci bastano per capire misure e muratura, e sono quelle su cui ti faremo vedere la tua nuova finestra.</p>
+   <div class="photos">
+    <div class="ph"><svg viewBox="0 0 100 70" aria-hidden="true"><rect x="28" y="6" width="44" height="58" fill="none" stroke="#35d0ff" stroke-width="2"/><line x1="50" y1="6" x2="50" y2="64" stroke="#35d0ff" stroke-width="2"/></svg><b>1 · Frontale</b>Finestra chiusa, dritta davanti a te.</div>
+    <div class="ph"><svg viewBox="0 0 100 70" aria-hidden="true"><rect x="22" y="6" width="44" height="58" fill="none" stroke="#35d0ff" stroke-width="2"/><path d="M66 6 L86 14 L86 56 L66 64" fill="none" stroke="#7cf0c0" stroke-width="2"/></svg><b>2 · Laterale</b>Anta aperta, per vedere la mazzetta.</div>
+   </div>
+  </div>
+ </div>
+</div></section>
+
+<!-- RITORNO AL BINARIO B -->
+<section class="end"><div class="wrap">
+ <p class="eyebrow">Il tuo progetto</p>
+ <h2 class="ttl">Pronto a vedere la tua finestra?</h2>
+ <p class="sub">Una domanda, i tuoi colori, tre soluzioni su misura. E alla fine un regalo.</p>
+ <a class="btn" href="../tre-finestre/#priorita">Inizia il tuo progetto <span aria-hidden="true">→</span></a>
+</div></section>
+
+<div class="dock"><a class="btn" href="../tre-finestre/#priorita">Inizia il tuo progetto →</a></div>
+<footer>Vivantech S.r.l. · via Milano 3, 22070 Luisago (CO) · <a href="tel:+390318130087">031 8130087</a><br>Serramenti, pergole, tende da sole e vetrate panoramiche · rilievo e posa inclusi</footer>
+</body>
+</html>
