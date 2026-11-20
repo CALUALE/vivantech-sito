@@ -8,7 +8,7 @@ const $ = s => document.querySelector(s);
 /* ---------- priorità del cliente ---------- */
 export const PRIORITA = {
   sicurezza: { t: 'Sicurezza', s: 'Protezione e antieffrazione', ico: '🛡️', mat: 'pvc' },
-  luce: { t: 'Luce & Design', s: 'Profilo minimale, massima luminosità', ico: '☀️', mat: 'alu' },
+  luce: { t: 'Luce & Design', s: 'Profilo minimale, massima luminosità', ico: '☀️', mat: 'fib' },
   silenzio: { t: 'Insonorizzazione', s: 'Lasciare fuori i rumori', ico: '🤫', mat: 'fib' }
 };
 let prio = null;
@@ -20,7 +20,7 @@ export const setPrio = p => { prio = p; try { sessionStorage.setItem('vt-prio', 
 export const BENEFICIO = {
   pvc: {
     sicurezza: 'Il PVC 80 arriva fino alla classe antieffrazione WK3: profilo a 7 camere con rinforzi in acciaio e 3 guarnizioni.',
-    luce: 'Brillant 70 e PVC 80 sono i profili più robusti. Se la luce viene prima di tutto, guarda anche il VLS: nodo centrale da 90 mm.',
+    luce: 'Brillant 70 e PVC 80 sono i profili più robusti. Se la luce viene prima di tutto, guarda anche il 70 EVO: nodo centrale sottile, più vetro e più luce.',
     silenzio: 'Il PVC 80 arriva fino a 46 dB di isolamento acustico, con 7 camere e 3 guarnizioni.'
   },
   fib: {
@@ -29,9 +29,9 @@ export const BENEFICIO = {
     silenzio: 'Il 70 EVO arriva fino a 46 dB, il P76 NEO fino a 44 dB con tre guarnizioni per la tenuta.'
   },
   alu: {
-    sicurezza: 'Il VLS accoglie vetri fino a 48 mm: c’è spazio per vetri stratificati di sicurezza, con anticorrosione di serie.',
-    luce: 'Il VLS ha nodo laterale da 82 mm e centrale da 90 mm: fino al 30% di luce in più, anche con anta smussata a 17°.',
-    silenzio: 'Il VLS ha tre guarnizioni di serie e vetri fino a 48 mm, per vetrocamere acustiche importanti.'
+    sicurezza: 'Il nuovo profilo in alluminio è in arrivo: chiedi in showroom per i dettagli.',
+    luce: 'Il nuovo profilo in alluminio è in arrivo: chiedi in showroom per i dettagli.',
+    silenzio: 'Il nuovo profilo in alluminio è in arrivo: chiedi in showroom per i dettagli.'
   }
 };
 

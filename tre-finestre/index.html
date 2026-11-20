@@ -342,10 +342,9 @@ const M=[
    pts:['Profilo da 70 mm, 6 camere','Nodo centrale sottile: più vetro, più luce','Uw 1,18 W/m²K · isolamento acustico fino a 46 dB','PVC riciclato fino all’80%']},
   {model:'P76 NEO',img:'angolo-p76.png',sheet:'scheda-p76.jpg',
    pts:['Profilo da 76 mm rinforzato in ultrafibra, 5/7 camere','Uw 0,85 W/m²K con vetro Ug 0,6','Isolamento acustico fino a 44 dB','Tre guarnizioni per la massima tenuta']}]},
- {k:'alu',label:'Alluminio',sub:'Very Light System · ibrido',depth:.082,frame:.050,sash:.044,meet:.045,models:[
-  {model:'VLS',sub:'Fiber Core',img:'angolo-vls.png',img2:'angolo-vls-smussata.png',caps:['Anta squadrata','Anta smussata 17°'],sheet:[['scheda-vls.jpg','Anta squadrata'],['scheda-vls-smussata.jpg','Anta smussata · inclinazione 17°']],
-   hl:'Riciclabile al 100% · nel rispetto della direttiva Case Green 2030',
-   pts:['Alluminio a taglio termico con tecnologia Fiber Core','Nodo laterale 82 mm · centrale 90 mm: +30% di luce','Vetro fino a 48 mm · tre guarnizioni di serie','Anticorrosione di serie, verniciatura fino a 30 anni']}]}
+ {k:'alu',label:'Alluminio',depth:.082,frame:.050,sash:.044,meet:.045,models:[
+  {model:'In arrivo',img:null,sheet:null,
+   pts:['Il nuovo profilo in alluminio sarà presto disponibile','Vuoi saperne di più? Chiedi in showroom o al tuo consulente Vivantech']}]}
 ];
 M.forEach(m=>m.model=m.models.map(x=>x.model).join(' · '));
 const W=1.2,H=1.5,GAP=1.75;
@@ -741,7 +740,7 @@ canvas.addEventListener('pointermove',e=>{if(busy){canvas.style.cursor='';return
 let curM=null;
 function showModel(k,instant){curM=cur.models[k];if(typeof updBen==='function')updBen();
  [...document.getElementById('iTabs').children].forEach((b,j)=>b.setAttribute('aria-selected',j===k?'true':'false'));
- const im=document.getElementById('iImg'),apply=()=>{im.src='../img/'+curM.img;im.alt=(curM.photo?'Foto ':curM.sez?'Sezione del nodo centrale ':'Profilo ')+curM.model;im.classList.toggle('photo',!!curM.photo);
+ const im=document.getElementById('iImg'),apply=()=>{document.getElementById('prof').hidden=!curM.img;if(curM.img)im.src='../img/'+curM.img;im.alt=(curM.photo?'Foto ':curM.sez?'Sezione del nodo centrale ':'Profilo ')+curM.model;im.classList.toggle('photo',!!curM.photo);
   {const i2=document.getElementById('iImg2'),pc=document.getElementById('pcap');i2.hidden=!curM.img2;pc.hidden=!curM.caps;document.getElementById('prof').classList.toggle('duo',!!curM.img2);if(curM.img2){i2.src='../img/'+curM.img2;i2.alt='Profilo '+curM.model+' '+(curM.caps?curM.caps[1]:'')}if(curM.caps){document.getElementById('iCap1').textContent=curM.caps[0];document.getElementById('iCap2').textContent=curM.caps[1]}}document.getElementById('iName').innerHTML=curM.model+(curM.sub?` <small>${curM.sub}</small>`:'');document.getElementById('iHl').hidden=!curM.hl;document.getElementById('iHl').textContent=curM.hl||'';document.getElementById('iList').innerHTML=curM.pts.map(p=>`<li>${p}</li>`).join('');
   document.getElementById('bSheet').hidden=!curM.sheet;requestAnimationFrame(()=>im.classList.remove('sw'))};
  if(instant)apply();else{im.classList.add('sw');setTimeout(apply,280)}}
